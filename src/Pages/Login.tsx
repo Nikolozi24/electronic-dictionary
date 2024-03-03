@@ -19,7 +19,7 @@ const Login = () => {
     <div className={`login`}>
       <div className='wrapper'>
 
-          <form action='' className='' noValidate onSubmit={handleSubmit(()=>{}, ()=>{alert("მოხდა შეცდომა")})}>
+          <form action='' className='' noValidate onSubmit={handleSubmit(()=>{}, ()=>{ isEnglish? alert("Error"):alert("შეცდომა")})}>
           <div className='login-header'>
 
           <h1 className={``}>{isEnglish?'Log in':'შესვლა'}</h1>

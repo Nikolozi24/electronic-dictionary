@@ -39,3 +39,10 @@ div.App{
     transform: rotate(360deg);
   }
 }
+
+@media screen and(max-width:910) {
+      div.app{
+        display: grid;
+        flex-direction: column;
+      }  
+}

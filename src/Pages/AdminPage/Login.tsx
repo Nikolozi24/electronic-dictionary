@@ -1,25 +1,34 @@
 import React from 'react'
-import "../styles/Login.css"
+import "../../styles/Login.css"
 import { FaUser, FaLock} from "react-icons/fa";
 import {useForm} from "react-hook-form"
-
-import { useStore } from '../Store/Store';
-import { CHANGE_LANGUAGE } from '../Store/ActionType';
+import { useStore } from '../../Store/Store';
+import { CHANGE_LANGUAGE } from '../../Store/ActionType';
 import { DevTool } from '@hookform/devtools';
+import { redirect } from 'react-router-dom';
+import {useCookies } from 'react-cookie';
+import Cookies from 'react-cookie';
 const Login = () => {
   type formType= {
     username:string,
     password:string
   }
-    const form = useForm<formType>();
-    const{register , formState , control , handleSubmit} = form
-    const {errors} = formState
+  const form = useForm<formType>();
+  const{register , formState , control , handleSubmit , getValues} = form
+  const {errors} = formState
+  const HandleLogin=()=>{
+    const [cookie,setCookies , removeCookies] = useCookies(["isJoined"]);
+    if(getValues("username").trim()=="NikoloziAdmin@gmail.com" && getValues("password").trim() == "adminAdmin"){
+      setCookies("isJoined" , true , {secure:true , path:"/" , maxAge:6000});
+            redirect("/add-user");
+      }
+    }
   const {dispatch, isEnglish} = useStore();
   return (
     <div className={`login`}>
       <div className='wrapper'>
 
-          <form action='' className='' noValidate onSubmit={handleSubmit(()=>{}, ()=>{ isEnglish? alert("Error"):alert("შეცდომა")})}>
+          <form action='' className='' noValidate onSubmit={handleSubmit(HandleLogin, ()=>{ isEnglish? alert("Error"):alert("შეცდომა")})}>
           <div className='login-header'>
 
           <h1 className={``}>{isEnglish?'Log in':'შესვლა'}</h1>

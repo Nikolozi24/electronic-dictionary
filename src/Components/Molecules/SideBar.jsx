@@ -9,10 +9,12 @@ import { FcAbout } from "react-icons/fc";
 import { BiLogOut } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
+import { BsDatabaseAdd } from "react-icons/bs";
+import { GrUserAdd } from 'react-icons/gr';
 
 import "../../styles/sideBar.css"
 const SideBar = () => {
-    const isLogin = true;
+    const isLogin = false;
     const [isActive, setIsActive] = useState(false);
     const [login , setLogin] = useState({
             in:<Link 
@@ -53,14 +55,7 @@ const SideBar = () => {
                          <FcMenu id='btn'/>
               </button>
             <ul className='list'>
-           
-              <li className='list-item'>
-                <Link to="/Search">
-                    <CiSearch className='icon'/>
-                    <span className='links-name'> Search</span>
-                </Link>
-             </li>
-              <li className='list-item'>
+              {/* <li className='list-item'>
                 <Link to="/">
                     <GrHomeRounded className='icon'/>
                     <span className='links-name'> Home</span>
@@ -78,11 +73,29 @@ const SideBar = () => {
                     <span className='links-name'>About us</span>
                 </Link>
              </li>
-             { <li className='list-item '>
+           
+              <li className='list-item'>
+                <Link to="/Search">
+                    <CiSearch className='icon'/>
+                    <span className='links-name'> Search</span>
+                </Link>
+             </li> */}
+             {  true && <li className='list-item '>
                 <Link to="admin-panel">
+                    <BsDatabaseAdd className='icon'/>
                     <span className='links-name'>admin Panel</span>
                 </Link>
-             </li> && false}
+             </li> 
+             
+             }
+             {  true && <li className='list-item '>
+                <Link to="add-user">
+                    <GrUserAdd className='icon'/>
+                    <span className='links-name'>add new user</span>
+                </Link>
+             </li> 
+             
+             }
             </ul>
             <ul className='list-logout'>
                 <li className='list-logout'> 

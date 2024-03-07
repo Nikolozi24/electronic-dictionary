@@ -4,7 +4,7 @@ import SideBar from '../Components/Molecules/SideBar'
 const Main = () => {
   return (
     <div className='Bar'>
-        <SideBar/>
+              
 
     </div>
   )

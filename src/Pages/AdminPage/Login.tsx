@@ -7,7 +7,7 @@ import { CHANGE_LANGUAGE } from '../../Store/ActionType';
 import { DevTool } from '@hookform/devtools';
 import { redirect } from 'react-router-dom';
 import {useCookies } from 'react-cookie';
-import Cookies from 'react-cookie';
+
 const Login = () => {
   type formType= {
     username:string,

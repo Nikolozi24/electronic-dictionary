@@ -5,15 +5,16 @@ import Main from './Pages/Main.jsx';
 import SideBar from './Components/Molecules/SideBar.jsx';
 import { Routes, Route } from 'react-router-dom';
 import UserRegistration from './Pages/AdminPage/UserRegistration.tsx';
+import FillWordToDatabase from './Pages/AdminPage/FillWordToDatabase.tsx';
 
 function App() {
   return (
     <div className='App'>
             <SideBar/>
-              <Routes>
-
+          <Routes>
             <Route path='/login' element={<Login/>}/> 
             <Route path='/add-user' element={<UserRegistration/>}/>
+            <Route path='/admin-panel' element={<FillWordToDatabase/> }/>
           </Routes>
     </div>
   );

@@ -17,12 +17,13 @@ const Login = () => {
   const{register , formState , control , handleSubmit , getValues} = form
   const {errors} = formState
   const HandleLogin=()=>{
-    const [cookie,setCookies , removeCookies] = useCookies(["isJoined"]);
-    if(getValues("username").trim()=="NikoloziAdmin@gmail.com" && getValues("password").trim() == "adminAdmin"){
-      setCookies("isJoined" , true , {secure:true , path:"/" , maxAge:6000});
-            redirect("/add-user");
-      }
-    }
+    // const [cookie,setCookies , removeCookies] = useCookies(["isJoined"]);
+    // if(getValues("username").trim()=="NikoloziAdmin@gmail.com" && getValues("password").trim() == "adminAdmin"){
+    //   setCookies("isJoined" , true , {secure:true , path:"/" , maxAge:6000});
+    //         redirect("/add-user");
+    //   }
+  console.log("submited")  
+  }
   const {dispatch, isEnglish} = useStore();
   return (
     <div className={`login`}>

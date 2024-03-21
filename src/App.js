@@ -6,6 +6,7 @@ import SideBar from './Components/Molecules/SideBar.jsx';
 import { Routes, Route } from 'react-router-dom';
 import UserRegistration from './Pages/AdminPage/UserRegistration.tsx';
 import FillWordToDatabase from './Pages/AdminPage/FillWordToDatabase.tsx';
+import Quiz from './Pages/AdminPage/UserPages/Quiz.jsx';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path='/login' element={<Login/>}/> 
             <Route path='/add-user' element={<UserRegistration/>}/>
             <Route path='/admin-panel' element={<FillWordToDatabase/> }/>
+            <Route path='/game/quiz' element={<Quiz/>}/>
           </Routes>
     </div>
   );

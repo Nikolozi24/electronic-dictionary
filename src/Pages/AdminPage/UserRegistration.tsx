@@ -90,7 +90,7 @@ const UserRegistration = () => {
           <span>
 
             <span className='note'>
-              შენიშვნა:წოდება არის ან admin(ადმინი) ან moderator(მოდერატორი)!
+              შენიშვნა: წოდება არის ან admin(ადმინი) ან moderator(მოდერატორი)!
             </span>
           </span>
             </form>

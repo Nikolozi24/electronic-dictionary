@@ -14,7 +14,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background:  url("../Assets/Images/BackgroundHighPhoto.jpg") no-repeat;
+    background:linear-gradient(45deg,rgb(17, 17, 114) 5% ,rgba(40, 182, 83, 0.938) 70%, yellow 20%);
     background-position: center;
     background-size: cover;
 }   

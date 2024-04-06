@@ -3,11 +3,11 @@ import { Language, Translation } from "../../../shared/DictionaryModels.ts";
 import { Input, Modal } from "antd";
 
 interface Props {
-  id: number;
+  id?: number;
   nameTranslations: Translation[];
   title: string;
   isOpen: boolean;
-  onSave: (id: number, nameTranslations: Translation[]) => void;
+  onSave: (nameTranslations: Translation[], id?: number) => void;
   onCancel: () => void;
 }
 
@@ -40,7 +40,7 @@ const TranslationComponent = (props: Props) => {
             new Translation(Language.Ka, georgianText),
             new Translation(Language.En, englishText),
           ];
-          props.onSave(props.id, nameTranslations);
+          props.onSave(nameTranslations, props.id);
         }}
         onCancel={props.onCancel}
       >

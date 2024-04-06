@@ -8,11 +8,7 @@ function App() {
 
     const [modalIsOpen, setModalOpen] = useState(false);
 
-    function getId() {
-        return 1;
-    }
-
-    function onSave(id: number, nameTranslations: Translation[]){
+    function onSave(nameTranslations: Translation[],id?: number, ){
         console.log(id);
         console.log(nameTranslations);
         setModalOpen(false);
@@ -25,7 +21,6 @@ function App() {
         </Button>
 
         <TranslationComponent
-            id={getId()}
             nameTranslations={[new Translation(Language.Ka,"ქართული"), new Translation(Language.En,"English")]}
             title={"თემა"}
             isOpen={modalIsOpen}

@@ -2,9 +2,20 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import TranslationComponent from "./components/TranslationComponent.tsx";
+import {Translation} from "../../shared/DictionaryModels.ts";
 
 function App() {
   const [count, setCount] = useState(0)
+
+    function onSave(id: number, nameTranslations: Translation[]) {
+        console.log(id);
+        console.log(nameTranslations);
+    }
+
+    function getId(): number{
+      return 1;
+    }
 
   return (
     <>
@@ -28,6 +39,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+        <TranslationComponent id={getId()} nameTranslations={[]} onSave={onSave}/>
     </>
   )
 }

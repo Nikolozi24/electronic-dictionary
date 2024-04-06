@@ -2,15 +2,15 @@ import './App.css'
 import {Button } from "antd";
 import {useState} from "react";
 import TranslationComponent from "./components/TranslationComponent.tsx";
-import {Language, Translation} from "../../shared/DictionaryModels.ts";
 
 function App() {
 
     const [modalIsOpen, setModalOpen] = useState(false);
 
-    function onSave(nameTranslations: Translation[],id?: number, ){
+    function onSave(georgianName: string, englishName: string, id?: number){
         console.log(id);
-        console.log(nameTranslations);
+        console.log(georgianName);
+        console.log(englishName);
         setModalOpen(false);
     }
 
@@ -21,7 +21,8 @@ function App() {
         </Button>
 
         <TranslationComponent
-            nameTranslations={[new Translation(Language.Ka,"ქართული"), new Translation(Language.En,"English")]}
+            georgianName="ქართული"
+            englishName="english"
             title={"თემა"}
             isOpen={modalIsOpen}
             onSave={onSave}

@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import { Language, Translation } from "../../../shared/DictionaryModels.ts";
 import { Input, Modal } from "antd";
 
 interface Props {
   id?: number;
-  nameTranslations: Translation[];
+  georgianName: string;
+  englishName: string;
   title: string;
   isOpen: boolean;
-  onSave: (nameTranslations: Translation[], id?: number) => void;
+  onSave: (georgianName: string, englishName: string, id?: number) => void;
   onCancel: () => void;
 }
 
 const TranslationComponent = (props: Props) => {
-  const [georgianText, setGeorgianText] = useState(props.nameTranslations.find(t => t.Language == Language.Ka)?.Value ?? '');
-  const [englishText, setEnglishText] = useState(props.nameTranslations.find(t => t.Language == Language.En)?.Value ?? '');
+  const [georgianText, setGeorgianText] = useState(props.georgianName);
+  const [englishText, setEnglishText] = useState(props.englishName);
 
   const handleGeorgianInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -36,11 +36,7 @@ const TranslationComponent = (props: Props) => {
         cancelText="გაუქმება"
         okText="შენახვა"
         onOk={() => {
-          const nameTranslations = [
-            new Translation(Language.Ka, georgianText),
-            new Translation(Language.En, englishText),
-          ];
-          props.onSave(nameTranslations, props.id);
+          props.onSave(georgianText, englishText, props.id);
         }}
         onCancel={props.onCancel}
       >

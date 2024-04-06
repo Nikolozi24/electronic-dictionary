@@ -1,33 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import {Button } from "antd";
+import {useState} from "react";
+import TranslationComponent from "./components/TranslationComponent.tsx";
+import {Language, Translation} from "../../shared/DictionaryModels.ts";
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
+    const [modalIsOpen, setModalOpen] = useState(false);
+
+    function onSave(nameTranslations: Translation[],id?: number, ){
+        console.log(id);
+        console.log(nameTranslations);
+        setModalOpen(false);
+    }
+
+    return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <Button type="primary" onClick={() => setModalOpen(true)}>
+            Vertically centered modal dialog
+        </Button>
+
+        <TranslationComponent
+            nameTranslations={[new Translation(Language.Ka,"ქართული"), new Translation(Language.En,"English")]}
+            title={"თემა"}
+            isOpen={modalIsOpen}
+            onSave={onSave}
+            onCancel={() => setModalOpen(false)}
+        />
     </>
   )
 }

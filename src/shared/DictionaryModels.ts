@@ -1,13 +1,13 @@
 export class SubTopic
 {
     Id: number;
-    GeogianName: string;
+    GeorgianName: string;
     EnglishName: string;
     Topic: Topic;
 
     constructor(id: number, georgianName: string, englishName: string, topic: Topic) {
         this.Id = id;
-        this.GeogianName = georgianName;
+        this.GeorgianName = georgianName;
         this.EnglishName = englishName;
         this.Topic = topic;
     }
@@ -15,13 +15,13 @@ export class SubTopic
 
 export class Topic {
     Id: number;
-    GeogianName: string;
+    GeorgianName: string;
     EnglishName: string;
     SubTopics: SubTopic[];
 
     constructor(id: number, georgianName: string, englishName: string, subTopics: SubTopic[]) {
         this.Id = id;
-        this.GeogianName = georgianName;
+        this.GeorgianName = georgianName;
         this.EnglishName = englishName;
         this.SubTopics = subTopics;
     }

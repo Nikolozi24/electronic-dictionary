@@ -3,11 +3,14 @@ import { TbUserStar } from "react-icons/tb";
 import { MdEmail } from "react-icons/md";
 import { TbUserEdit } from "react-icons/tb";
 import { useForm } from 'react-hook-form';
-
+import Cookies from 'universal-cookie';
 import "../../styles/Registration.css"
 import { useStore } from '../../Store/Store'
+import axios from '../../Assets/api/axios';
+import { getValue } from '@testing-library/user-event/dist/utils';
 
 const UserRegistration = () => {
+  const cookies = new Cookies();
   type formValues = {
     firstName:string ,
     lastName:string,
@@ -23,14 +26,23 @@ const UserRegistration = () => {
       priority:"moderator"
     }
   })
-  const {register , formState , handleSubmit} = form;
+  const {register , formState , handleSubmit , getValues} = form;
   const {errors} = formState;
   const {isEnglish} = useStore()
+  const handleResgistration = async ()=>{
+    try{
+          //const response =  await axios.post('/register' , getValues())
+    }
+    catch(err){
+      console.log('error')
+
+    }
+  }
 
     return (
-      <div className='registration'>
+    cookies.get("admin") &&  <div className='registration'>
    <div  className='container'>
-            <form onSubmit={handleSubmit(()=>{} , ()=>{console.log("error")})} noValidate >
+            <form onSubmit={handleSubmit(handleResgistration)} noValidate >
             <legend>{isEnglish?"User Registration":"მომხარებლის რეგისტრაცია"}</legend>
             <div className='inputs'>
             <input type='text'

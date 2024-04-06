@@ -3,7 +3,9 @@ import "../../styles/FillWordToDatabase.css"
 import { BsDatabaseAdd } from "react-icons/bs";
 import { useStore } from '../../Store/Store';
 import {useForm , useFieldArray, FieldValue} from "react-hook-form"
+import Cookies from 'universal-cookie';
 const FillWordToDatabase = () => {
+  const cookies  = new Cookies()
   type formType = {
       headWord:string,
       partOfSpeech:"noun"|"adjective", 
@@ -53,7 +55,7 @@ const {fields , append , remove}= useFieldArray({
 })
 
   return (
-    <div className='fillWordForm'>   
+  (cookies.get("moderator")|| cookies.get("admin"))&&  <div className='fillWordForm'>   
                 <div className='background'>
 
                     <span className='database-logo'><BsDatabaseAdd size="middle"/></span>

@@ -1,1 +1,2 @@
 export const CHANGE_LANGUAGE ="CHANGE_LANGUAGE"
+export const SET_AUTH = "SET_AUTH"

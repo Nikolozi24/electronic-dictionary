@@ -13,9 +13,12 @@ import { BsDatabaseAdd } from "react-icons/bs";
 import { GrUserAdd } from 'react-icons/gr';
 
 import "../../styles/sideBar.css"
+import { useStore } from '../../Store/Store';
 const SideBar = () => {
-    const isLogin = false;
+     
+    const {cookies } = useStore();
     const [isActive, setIsActive] = useState(false);
+    useEffect(()=>{} , [cookies.get("admin") , cookies.get("moderator")])
     const [login , setLogin] = useState({
             in:<Link 
             to="/login"   
@@ -80,7 +83,7 @@ const SideBar = () => {
                     <span className='links-name'> Search</span>
                 </Link>
              </li> */}
-             {  true && <li className='list-item '>
+             { (cookies.get("moderator") || cookies.get("admin"))  && <li className='list-item '>
                 <Link to="admin-panel">
                     <BsDatabaseAdd className='icon'/>
                     <span className='links-name'>admin Panel</span>
@@ -88,7 +91,7 @@ const SideBar = () => {
              </li> 
              
              }
-             {  true && <li className='list-item '>
+             {  cookies.get('admin') && <li className='list-item '>
                 <Link to="add-user">
                     <GrUserAdd className='icon'/>
                     <span className='links-name'>add new user</span>
@@ -101,7 +104,7 @@ const SideBar = () => {
                 <li className='list-logout'> 
 
                 {
-                    isLogin?  login.in :login.out
+                    (cookies.get("admin") || cookies.get("moderator"))?  login.in :login.out
                 }
                 </li>
             </ul> 

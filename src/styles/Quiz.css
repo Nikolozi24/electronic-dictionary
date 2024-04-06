@@ -56,3 +56,9 @@
     font-size: 18px;
     margin: auto;
 }
+.correct{
+    background-color: rgba(56, 233, 94, 0.671);
+}
+.wrong{
+    background-color: #f44;
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import AddUserComponent from '../../components/addUserComponent/addUserComponent';
+import AddUserComponent from '../../components/AddUserComponent';
 
 const AddUser: React.FC = () => {
   const handleSave = (username: string, email: string, password: string, role: string) => {

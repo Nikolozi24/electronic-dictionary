@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "antd": "^5.16.1"
+    "antd": "^5.16.1"  
+  },
+
+  "devDependencies": {
+    "@types/react": "^18.2.74"
   }
 }

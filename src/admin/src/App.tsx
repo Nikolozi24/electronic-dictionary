@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
-import AddTopic from './pages/AddTopicPage/addTopicPage';
-import AddUser from './pages/AddUserPage/addUserPage';
+import AddUser from './pages/addUserPage/addUserPage';
+import AddTopic from './pages/addTopicPage/addTopicPage';
 
 function App() {
     return (

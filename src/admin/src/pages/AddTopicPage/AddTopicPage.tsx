@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Input, Modal } from 'antd';
-import TranslationComponent from '../../components/TranslationComponent/TranslationComponent';
+import TranslationComponent from '../../components/translationComponent/translationComponent';
 
 const AddTopic: React.FC = () => {
   const [modalIsOpen, setModalOpen] = useState(false);

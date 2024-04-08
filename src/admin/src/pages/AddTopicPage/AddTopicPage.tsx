@@ -11,6 +11,7 @@ const AddTopic: React.FC = () => {
         console.log(id);
         console.log(georgianName);
         console.log(englishName);
+        localStorage
         setModalOpen(false);
     }
 

@@ -16,7 +16,52 @@ import {PlusCircleOutlined , CloseCircleTwoTone , EditTwoTone} from "@ant-design
 const handleDelete=()=>{
 }
 const Thematic:React.FC = () => {
-  const {Footer , Header, Content} = Layout
+  
+  // დავუშვათ და გვაქვს სზოგადად წამოღებული 
+  //ბაზიდად ტოპიკები რომელსაც აქვს ეს ველები 
+  // შემდეგ ამას დავმაპავთ და მხოლოდ იმ ველებს 
+  //ამოვიღებთ რომლებიც გამოსაჩენად გვჭირდება
+
+  const [thematics , setThematics] = useState([
+    {
+        id:1,
+        GeorgianMeaning:"წაშლა",
+        EnglishMeaning:"remove",
+        subtopics:[""],
+       
+    },
+    {
+        id:2,
+        GeorgianMeaning:"დამატება",
+        EnglishMeaning:"add",
+        subtopics:[""],
+    },
+    {
+        id:3,
+        GeorgianMeaning:"წაშლა",
+        EnglishMeaning:"remove",
+        subtopics:[""],
+    },
+    {
+        id:4,
+        GeorgianMeaning:"წაშლა",
+        EnglishMeaning:"remove",
+        subtopics:[""],
+    },
+    {
+        id:5,
+        GeorgianMeaning:"წაშლა",
+        EnglishMeaning:"remove",
+        subtopics:[""],
+    },
+    {
+        id:6,
+        GeorgianMeaning:"წაშლა",
+        EnglishMeaning:"remove",
+        subtopics:[""],
+    },
+
+])
   const [isOpen ,  setIsOpen] = useState(false)
     const onSave=  (Georgian:any , English:any, id?:any)=>{
             console.log(English , Georgian, id , "onSave")
@@ -24,66 +69,56 @@ const Thematic:React.FC = () => {
     const onCancel=()=>{
           setIsOpen(false)
     }
+    // აქ განვსაზღვრავ თუ რა ველები არის საჭირო ცხრილის სახით გამოსაჩენათ
+    // 
   const  columns: TableColumnsType<dataType> = [
     {
-      title:"თემატიკა",
+      title:"თემატიკა",// რაც  გამოჩნდება ცხრილის სვეტის სათაურში
+      // ეს დანარჩენი ორი იგივე სახელისა რაც თემატიკის ობიექტში ველს ქვია
       dataIndex:"GeorgianMeaning",
       key:"GeorgianMeaning",
     },
-      {
-        title:"Thematic",
-        dataIndex:"EnglishMEaning",
-        key:"EnglishMEaning",
-      },
-      {
-          key:"update",
-          title:"რედაქტირება",
-          dataIndex:"update",
-          render:(_,record)=>{
-            return <Link to={`/update/${record.key}`} onClick={()=>{console.log(record.key)}}><EditTwoTone width={10}/></Link>
-          }
-      },
-      {
-          key:"delete",
-          title:"წაშლა",
-          dataIndex:"delete",
-          render:(_,record)=>{
-            return <Link style={{width:'100%'}} to={`/delete/`} onClick={()=>{console.log(record.key)}}><CloseCircleTwoTone width={10}/></Link>
-          }
-      },
-  ]
-
-  const data: dataType[]= [
-      {
-          key:1,
-          GeorgianMeaning:"წაშლა",
-          EnglishMEaning:"remove",
-         
-      },
-      {
-          key:2,
-          GeorgianMeaning:"დამატება",
-          EnglishMEaning:"add",
-      },
-      {
-          key:3,
-          GeorgianMeaning:"წაშლა",
-          EnglishMEaning:"remove",
+    {
+      title:"Thematic",
+      dataIndex:"EnglishMeaning",
+      key:"EnglishMEaning",
+    },
+    {
+      key:"update",
+      title:"რედაქტირება",
+      dataIndex:"update",
+      render:(_,record)=>{
+          return <Link to={`/update/${record.key}`} onClick={()=>{console.log(record.key)}}><EditTwoTone width={10}/></Link>
       }
-
+    },
+    {
+      key:"delete",
+      title:"წაშლა",
+      dataIndex:"delete",
+      render:(_,record)=>{
+        return <Link style={{width:'100%'}} to={`/delete/`} onClick={()=>{console.log(record.key)}}><CloseCircleTwoTone width={10}/></Link>
+      }
+    },
   ]
+// აქ ცხრილის მონაცემების მასივს ვქმნი
+  const data: dataType[]= thematics.map(item=>{
+    // ამოვიღებ დესტრუქტურიზაციით იმ ველებს რომლებიც მჭირდება
+    const {id, GeorgianMeaning, EnglishMeaning } = item;
+    // ვქმნი ობიექტს შესაბბამისი ველებით და ვაბრუნებ
+      const obj = {
+              key:id,
+              GeorgianMeaning:GeorgianMeaning,
+              EnglishMeaning:EnglishMeaning
+        }
+        return obj
+      }
+    )
+ 
+      
+      
+  
   
 console.log(data)
-
-  
-  const footerStyle: React.CSSProperties = {
-    textAlign: 'center',
-   
-    width:'100%',
-    backgroundColor: '#4096ff',
-  };
-
-
 
     
   return (

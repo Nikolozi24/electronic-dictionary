@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "antd": "^5.16.1"  
+    "antd": "^5.16.1",
+    "axios": "^1.6.8"
   },
-
   "devDependencies": {
     "@types/react": "^18.2.74"
   }

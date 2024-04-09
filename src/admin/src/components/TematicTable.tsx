@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
   // ცხრილის  შესაქნელი ბიბლიოთეკა
+  import {useNavigate}  from 'react-router-dom'
 import { Table , Flex, Layout } from 'antd'
 import type { TableColumnsType } from 'antd';
 import {Link} from 'react-router-dom';
@@ -16,7 +17,7 @@ import {PlusCircleOutlined , CloseCircleTwoTone , EditTwoTone} from "@ant-design
 const handleDelete=()=>{
 }
 const Thematic:React.FC = () => {
-  
+  const navigate = useNavigate();
   // დავუშვათ და გვაქვს სზოგადად წამოღებული 
   //ბაზიდად ტოპიკები რომელსაც აქვს ეს ველები 
   // შემდეგ ამას დავმაპავთ და მხოლოდ იმ ველებს 
@@ -65,9 +66,11 @@ const Thematic:React.FC = () => {
   const [isOpen ,  setIsOpen] = useState(false)
     const onSave=  (Georgian:any , English:any, id?:any)=>{
             console.log(English , Georgian, id , "onSave")
+            navigate('/added')
     }
     const onCancel=()=>{
           setIsOpen(false)
+          navigate(-1)
     }
     // აქ განვსაზღვრავ თუ რა ველები არის საჭირო ცხრილის სახით გამოსაჩენათ
     // 
@@ -96,7 +99,7 @@ const Thematic:React.FC = () => {
       title:"წაშლა",
       dataIndex:"delete",
       render:(_,record)=>{
-        return <Link style={{width:'100%'}} to={`/delete/`} onClick={()=>{console.log(record.key)}}><CloseCircleTwoTone width={10}/></Link>
+        return <Link style={{width:'100%'}} to={`/delete/${record.key}`} onClick={()=>{console.log(record.key)}}><CloseCircleTwoTone width={10}/></Link>
       }
     },
   ]

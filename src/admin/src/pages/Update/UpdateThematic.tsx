@@ -14,24 +14,29 @@ const UpdateThematic:React.FC=() => {
     EnglishMeaning:"",
     subtopics:[""]
    })
-   const {id } = useParams();
+   ///useParam-ით გავიგოთ თუ რა აიდის მატარებელი ელემენტი უნდა დააბდეითდეს
+   const navigate  =useNavigate();
+   const { ID } = useParams();
+   console.log(useParams()?.ID)
     useState(()=>{
         try{
-            const response = async ()=>  await  axios.get(`${BASE_URL}/thematics/${id}`).then(res=>setThematic(res.data))
+            const response = async ()=>  await  axios.get(`${BASE_URL}/thematics/${ID}`).then(res=>setThematic(res.data))
         }  
           catch(err){   
             console.log(err);
 
         }
-        console.log(id);
-    },[id])
+        console.log(ID);
+        console.log(typeof(ID))
+    },[ID])
     const [isOpen ,  setIsOpen] = useState(true)
     const onSave=  (Georgian:any , English:any, id?:any)=>{
             
             console.log(English , Georgian, id , "onSave")
+          
+       
             navigate('/added')
-    }
-    const navigate  =useNavigate();
+        }
     const onCancel=()=>{
         navigate(-1)
         setIsOpen(false);

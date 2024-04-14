@@ -6,6 +6,9 @@ import type { TableColumnsType } from 'antd';
 import {Link} from 'react-router-dom';
 import TranslationComponent from './TranslationComponent/TranslationComponent';
 import {PlusCircleOutlined , CloseCircleTwoTone , EditTwoTone} from "@ant-design/icons" 
+
+import { useStore } from './ContextAPI/StoreProvider';
+
   // costum კომპონენტი
 
 //ცხრილის ველების  მნიშვნელობები
@@ -14,8 +17,7 @@ import {PlusCircleOutlined , CloseCircleTwoTone , EditTwoTone} from "@ant-design
     GeorgianMeaning:string;
     EnglishMEaning:string;
  }
-const handleDelete=()=>{
-}
+
 const Thematic:React.FC = () => {
   const navigate = useNavigate();
   // დავუშვათ და გვაქვს სზოგადად წამოღებული 
@@ -23,57 +25,10 @@ const Thematic:React.FC = () => {
   // შემდეგ ამას დავმაპავთ და მხოლოდ იმ ველებს 
   //ამოვიღებთ რომლებიც გამოსაჩენად გვჭირდება
 
-  const [thematics , setThematics] = useState([
-    {
-        id:1,
-        GeorgianMeaning:"წაშლა",
-        EnglishMeaning:"remove",
-        subtopics:[""],
-       
-    },
-    {
-        id:2,
-        GeorgianMeaning:"დამატება",
-        EnglishMeaning:"add",
-        subtopics:[""],
-    },
-    {
-        id:3,
-        GeorgianMeaning:"წაშლა",
-        EnglishMeaning:"remove",
-        subtopics:[""],
-    },
-    {
-        id:4,
-        GeorgianMeaning:"წაშლა",
-        EnglishMeaning:"remove",
-        subtopics:[""],
-    },
-    {
-        id:5,
-        GeorgianMeaning:"წაშლა",
-        EnglishMeaning:"remove",
-        subtopics:[""],
-    },
-    {
-        id:6,
-        GeorgianMeaning:"წაშლა",
-        EnglishMeaning:"remove",
-        subtopics:[""],
-    },
-
-])
-  const [isOpen ,  setIsOpen] = useState(false)
-    const onSave=  (Georgian:any , English:any, id?:any)=>{
-            console.log(English , Georgian, id , "onSave")
-            navigate('/added')
-    }
-    const onCancel=()=>{
-          setIsOpen(false)
-          navigate(-1)
-    }
+  
     // აქ განვსაზღვრავ თუ რა ველები არის საჭირო ცხრილის სახით გამოსაჩენათ
     // 
+    const {thematics , isOpen, onCancel , onSave} = useStore();
   const  columns: TableColumnsType<dataType> = [
     {
       title:"თემატიკა",// რაც  გამოჩნდება ცხრილის სვეტის სათაურში

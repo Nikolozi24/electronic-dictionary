@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom';
 import TranslationComponent from './TranslationComponent/TranslationComponent';
 import {PlusCircleOutlined , CloseCircleTwoTone , EditTwoTone} from "@ant-design/icons" 
 
-import { useStore } from './ContextAPI/StoreProvider';
+;
 
   // costum კომპონენტი
 

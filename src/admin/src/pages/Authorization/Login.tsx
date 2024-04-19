@@ -1,111 +1,162 @@
-import React from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import {Link , useNavigate ,  useLocation} from 'react-router-dom'
-
-import axios from 'axios'
+import { useEffect, } from 'react'
 import "./Login.css"
-import {useStore} from "../../components/ContextAPI/StoreProvider.jsx"
-import { useForm } from 'react-hook-form';
-
-interface valueType {
-  values:{
-    username:string;
-    password:string;
-    remember:boolean;
-  }
-}
-const LoginForm: React.FC = () => {
+import {useForm} from "react-hook-form"
+import { LockOutlined , UserOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { SET_AUTH } from '../../components/Store/redux/actionTypes';
+import axios from "../../components/API/axios"
+import { useDispatch} from 'react-redux';
+import Cookies from 'universal-cookie';
 
 
+const Login = () => {
 
-  const { setAuth } =useStore();
-  const BASE_URL = 'http://localhost:5173/';
-  const LOGIN_URL ='/auth';
+const dispatch = useDispatch()
+
   const navigate = useNavigate();
-  
-  // რომ გავიგოთ თუ რომელ გვერდიდან გადმოვიდა
-  const location = useLocation();
-  
-  const from  = location.state?.from?.pathname || "/";
-  const onFinish =  async (values:any) => {
-    /// ნავიგაციისთის
-    try{
-        const response = await axios.post( `${BASE_URL}${LOGIN_URL}`, JSON.stringify({values})
-      ,{
+  type formType= {
+    username:string,
+    password:string
+  }
+  useEffect(()=>{
+    const cookies = new Cookies()
+    cookies.remove("admin")
+    cookies.remove("moderator")
+
+
+
+
+  },[])
+  const form = useForm<formType>();
+  const{register , formState ,   handleSubmit , getValues} = form
+  const {errors }  = formState
+  const LOGIN_INFO_URL = "/auth"
+  const HandleLogin= async ()=>{
+      try{
+        // 
+        // 
+        const response = await axios.post(LOGIN_INFO_URL ,JSON.stringify({username: getValues("username") , password:getValues("password")}) , {
             headers:{"Content-Type":'application/json'},
             withCredentials:true
+        })
+
+        const accToken = response?.data?.accessToken;
+        const roles = response?.data?.roles;
+
+        dispatch({
+                  type:SET_AUTH, 
+                  payload:{
+                                username:getValues("username"), 
+                                password:getValues("password"),
+                                roles:roles,
+                                accessToken:accToken
+                    }
+                  }
+                )
+                navigate("/main")
+       }
+       catch (err:any){
+        if(!err.response){
+          console.log("no Server Response")
+          alert("no Server Response")
         }
-      )
-      const accessToken = response.data.accessToken;
-      const roles = response.data.roles
-      console.log(values , values.user)
-      setAuth({ user:values?.username ,password:values?.password, roles, accessToken});
-      navigate(from , {replace:true})
-
-    }
-
-    catch(err:any){
-      console.log(values.username)
-      if(!err?.response){
-          alert("No Server Response")
-      }
-      else if(err.response?.status ===400){
-        alert("missing username or password")
-      }
-      else if(err.response?.status===401){
+        else if(err.response?.status===400 ){
+            console.log("Missing Username or Password");
+            alert("MIssing Username or password")
+        }
+        else if(err.response?.status===401){
+          console.log("Unauthorized")
           alert("Unauthorized")
-      }
-          else{
-              alert("Login Failed");
+        }
+        else{
+          console.log("Login Failed")
+          alert("Login Failed")
+        }
+       }
 
-          }
-      }
 
-    }
+
+
+
+
+    /*         const submitedPassword = getValues("password");
+            console.log(submitedUsername, submitedPassword)
+    usersInfo.map(data=>{
+      console.log("inside map")
+              if(data.username === submitedUsername && data.password === submitedPassword){
+               console.log("inside Accepted!")
+                if(data.status == "moderator"){
+                  console.log("inside moderator");
+                cookies.set('moderator' ,true ,{path:'/'});
+              }
+              
+              else {
+                if(data.status =="admin")
+                {
+                  console.log(" inside admin")
+                  
+                  
+                  cookies.set('admin' , true , {path:'/'})
+                }
+              }
+              navigate("/admin-panel")
+            }
+
+          })
+
+
+          console.log("clicked") */
+   }
 
 
   return (
-    <Form
-      name="normal_login"
-      className="login-form"
-      initialValues={{ remember: true }}
-      onFinish={onFinish }
-    >
-      <Form.Item
-        rules={[{ required: true, message: 'Please input your Username!' }]}
-        name="username"
-      >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-      </Form.Item>
-      <Form.Item
-        name="password"
-        rules={[{ required: true, message: 'Please input your Password!' }]}
-      >
-        <Input
-          prefix={<LockOutlined className="site-form-item-icon" />}
-          type="password"
-          placeholder="Password"
-        />
-      </Form.Item>
-      <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
+    <div className={`login`}>
+      <div className='wrapper'>
 
-        <a className="login-form-forgot" href="/">
-          Forgot password
-        </a>
-      </Form.Item>
+          <form action='' className='' noValidate onSubmit={handleSubmit(HandleLogin, ()=>{ alert("შეცდომა")})}>
+          <div className='login-header'>
 
-      <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
-          Log in
-        </Button>
-       
-      </Form.Item>
-    </Form>
-  );
-};
+          <h1 className={``}>{'შესვლა'}</h1>
+          <div className='langSection'> 
+         
+            </div>
+          </div>
+          <div  className={`input-box`}>
+            <input type='text' placeholder={'მომხმარებელი'}
+              {...register("username" , {
+                required:true,
+                validate:(fieldValue)=>{
+                    return fieldValue!="admin@example.com" || "this is bad email"
+                }
+              })}
+              className={`${formState.errors.username?  "error" :""}`}
+            />
+           <UserOutlined  className='icon'/>
+          </div>
+            <div className='input-box'>
 
-export default LoginForm;
+            <input type='password' placeholder={'პაროლი'}
+                {...register("password" , {
+                  required:{
+                   value:true,
+                  message:"this field is required"
+                  },
+                  minLength:8
+                })}
+                className={`${errors.password? "error":""}`}
+            />
+              
+              <LockOutlined className='icon'/>
+            </div>
+            {/* <div className='remember-forget'>
+                <label><input type='checkbox'/>{'დამახსოვრება'}</label>
+            </div> */}
+              <button disabled={errors.password ||errors.username ? true : false} onClick={()=>{}} type='submit'>{'შესვლა'}</button>
+
+           </form>
+      </div>
+  
+    </div>
+  )
+}
+export default Login

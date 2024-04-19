@@ -1,15 +1,13 @@
 import { useLocation , Navigate, Outlet } from 'react-router-dom'
 import React, { useState } from 'react'
+import { UseSelector, useSelector } from 'react-redux'
 
 interface RoleTypes{
   allowedRoles:number[]
 }
 
 const RequireAuth:React.FC<RoleTypes> = ({allowedRoles=[]}) => {
-const auth = {
-  roles:[],
-  user:"",
-}
+const auth = useSelector(state=>state.auth)
 const location = useLocation()
 
   return (

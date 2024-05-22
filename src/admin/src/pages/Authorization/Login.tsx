@@ -2,24 +2,26 @@ import { useEffect, } from 'react'
 import "./Login.css"
 import {useForm} from "react-hook-form"
 import { LockOutlined , UserOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
-import { SET_AUTH } from '../../components/Store/redux/actionTypes';
-import axios from "../../components/API/axios"
+import { useNavigate , useLocation } from 'react-router-dom';
+import useAxiosPrivate from "../../components/Hooks/useAxiosPrivate.js"
 import { useDispatch} from 'react-redux';
 import Cookies from 'universal-cookie';
+import { authActions } from '../../components/Store/redux/authSlice';
 
 
 const Login = () => {
 
 const dispatch = useDispatch()
+const  axiosPrivate = useAxiosPrivate();
 
   const navigate = useNavigate();
+  const location =  useLocation();
   type formType= {
     username:string,
     password:string
   }
+  const cookies = new Cookies()
   useEffect(()=>{
-    const cookies = new Cookies()
     cookies.remove("admin")
     cookies.remove("moderator")
 
@@ -30,31 +32,31 @@ const dispatch = useDispatch()
   const form = useForm<formType>();
   const{register , formState ,   handleSubmit , getValues} = form
   const {errors }  = formState
-  const LOGIN_INFO_URL = "/auth"
+ // const LOGIN_INFO_URL = "/auth"
   const HandleLogin= async ()=>{
       try{
         // 
-        // 
-        const response = await axios.post(LOGIN_INFO_URL ,JSON.stringify({username: getValues("username") , password:getValues("password")}) , {
+        //  /// რეალური აპისთვის
+        const response = await axiosPrivate.post("/login",JSON.stringify({username: getValues("username") , password:getValues("password")}) , {
             headers:{"Content-Type":'application/json'},
             withCredentials:true
         })
-
-        const accToken = response?.data?.accessToken;
-        const roles = response?.data?.roles;
-
-        dispatch({
-                  type:SET_AUTH, 
-                  payload:{
-                                username:getValues("username"), 
-                                password:getValues("password"),
-                                roles:roles,
-                                accessToken:accToken
-                    }
-                  }
-                )
-                navigate("/main")
-       }
+        let role =[] ;
+        let  accToken="" ;
+        /// სატესტო{
+          if(getValues("username") === "adminAdmin"  && getValues("password") ==="HelloWorld"){
+            role = [1900, 2001];
+            accToken = "dfsdhjlk;frouhrgthgngtygeruirieterhifhgrlghsif";
+          }
+          else{
+            throw 404
+          }
+          cookies.set("jwt" , accToken);
+          navigate("/main")
+          dispatch(authActions.setAuth({username:getValues("username"),password:getValues("password"),roles:role,accessToken:accToken}
+        )
+      )
+    }
        catch (err:any){
         if(!err.response){
           console.log("no Server Response")
@@ -72,40 +74,8 @@ const dispatch = useDispatch()
           console.log("Login Failed")
           alert("Login Failed")
         }
+
        }
-
-
-
-
-
-
-    /*         const submitedPassword = getValues("password");
-            console.log(submitedUsername, submitedPassword)
-    usersInfo.map(data=>{
-      console.log("inside map")
-              if(data.username === submitedUsername && data.password === submitedPassword){
-               console.log("inside Accepted!")
-                if(data.status == "moderator"){
-                  console.log("inside moderator");
-                cookies.set('moderator' ,true ,{path:'/'});
-              }
-              
-              else {
-                if(data.status =="admin")
-                {
-                  console.log(" inside admin")
-                  
-                  
-                  cookies.set('admin' , true , {path:'/'})
-                }
-              }
-              navigate("/admin-panel")
-            }
-
-          })
-
-
-          console.log("clicked") */
    }
 
 

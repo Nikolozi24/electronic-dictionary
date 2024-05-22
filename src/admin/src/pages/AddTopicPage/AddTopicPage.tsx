@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 // import TranslationComponent from '../../components/TranslationComponent/TranslationComponent.tsx';
 import Thematic from '../../components/TematicTable.tsx';
 import "./AddTopicPage.css"
+import Header from '../../components/Header/Header.tsx';
+
 
 const AddTopic: React.FC = () => {
   const [modalIsOpen, setModalOpen] = useState(false);
@@ -15,9 +17,10 @@ const AddTopic: React.FC = () => {
         setModalOpen(false);
     }
 
+
     return ( 
             <div className='thematic'>
-
+            <Header/>
             <Thematic />
             </div>
                         /* <Button type="primary" onClick={() => setModalOpen(true)}>

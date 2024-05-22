@@ -1,7 +1,12 @@
-import { createStore } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 
-import reducer from "./Reducer.tsx";
+import { AuthSlice } from "./authSlice.tsx";
+import { thematicSlice } from "./thematicSlice.tsx";
 
-const store = createStore(reducer)
+
+
+const store = configureStore({
+    reducer:{auth: AuthSlice.reducer , thematic: thematicSlice.reducer}
+})
 
 export default store

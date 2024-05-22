@@ -1,108 +1,206 @@
-import React from 'react'
-import "../../styles/FillWordToDatabase.css"
-import { BsDatabaseAdd } from "react-icons/bs";
-import { useStore } from '../../Store/Store';
-import {useForm , useFieldArray, FieldValue} from "react-hook-form"
-import Cookies from 'universal-cookie';
-const FillWordToDatabase = () => {
-  const cookies  = new Cookies()
+import React from "react";
+import "./fillWord.css";
+
+import { useForm, useFieldArray, FieldValue } from "react-hook-form";
+import { DeleteFilled } from "@ant-design/icons"
+import Cookies from "universal-cookie";
+import Header from "../../components/Header/Header";
+
+const FillWordToDatabase:React.FC = () => {
+  const cookies = new Cookies();
   type formType = {
-      headWord:string,
-      partOfSpeech:"noun"|"adjective", 
-      styleQualification:string,
-      EqToTheHeadOfWord:string,
-      DefOfTheHeadGeorgian:{
-        definition:string,
-      }[],
-      DefInEnglish:string,
-      IllustrativeSentInGeorgian:string,
-      TranslationOfIlSentIntoEng:string,
-      ContextSrc:string,
-      idiom:string,
-      Synonym:string,
-      UsageNote:string,
-      photo:string,
-      topic:string,
-      subtopic:string,
-    }
+    headWord: string;
+    partOfSpeech: "noun" | "adjective";
+    styleQualification: string;
+    EqToTheHeadOfWord: string;
+    DefOfTheHeadGeorgian: {
+      definition: string;
+    }[];
+    DefInEnglish: string;
+    IllustrativeSentInGeorgian: string;
+    TranslationOfIlSentIntoEng: string;
+    ContextSrc: string;
+    idiom: string;
+    Synonym: string;
+    UsageNote: string;
+    photo: string;
+    topic: string;
+    subtopic: {
+      value:string
+    }[];
+  };
 
-  const form  = useForm<formType>({
-    defaultValues:{
-      headWord:"",
-      partOfSpeech:"noun",
-      styleQualification:"",
-      EqToTheHeadOfWord:"",
-      DefOfTheHeadGeorgian:[{definition:""}],
-      DefInEnglish:"",
-      IllustrativeSentInGeorgian:"",
-      TranslationOfIlSentIntoEng:"",
-      ContextSrc:"",
-      idiom:"",
-      Synonym:"",
-      UsageNote:"",
-      photo:"",
-      topic:"",
-      subtopic:""
-
-    }
+  const form = useForm<formType>({
+    defaultValues: {
+      headWord: "",
+      partOfSpeech: "noun",
+      styleQualification: "",
+      EqToTheHeadOfWord: "",
+      DefOfTheHeadGeorgian: [{ definition: "" }],
+      DefInEnglish: "",
+      IllustrativeSentInGeorgian: "",
+      TranslationOfIlSentIntoEng: "",
+      ContextSrc: "",
+      idiom: "",
+      Synonym: "",
+      UsageNote: "",
+      photo: "",
+      topic: "",
+      subtopic:[{
+            value:""
+      }],
+    },
   });
-  const {register  , control} = form;
-const {fields , append , remove}= useFieldArray({
-  name:"DefOfTheHeadGeorgian",
-  control
-})
-
+  const { register, control , getValues } = form;
+  const { fields:defields, append:defAppend, remove:deffRemove } = useFieldArray(
+    {
+    name:"DefOfTheHeadGeorgian",
+    control,
+  });
+  const { fields:subtopFields, append:subtopAppend, remove:subtopRemove } = useFieldArray(
+    {
+    name:"subtopic",
+    control,
+  });
   return (
-  (cookies.get("moderator")|| cookies.get("admin"))&&  <div className='fillWordForm'>   
-                <div className='background'>
+    <div className="fillWordForm">
+      <Header>
 
-                    <span className='database-logo'><BsDatabaseAdd size="middle"/></span>
-                    <span className="text">Input to database</span>
-                </div>
+      </Header>
+  
+      <form className="form" onSubmit={(e)=>{ e.preventDefault(); console.log(getValues())}} >
+        <input
+          type="text"
+          {...register("headWord", {
+            required: "მეთაური სიტყვა სავალდებულოა!",
+          })}
+          placeholder={`  მეთაური სიტყვა`}
+        />
+        <input
+          type="text"
+          {...register("partOfSpeech", {
+            required: "მეტყველების ნაწილის ველი სავალდებულოა!",
+          })}
+          placeholder={"ნეტყველების ნაწილი"}
+        />
+        <input
+          type="text"
+          {...register("styleQualification", {required:"ველი სავალდებულოა"})}
+          placeholder={` სტილისტური კვალიფიკაცია`}
+        />
+        <input
+          type="text"
+          {...register("EqToTheHeadOfWord", {
+            required: "მეთაური სიტყვის ექვივალენტი სავალდებულოა!",
+          })}
+          placeholder={`მეთაური სიტყვის ექვივალენტი`}
+        />
+        {
+          defields.map((field, index)=>{
+            return(index>0? <div className="subtopic">
 
-            <form className='form' method='post'>
-                <input type='text'{...register("headWord",{ required: "მეთაური სიტყვა სავალდებულოა!"}) }placeholder={`  "Head word":"მეთაური სიტყვა"}`}/>
-                <input type='text'{...register("partOfSpeech",{required:"მეტყველების ნაწილის ველი სავალდებულოა!"})} placeholder={"ნეტყველების ნაწილი"}/>
-                <input type='text'{...register("styleQualification",{})} placeholder={` "სტილისტური კვალიფიკაცია"}`}/>
-                <input type='text'{...register("EqToTheHeadOfWord",{required:  "მეთაური სიტყვის ექვივალენტი სავალდებულოა!"})} placeholder={`  "Equivalent to the head word":"მეთაური სიტყვის ექვივალენტი"}`}/>
-               
-                  {
-                    fields.map((field , index) =>{
-                      return(
-                       
-                        <>
-                      <input type='text' key={field.id }
-                     // {...register(`DefOfTheHeadGeorgian.index}.definition` as const ,{})} placeholder={`  "Definition of the head word in Georgian":"მეთაური სიტყვის განმარტება ქართულად"}`}/>
-                      
-                       {index>0&& <button className='remove-button' type='button' onClick={()=>remove(index)}>remove</button>
-                    }
-                    </>
-                    
-
-                        )
-                  })
+                <input
+                type="text"
+                placeholder="მეთაური სიტყვის განმარტება"
+                {...register(`DefOfTheHeadGeorgian.${index}.definition` as const , {required:"ველი სავალდებულოა"})}
+                />
+                {
+                  index>0 && <button className="remove-button" onClick={()=>{deffRemove(index)}}><DeleteFilled /></button>
                 }
-                <button type='button' className='add-button' onClick={()=>append({definition:""})}>{ `Add Definition of the Head word of Georgian`:"მეთაური სიტყვის განმარტება ქართულად"}</button>
-        
-                <input type='text'{...register("DefInEnglish",{})} placeholder={`  "Definition in English":" განმარტება ინგლისურად"}`}/>
-                <input type='text'{...register("IllustrativeSentInGeorgian",{})} placeholder={`  "Illustrative sentence in Georgian":"საილუსტრაციო წინადადება ქართულად"}`}/>
-                <input type='text'{...register("TranslationOfIlSentIntoEng",{})} placeholder={`  "Translation of the illustrative sentence into English":"საილუსტრაციო წინადადების თარგმაანი ინგლისურად"}`}/>
-                <input type='text'{...register("ContextSrc",{})} placeholder={`  "context source":"კონტექსტის წყარო"}`}/>
-                <input type='text'{...register("idiom",{})} placeholder={`  "idiom":"იდიომი"}`}/>
-                <input type='text'{...register("Synonym",{})} placeholder={`  "Synonym":"სინონიმი"}`}/>
-                <input type='text'{...register("UsageNote",{})} placeholder={`  "Usage note ":"დამატებითი კომენტარი"}`}/>
-                <input type='text'{...register("photo",{})} placeholder={`  "photo":"ფოტო"}`}/>
-                <input type='text'{...register("topic",{})} placeholder={`  "topic ":"თემატიკა "}`}/>
-                <input type='text'{...register("subtopic",{})} placeholder={`  " subtopic":"ქვეთემატიკა "}`}/>
-                
-              <button className='submit-button' type='submit'>Add word</button>
+                </div>
+                :
+                <input
+                type="text"
+                placeholder="მეთაური სიტყვის განმარტება"
+                {...register(`DefOfTheHeadGeorgian.${index}.definition` as const , {required:"ველი სავალდებულოა"})}
+                />
 
+            )
+          }
+          )
+        }
+        <button
+          type="button"
+          className="add-button"
+          onClick={() => defAppend({ definition: "" })}
+        >
+          {"მეთაური სიტყვის განმარტება ქართულად"}
+        </button>
 
-            </form>
+        <input
+          type="text"
+          {...register("DefInEnglish", {required:"ველი სავალდებულოა"})}
+          placeholder={` განმარტება ინგლისურად`}
+        />
+        <input
+          type="text"
+          {...register("IllustrativeSentInGeorgian", {})}
+          placeholder={`  საილუსტრაციო წინადადება ქართულად`}
+        />
+        <input
+          type="text"
+          {...register("TranslationOfIlSentIntoEng", {})}
+          placeholder={`  საილუსტრაციო წინადადების თარგმაანი ინგლისურად`}
+        />
+        <input
+          type="text"
+          {...register("ContextSrc", {required:"ველი სავალდებულოა"})}
+          placeholder={`კონტექსტის წყარო`}
+        />
+        <input
+          type="text"
+          {...register("idiom", {})}
+          placeholder={`  "idiom":"იდიომი"}`}
+        />
+        <input
+          type="text"
+          {...register("Synonym", {})}
+          placeholder={`  სინონიმი`}
+        />
+        <input
+          type="text"
+          {...register("UsageNote", {})}
+          placeholder={`  დამატებითი კომენტარი`}
+        />
+        <input
+          type="text"
+          {...register("photo", {})}
+          placeholder={` ფოტო`}
+        />
+        <input
+          type="text"
+          {...register("topic", {required:"ველი სავალდებულოა"})}
+          placeholder={`თემატიკა`}
+        />
+        {
+          subtopFields.map((field, index)=>{
+            return(index>0? <div className="subtopic">
+                <input
+                type="text"
+                placeholder="ქვეთემატიკა"
+                {...register(`subtopic.${index}.value` as const ,{required:"ველი სავალდებულოა"})}
+                />
+                  {
+                    index>0 && <button className="remove-button" onClick={()=>{subtopRemove(index)}}><DeleteFilled /></button>
+                  }
+                </div> :   <input
+                type="text"
+                placeholder="ქვეთემატიკა"
+                {...register(`subtopic.${index}.value` as const , {required:"ველი სავალდებულოა"})}
+                />
+            )
             
+          }
+          )
+        }
+        <button className="add-button" onClick={()=>{subtopAppend({value:""})}}>ქვეთემატიკის დამატება</button>
 
+        <button  className="submit-button" type="submit">
+          Add word
+        </button>
+      </form>
     </div>
-  )
-}
+  );
+};
 
-export default FillWordToDatabase
+export default FillWordToDatabase;

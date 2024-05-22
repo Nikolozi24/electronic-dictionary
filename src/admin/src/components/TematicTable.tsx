@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-  // ცხრილის  შესაქნელი ბიბლიოთეკა
+import { useState} from 'react'
   import {useNavigate}  from 'react-router-dom'
 import { Table , Flex, Layout } from 'antd'
 import type { TableColumnsType } from 'antd';
@@ -7,6 +6,9 @@ import {Link} from 'react-router-dom';
 import TranslationComponent from './TranslationComponent/TranslationComponent';
 import {PlusCircleOutlined , CloseCircleTwoTone , EditTwoTone} from "@ant-design/icons" 
 
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { thematicActions } from './Store/redux/thematicSlice';
 ;
 
   // costum კომპონენტი
@@ -28,7 +30,14 @@ const Thematic:React.FC = () => {
   
     // აქ განვსაზღვრავ თუ რა ველები არის საჭირო ცხრილის სახით გამოსაჩენათ
     // 
-    const {thematics , isOpen, onCancel , onSave} = useStore();
+    const thematics = useSelector(state=>state.thematic.thematic);
+  const [isOpen , setIsOpen] = useState<boolean>(false)
+  const onSave=(geo:string, english:string, id:any)=>{
+      console.log({geo, english,id})
+
+
+  }
+  
   const  columns: TableColumnsType<dataType> = [
     {
       title:"თემატიკა",// რაც  გამოჩნდება ცხრილის სვეტის სათაურში
@@ -74,7 +83,7 @@ const Thematic:React.FC = () => {
  
       
       
-  
+  const dispatch = useDispatch()
   
 console.log(data)
 
@@ -88,7 +97,7 @@ console.log(data)
             title="სიტყვის დამატება"
             isOpen={isOpen}
             onSave={onSave}
-            onCancel={onCancel}
+            onCancel={()=>{setIsOpen(false)}}
   />
     <Flex  gap={'20px'} vertical  style={{}} justify='center'>
     <Layout >

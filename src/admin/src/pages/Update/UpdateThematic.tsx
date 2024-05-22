@@ -44,6 +44,7 @@ const UpdateThematic:React.FC=() => {
     }
     return (
     <div>
+
             <TranslationComponent
             id={thematic.id}
             georgianName={thematic.GeorgianMeaning}

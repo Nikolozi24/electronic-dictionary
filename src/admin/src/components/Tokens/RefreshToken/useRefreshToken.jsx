@@ -19,13 +19,13 @@ const useRefreshToken = () => {
   const dispatch = useDispatch()
 
   const refresh =  async () =>{
-    const response = await axios.get('/refresh',{
+    const response = await axios.get('http://localhost/api/identity/refresh',{
       withCredentials:true
     })
-    const newAuth =  {...auth , accessToken: response.data.accessToken}
+    const newAuth =  {...auth , accessToken: response.accessToken}
       dispatch({type:SET_AUTH , payload: {...newAuth}})
 
-      return response.data.accessToken
+      return response
   }
   return refresh;
 }

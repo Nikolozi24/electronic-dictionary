@@ -1,29 +1,32 @@
-import { useEffect, } from 'react'
+import { useEffect,useState } from 'react'
 import "./Login.css"
 import {useForm} from "react-hook-form"
 import { LockOutlined , UserOutlined } from '@ant-design/icons';
 import { useNavigate , useLocation } from 'react-router-dom';
-import useAxiosPrivate from "../../components/Hooks/useAxiosPrivate.js"
+import useAxiosPrivate from "../../components/Hooks/UseAxiosPrivate.js"
 import { useDispatch} from 'react-redux';
 import Cookies from 'universal-cookie';
 import { authActions } from '../../components/Store/redux/authSlice';
+import axios from 'axios';
+
+
 
 
 const Login = () => {
-
 const dispatch = useDispatch()
+const [roles,setRoles] = useState([]);
 const  axiosPrivate = useAxiosPrivate();
 
   const navigate = useNavigate();
   const location =  useLocation();
   type formType= {
-    username:string,
+   email:string,
     password:string
   }
   const cookies = new Cookies()
   useEffect(()=>{
     cookies.remove("admin")
-    cookies.remove("moderator")
+    cookies.remove("super-admin")
 
 
 
@@ -33,27 +36,43 @@ const  axiosPrivate = useAxiosPrivate();
   const{register , formState ,   handleSubmit , getValues} = form
   const {errors }  = formState
  // const LOGIN_INFO_URL = "/auth"
+
+
+
+ // Make a request for a user with a given ID
+
+
   const HandleLogin= async ()=>{
       try{
         // 
         //  /// რეალური აპისთვის
-        const response = await axiosPrivate.post("/login",JSON.stringify({username: getValues("username") , password:getValues("password")}) , {
-            headers:{"Content-Type":'application/json'},
-            withCredentials:true
-        })
-        let role =[] ;
-        let  accToken="" ;
-        /// სატესტო{
-          if(getValues("username") === "adminAdmin"  && getValues("password") ==="HelloWorld"){
-            role = [1900, 2001];
-            accToken = "dfsdhjlk;frouhrgthgngtygeruirieterhifhgrlghsif";
+        const response = await axios.post("http://localhost/api/identity/login",
+          {
+           email:getValues("email") , 
+           password:getValues("password")
+          } ,{
+            headers:{
+              'Access-Control-Allow-Origin':'*'
+              
+            }
           }
-          else{
-            throw 404
+         
+        )
+         
+         const tokenType = response.data.tokenType;
+         const expiresIn = response.data.expiresIn;
+         const accToken = response.data.accessToken;
+         cookies.set(tokenType, accToken, {
+          expires: expiresIn
+         })
+         console.log(response)
+         const role = axios.get("http://localhost/api/identity/user",
+          {
+           Authorization:"Bearer Token"+accToken
           }
-          cookies.set("jwt" , accToken);
+        ).then(resp=>console.log(resp))
           navigate("/main")
-          dispatch(authActions.setAuth({username:getValues("username"),password:getValues("password"),roles:role,accessToken:accToken}
+          dispatch(authActions.setAuth({username:getValues("email"),password:getValues("password"),roles:role,accessToken:accToken}
         )
       )
     }
@@ -76,9 +95,13 @@ const  axiosPrivate = useAxiosPrivate();
         }
 
        }
+
+      
+
+
+
+
    }
-
-
   return (
     <div className={`login`}>
       <div className='wrapper'>
@@ -92,8 +115,8 @@ const  axiosPrivate = useAxiosPrivate();
             </div>
           </div>
           <div  className={`input-box`}>
-            <input type='text' placeholder={'მომხმარებელი'}
-              {...register("username" , {
+            <input type='email' placeholder={'მომხმარებელი'}
+              {...register("email" , {
                 required:true,
                 validate:(fieldValue)=>{
                     return fieldValue!="admin@example.com" || "this is bad email"
@@ -111,7 +134,7 @@ const  axiosPrivate = useAxiosPrivate();
                    value:true,
                   message:"this field is required"
                   },
-                  minLength:8
+                  minLength:5
                 })}
                 className={`${errors.password? "error":""}`}
             />
@@ -125,6 +148,8 @@ const  axiosPrivate = useAxiosPrivate();
 
            </form>
       </div>
+     
+
   
     </div>
   )

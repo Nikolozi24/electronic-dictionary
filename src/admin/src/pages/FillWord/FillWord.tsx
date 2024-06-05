@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./fillWord.css";
 
 import { useForm, useFieldArray, FieldValue } from "react-hook-form";
 import { DeleteFilled } from "@ant-design/icons"
-import Cookies from "universal-cookie";
+
 import Header from "../../components/Header/Header";
 
+
 const FillWordToDatabase:React.FC = () => {
-  const cookies = new Cookies();
+
   type formType = {
     headWord: string;
     partOfSpeech: "noun" | "adjective";
@@ -17,8 +18,8 @@ const FillWordToDatabase:React.FC = () => {
       definition: string;
     }[];
     DefInEnglish: string;
-    IllustrativeSentInGeorgian: string;
-    TranslationOfIlSentIntoEng: string;
+    IllustrativeSentInGeorgian: {ilustrationGeo:string;}[];
+    TranslationOfIlSentIntoEng: {ilustrationEng:string;}[];
     ContextSrc: string;
     idiom: string;
     Synonym: string;
@@ -38,8 +39,8 @@ const FillWordToDatabase:React.FC = () => {
       EqToTheHeadOfWord: "",
       DefOfTheHeadGeorgian: [{ definition: "" }],
       DefInEnglish: "",
-      IllustrativeSentInGeorgian: "",
-      TranslationOfIlSentIntoEng: "",
+      IllustrativeSentInGeorgian: [{ ilustrationGeo: "" }],
+      TranslationOfIlSentIntoEng: [{ ilustrationEng: "" }],
       ContextSrc: "",
       idiom: "",
       Synonym: "",
@@ -60,6 +61,16 @@ const FillWordToDatabase:React.FC = () => {
   const { fields:subtopFields, append:subtopAppend, remove:subtopRemove } = useFieldArray(
     {
     name:"subtopic",
+    control,
+  });
+  const { fields:ilustrationGeoFields, append:IlustratonGeoAppend, remove:IlustrationGeoRemove } = useFieldArray(
+    {
+    name:"IllustrativeSentInGeorgian",
+    control,
+  });
+  const { fields:ilustrationEngFields, append:ilustrationEngAppend, remove:ilustrationEngRemove } = useFieldArray(
+    {
+    name:"TranslationOfIlSentIntoEng",
     control,
   });
   return (
@@ -132,16 +143,68 @@ const FillWordToDatabase:React.FC = () => {
           {...register("DefInEnglish", {required:"ველი სავალდებულოა"})}
           placeholder={` განმარტება ინგლისურად`}
         />
-        <input
-          type="text"
-          {...register("IllustrativeSentInGeorgian", {})}
-          placeholder={`  საილუსტრაციო წინადადება ქართულად`}
-        />
-        <input
-          type="text"
-          {...register("TranslationOfIlSentIntoEng", {})}
-          placeholder={`  საილუსტრაციო წინადადების თარგმაანი ინგლისურად`}
-        />
+          {
+          ilustrationGeoFields.map((field, index)=>{
+            return(index>0? <div className="subtopic">
+
+                <input
+                type="text"
+                placeholder="საილუსტრაციო წინადადება ქართულად"
+                {...register(`IllustrativeSentInGeorgian.${index}.ilustrationGeo` as const , {required:"ველი სავალდებულოა"})}
+                />
+                {
+                  index>0 && <button className="remove-button" onClick={()=>{IlustrationGeoRemove(index)}}><DeleteFilled /></button>
+                }
+                </div>
+                :
+                <input
+                type="text"
+                placeholder="საილუსტრაციო წინადადება  ქართულად"
+                {...register(`IllustrativeSentInGeorgian.${index}.ilustrationGeo` as const , {required:"ველი სავალდებულოა"})}
+                />
+
+            )
+          }
+          )
+        }
+         <button
+          type="button"
+          className="add-button"
+          onClick={() => IlustratonGeoAppend({ ilustrationGeo: "" })}
+        >
+          საილუსტრაციო წინადადების  დამატება
+        </button>
+        {
+        ilustrationEngFields.map((field, index)=>{
+            return(index>0? <div className="subtopic">
+
+                <input
+                type="text"
+                placeholder="საილუსტრაციო წინადადების თარგმაანი ინგლისურად"
+                {...register(`TranslationOfIlSentIntoEng.${index}.ilustrationEng` as const , {required:"ველი სავალდებულოა"})}
+                />
+                {
+                  index>0 && <button className="remove-button" onClick={()=>{ilustrationEngRemove(index)}}><DeleteFilled /></button>
+                }
+                </div>
+                :
+                <input
+                type="text"
+                placeholder="საილუსტრაციო წინადადების თარგმაანი ინგლისურად"
+                {...register(`TranslationOfIlSentIntoEng.${index}.ilustrationEng` as const , {required:"ველი სავალდებულოა"})}
+                />
+
+            )
+          }
+          )
+        }
+         <button
+          type="button"
+          className="add-button"
+          onClick={() => ilustrationEngAppend({ ilustrationEng:""})}
+        >
+          საილუსტრაციო წინადადება ინგლისურად  დამატება
+        </button>
         <input
           type="text"
           {...register("ContextSrc", {required:"ველი სავალდებულოა"})}

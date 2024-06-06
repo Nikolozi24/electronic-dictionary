@@ -48,8 +48,8 @@ const  axiosPrivate = useAxiosPrivate();
            password:getValues("password")
           } ,{
             headers:{
-              'Access-Control-Allow-Origin':'*'
-              
+              'Access-Control-Allow-Origin':'*',
+              'Content-Type': 'application/json'
             }
           }
          

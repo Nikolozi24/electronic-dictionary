@@ -19,10 +19,7 @@ const UpdateThematic:React.FC=() => {
    useState(()=>{
        try{
            const response = async ()=>  await  axiosPrivate.get(`http://localhost/api/topic/${ID}`);
-            setThematic = {
-                  
-
-            }
+          
        }  
          catch(err){   
            console.log(err);

@@ -55,6 +55,11 @@ select  option{
 ul{
     list-style-type: none;
 }
+div.forgetPassword>a{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', 'Arial', 'sans-serif';
+    font-size: 20px;
+    color: black;
+}
 ul li{
     text-decoration: underline;
     cursor: pointer;

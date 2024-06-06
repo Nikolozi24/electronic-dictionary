@@ -2,7 +2,7 @@ import { useEffect,useState } from 'react'
 import "./Login.css"
 import {useForm} from "react-hook-form"
 import { LockOutlined , UserOutlined } from '@ant-design/icons';
-import { useNavigate , useLocation } from 'react-router-dom';
+import { useNavigate , useLocation , Link} from 'react-router-dom';
 import useAxiosPrivate from "../../components/Hooks/UseAxiosPrivate.js"
 import { useDispatch} from 'react-redux';
 import Cookies from 'universal-cookie';
@@ -19,19 +19,15 @@ const  axiosPrivate = useAxiosPrivate();
 
   const navigate = useNavigate();
   const location =  useLocation();
-  type formType= {
-   email:string,
-    password:string
-  }
   const cookies = new Cookies()
   useEffect(()=>{
     cookies.remove("admin")
     cookies.remove("super-admin")
-
-
-
-
   },[])
+  type formType= {
+   email:string,
+    password:string
+  }
   const form = useForm<formType>();
   const{register , formState ,   handleSubmit , getValues} = form
   const {errors }  = formState
@@ -141,6 +137,7 @@ const  axiosPrivate = useAxiosPrivate();
               
               <LockOutlined className='icon'/>
             </div>
+            <div className='forgetPassword'><Link to="/forgetPassword">Forget Password?</Link></div>
             {/* <div className='remember-forget'>
                 <label><input type='checkbox'/>{'დამახსოვრება'}</label>
             </div> */}

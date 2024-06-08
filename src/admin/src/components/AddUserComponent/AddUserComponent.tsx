@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Input, Modal } from 'antd';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { thematicActions } from '../Store/redux/thematicSlice';
+import axios from 'axios';
+import GetCookie from '../Utilities/GetCookie';
+import "./AddUserComponent.css"
 
 interface Props {
   onSave: (username: string, email: string, password: string, role: string) => void;
@@ -23,47 +25,27 @@ const AddUserComponent: React.FC<Props> = ({ onSave, onCancel }) => {
     navigate('/fill')
   }
   const handleSave = () => {
-    onSave(username, email, password, role);
+    const Accjwt = GetCookie('jwt');
+    const response = axios.post("http://localhost/api/identity/add-user",{
+      email:email,
+      password:password,
+      role:role
+    },
+    {
+      headers:{
+        "Content-Type":'application/json',
+        'Authorization': "Bearer "+Accjwt,
+      },
+      withCredentials:true
+  }
+    )
+
+
     navigate('/added')
   };
   return (
-    <Modal
-      title="Add User"
-      open={isOpen}
-      centered
-      visible
-      cancelText="Cancel"
-      okText="Save"
-      onOk={handleSave}
-      onCancel={handleCancel}
-    >
-      <Input
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <br />
-      <br />
-      <Input
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <br />
-      <br />
-      <Input.Password
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br />
-      <br />
-      <Input
-        placeholder="Role"
-        value={role}
-        onChange={(e) => setRole(e.target.value)}
-      />
-    </Modal>
+  <div>
+  </div>
   );
 };
 

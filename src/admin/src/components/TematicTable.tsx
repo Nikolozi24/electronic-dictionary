@@ -1,21 +1,20 @@
-import { useState} from 'react'
+import { useEffect, useState} from 'react'
   import {useNavigate}  from 'react-router-dom'
 import { Table , Flex, Layout } from 'antd'
 import type { TableColumnsType } from 'antd';
 import {Link} from 'react-router-dom';
 import TranslationComponent from './TranslationComponent/TranslationComponent';
 import {PlusCircleOutlined , CloseCircleTwoTone , EditTwoTone} from "@ant-design/icons" 
-
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { thematicActions } from './Store/redux/thematicSlice';
+import axios from './API/axios';
+import GetCookie from './Utilities/GetCookie';
 ;
 
   // costum კომპონენტი
 
 //ცხრილის ველების  მნიშვნელობები
  interface dataType {
-    key:number;
+    id:number;
     GeorgianMeaning:string;
     EnglishMEaning:string;
  }
@@ -30,7 +29,21 @@ const Thematic:React.FC = () => {
   
     // აქ განვსაზღვრავ თუ რა ველები არის საჭირო ცხრილის სახით გამოსაჩენათ
     // 
-    const thematics = useSelector(state=>state.thematic.thematic);
+    const [thematics,setThematics] =useState([{id:"", GeorgianMeaning:"", EnglishMeaning:""}]) 
+
+  useEffect(   ()=>{
+    const accToken = GetCookie('jwt')
+   const  response =  axios.get("http://localhost/api/topic",{
+     
+          headers:{
+            'Access-Control-Allow-Origin':'*',
+            'Content-Type': 'application/json',
+            'Authorization':'Bearer'+" "+accToken
+          }
+    }).then(resp =>console.log(resp.data))
+
+  },
+  [])
   const [isOpen , setIsOpen] = useState<boolean>(false)
   const onSave=(geo:string, english:string, id:any)=>{
       console.log({geo, english,id})

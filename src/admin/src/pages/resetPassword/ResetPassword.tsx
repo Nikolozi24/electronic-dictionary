@@ -57,7 +57,7 @@ const ResetPassword:React.FC = () => {
       </div>
   
       <div className="btn-container">
-        <button className="btn" >Submit</button>
+        <button className="btn" >პაროლის შეცვლა</button>
       </div>
     </form>
   </div>

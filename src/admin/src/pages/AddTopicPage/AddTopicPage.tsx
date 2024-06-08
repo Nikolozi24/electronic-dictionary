@@ -3,10 +3,20 @@ import React, { useState } from 'react';
 // import TranslationComponent from '../../components/TranslationComponent/TranslationComponent.tsx';
 import Thematic from '../../components/TematicTable.tsx';
 import "./AddTopicPage.css"
+import { Navigate, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header.tsx';
+import GetCookie from '../../components/Utilities/GetCookie.tsx';
 
 
 const AddTopic: React.FC = () => {
+    const navigate = useNavigate();
+    useState(()=>{
+        const jwt = GetCookie('jwt')
+        console.log(jwt==="");
+        if(GetCookie('jwt')===""){
+            navigate("/")
+            }
+        },[])
   const [modalIsOpen, setModalOpen] = useState(false);
 
     function onSave(georgianName: string, englishName: string, id?: number){

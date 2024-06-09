@@ -48,7 +48,12 @@ const FillWordToDatabase:React.FC = () => {
       subTopicId:0,
       },
       })
-    const [subThematic, setSubThematic] = useState([""]);
+    const [subThematic, setSubThematic] = useState([{
+      id:1,
+      georgianName:"",
+      englishName:""
+      
+    }]);
     const [thematic, setThematic] = useState([
       {
         id:1,
@@ -65,14 +70,8 @@ useEffect(()=>{
               'Authorization':"Bearer "+ jwt
           }
   });
-  const thematis = response.data.map((item:{})=>{
-        return {
-          id:item.id,
-          georgianName:item.georgianName,
-          subThematic:item.subThematic
-        }
-    }) 
-  
+  const thematis = response.data
+  console.log(thematis)
   setThematic(thematis)
   
   }
@@ -80,15 +79,23 @@ fun()
   },[])
 
   useEffect(()=>{
-    const subThmatic = thematic.filter(item=> {return item.id == thetamticId});
-
-    setSubThematic(subThmatic)
+    const Thmatic = thematic.filter(item=> {return item.id == thetamticId});
+    console.log(Thmatic)
+    setSubThematic(Thmatic[0].subTopics)
+    console.log(Thmatic[0].subThopics)
 
   }
 ,[thetamticId])
+const handleThematicSelect  = ()=>{
+  var selectElement = document.getElementById("thematic");
+  var selectedValue = selectElement.value;
+   console.log(selectedValue)
+   setThematicId(selectedValue);
+  }
+
 
   const { register, control , getValues } = form;
-  
+  console.log(thetamticId)
   
   return (
     <div className="fillWordForm">
@@ -97,18 +104,25 @@ fun()
       </Header>
   
       <form className="formFill" onSubmit={(e)=>{ e.preventDefault(); console.log(getValues())}} >
-      <select name="thematic" className="minimal" id="thematic">
+      <select name="thematic" id="thematic" onChange={()=>handleThematicSelect()}  className="minimal" id="thematic">
             {
             thematic.map((item) => {
-                return <option key={item.id}  onClick={()=>{ setThematicId(item.id)}}value={item.id}>  {item.georgianName} </option>;
+                return <option key={item.id}  onClick={()=>{
+                  setThematicId(item.id);
+                  console.log(item.id)
+                }} value={item.id}>  {item.georgianName} </option>;
             })}
      </select>
-      <select name="subThematic" className="minimal" id="Subthematic">
+   
+      <select name="thematic" id="thematic" onChange={()=>handleThematicSelect()}  className="minimal" id="thematic">
             {
-              subThematic.map((item) => {
-                return <option key={item.id} value={item.id}>  {item.georgianName} </option>;
+            subThematic?.map((item) => {
+                return <option key={item.id}  onClick={()=>{
+                  
+                }} value={item.id}>  {item.georgianName} </option>;
             })}
      </select>
+   
         <input
           type="text"
           {...register("georgianHeadword", {
@@ -177,10 +191,13 @@ fun()
         />
         <div className="input-div">
           <label htmlFor="photo">photo</label>
-   <input id="photo" className="input" {...register("imageUrl",{})} type="file"/>
+   <input id="photo" className="input" {...register("imageUrl",{})} onChange={()=>{const el = document.getElementById('photo');
+    const val = el?.value;
+    console.log(val);
+
+   }}  type="file"/>
   <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" stroke-linejoin="round" stroke-linecap="round" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon"><polyline points="16 16 12 12 8 16"></polyline><line y2="21" x2="12" y1="12" x1="12"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
 </div>
-      <input type="text" placeholder=""/>
         <button  className="submit-button" type="submit">
           Add word
         </button>

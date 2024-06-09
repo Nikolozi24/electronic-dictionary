@@ -51,7 +51,6 @@ function App() {
           {/* </Route> */}
           <Route path="/fill" element={<FillWordToDatabase />} />
 
-          <Route path="/main" element={<Main />} />
           <Route path="/" element={<Welcome />} />
           <Route path="/forgetPassword" element={<ForgetPassword />} />
           <Route path="/resetPassword" element={<ResetPassword />} />

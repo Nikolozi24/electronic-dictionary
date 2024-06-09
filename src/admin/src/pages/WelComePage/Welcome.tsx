@@ -9,13 +9,14 @@ const Welcome:React.FC = () => {
     const [email, setEmail]= useState('')
     const [role, setRole]= useState('')
    
-        useEffect(()=>{
+    const jwt = GetCookie('jwt')
+   
+    useEffect(()=>{
+        if(jwt===""){
+            navigate("/login")
+        }
         const fun = async ()=>{
-          const jwt = GetCookie('jwt');
-          if(jwt===""){
-            throw 401
-          }
-          console.log(jwt)
+            console.log(jwt)
         
           try{
         
@@ -26,6 +27,11 @@ const Welcome:React.FC = () => {
                 }
         })
     const role = response.data.role;
+
+    if(role!="admin" || role!="super_admin"){
+        console.log("role does't exist")
+        navigate('/login')
+    }
 setRole(role);
 const email = response.data.email;
 setEmail(email);
@@ -37,7 +43,8 @@ catch(err){
 }
     }
     fun();
-    },[])
+    },
+[])
     return (
    
    

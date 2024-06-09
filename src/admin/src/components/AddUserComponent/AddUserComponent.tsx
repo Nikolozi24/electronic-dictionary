@@ -9,7 +9,7 @@ interface Props {
 }
 
 const AddUserComponent: React.FC<Props> = ({ onSave, onCancel }) => {
-  const [username, setUsername] = useState('');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
@@ -23,7 +23,7 @@ const AddUserComponent: React.FC<Props> = ({ onSave, onCancel }) => {
     navigate('/fill')
   }
   const handleSave = () => {
-    onSave(username, email, password, role);
+    onSave(email, password, role);
     navigate('/added')
   };
   return (
@@ -37,11 +37,7 @@ const AddUserComponent: React.FC<Props> = ({ onSave, onCancel }) => {
       onOk={handleSave}
       onCancel={handleCancel}
     >
-      <Input
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
+    
       <br />
       <br />
       <Input

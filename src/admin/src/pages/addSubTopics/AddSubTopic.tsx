@@ -129,12 +129,12 @@ const AddSubTopic: React.FC = () => {
   try  {
     const response = axios.post('http://localhost/api/topic/subTopic',{
       topicId:selectedValue,
-      georginName: subThematicGeo,
+      georgianName: subThematicGeo,
       englishName: subThematicEng,
     },
       {
         headers:{
-          'Accept':'application/json',
+           'Accept':'application/json',
            "Content-Type":"application/json",
            "Authorization":"Bearer "+jwt
            }

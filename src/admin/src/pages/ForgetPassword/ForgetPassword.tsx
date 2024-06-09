@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 const ForgetPassword:React.FC = () => {
   const navigate = useNavigate();
-const handleSubmit:React.FC=(e:any)=>{
+const handleSubmit=(e:any)=>{
 
         const value = document.getElementById('email')?.value;
         console.log(value)

@@ -20,41 +20,55 @@ import AddSubTopic from "./pages/addSubTopics/AddSubTopic";
 import FillWordToDatabase from "./pages/FillWord/FillWord.tsx";
 import axios from "./components/API/axios.tsx";
 import ResetPassword from "./pages/resetPassword/ResetPassword.tsx";
-
+import Welcome from "./pages/WelComePage/Welcome.tsx";
 import { Header } from "antd/es/layout/layout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import GetCookie from "./components/Utilities/Coookies/GetCookie.ts";
 import ForgetPassword from "./pages/ForgetPassword/ForgetPassword.tsx";
 function App() {
-  const [Roles ,setRoles] = useState([])
-  const [isLoading, setIsLoadin] = useState(true)
-  axios.get('http://localhost/api/identity/user-roles')
-  .then(response=> setRoles(response.data));  
+  const [role, setRole] = useState("");
+  const jwt = GetCookie("jwt");
+  useEffect(() => {
+    const fun = async () => {
+      console.log(jwt);
+      const response = await axios.get("http://localhost/api/identity/user", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + jwt,
+        },
+      });
+      const role = response.data.role;
+      setRole(role);
+    };
+    fun();
+  }, []);
   return (
-    <div className="app" onLoad={()=>{setIsLoadin(true)}}  >
+    <div className="app">
       <Router>
         <Routes>
-     
-          <Route path="/subTematic" element={<AddSubTopic />} />
-
           {/* // routes we want to protetc */}
-          <Route element={<RequireAuth allowedRoles={[Roles[1]]}/>}>
-            <Route path="/addUsers" element={<AddUser />} />
+          {/* <Route element={<RequireAuth allowedRoles={["admin" , "super_admin"]}/>}> */}
+          {/* </Route> */}
+          <Route path="/fill" element={<FillWordToDatabase />} />
 
-</Route>
+          <Route path="/main" element={<Main />} />
+          <Route path="/" element={<Welcome />} />
+          <Route path="/forgetPassword" element={<ForgetPassword />} />
+          <Route path="/resetPassword" element={<ResetPassword />} />
 
-{/* <Route element={<RequireAuth allowedRoles={[Roles[0] , Roles[1]]} />}  > */}
-<Route path='/main' element={<Main/>}/>
-<Route path='/forgetPassword' element={<ForgetPassword/>}/>
-<Route path="/resetPassword" element={<ResetPassword/>}/>
-<Route path="/addTopic" element={<AddTopic />} />
-<Route path={`/update/:ID`} element={<UpdateThematic />} />
-<Route path='/delete/:id' element={<Delete/>}/>
-<Route path='/added' element={<Added/>}/>
-<Route path='/added-failed' element={<AddedFailed/>}/>
-<Route path="/fill" element = {<FillWordToDatabase />} />
-<Route path='*' element={<Missing/>} />
-{/* </Route>                                                                                 */}
-<Route path='/' element={<Login/>}/>
+        
+         { role==="super_admin"&& <Route path="/addTopic" element={<AddTopic />} />}
+         {role==="super_admin"&&  <Route path={`/update/:ID`} element={<UpdateThematic />} />}
+          {role==="super_admin"&& <Route path="/subTematic" element={<AddSubTopic />} />}
+
+         {role==="super_admin"&&  <Route path="/addUsers" element={<AddUser />} />}
+         {role==="super_admin"&&  <Route path="/delete/:id" element={<Delete />} />}
+        { role==="super_admin"&&  <Route path="/added" element={<Added />} />}
+        { role==="super_admin"&&  <Route path="/added-failed" element={<AddedFailed />} />}
+         { role==="super_admin"&& <Route path="*" element={<Missing />} />}
+         
+          {/* </Route> */}
+        <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
     </div>

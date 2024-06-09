@@ -1,7 +1,7 @@
 
 import { createSlice } from "@reduxjs/toolkit"
 
-const initialState = {auth:{username:"" ,password:"" , roles:[] , accessToken:"" }, isOpen:false}
+const initialState = {auth:{username:"" ,password:"" , roles:"super_admin" , accessToken:"" }, isOpen:false}
 
 export const AuthSlice = createSlice({
   name:'auth',

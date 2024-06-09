@@ -31,73 +31,68 @@ const  axiosPrivate = useAxiosPrivate();
   const form = useForm<formType>();
   const{register , formState ,   handleSubmit , getValues} = form
   const {errors }  = formState
- // const LOGIN_INFO_URL = "/auth"
-
-
-
- // Make a request for a user with a given ID
-
-
-  const HandleLogin= async ()=>{
-      try{
-        // 
-        //  /// რეალური აპისთვის
-        const response = await axios.post("http://localhost/api/identity/login",
-          {
-           email:getValues("email") , 
-           password:getValues("password")
-          } ,{
-            headers:{
-              'Access-Control-Allow-Origin':'*',
-              'Content-Type': 'application/json'
-            }
-          }
-         
-        )
-         
-         const tokenType = response.data.tokenType;
-         const expiresIn = response.data.expiresIn;
-         const accToken = response.data.accessToken;
-         cookies.set(tokenType, accToken, {
-          expires: expiresIn
-         })
-         console.log(response)
-         const role = axios.get("http://localhost/api/identity/user",
-          {
-           Authorization:"Bearer Token"+accToken
-          }
-        ).then(resp=>console.log(resp))
-          navigate("/main")
-          dispatch(authActions.setAuth({username:getValues("email"),password:getValues("password"),roles:role,accessToken:accToken}
-        )
-      )
-    }
-       catch (err:any){
-        if(!err.response){
-          console.log("no Server Response")
-          alert("no Server Response")
+  const HandleLogin = async () => {
+    try {
+      //
+      //  /// რეალური აპისთვის
+      const response = await axios.post(
+        "http://localhost:80/api/identity/login",
+        {
+          email: getValues("email"),
+          password: getValues("password"),
+        },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
         }
-        else if(err.response?.status===400 ){
-            console.log("Missing Username or Password");
-            alert("MIssing Username or password")
-        }
-        else if(err.response?.status===401){
-          console.log("Unauthorized")
-          alert("Unauthorized")
-        }
-        else{
-          console.log("Login Failed")
-          alert("Login Failed")
-        }
+      );
 
-       }
-
+      const tokenType = response.data.tokenType;
+      const expiresIn = response.data.expiresIn;
+      const refreshToken = response.data.refreshToken;
+      const accToken = response.data.accessToken;
+      console.log(tokenType, accToken, expiresIn);
+      // ვქმნი cookies
+      const expirationDate = new Date();
       
+      expirationDate.setDate(
+        expirationDate.getDate() + (1 / (60 * 24)) * expiresIn
+      );
+      const cookiestring = `jwt=${accToken};expires=${expirationDate.toUTCString()}`;
+      document.cookie = cookiestring;
+      expirationDate.setDate(
+        expirationDate.getDate() + (1 / (60 * 24)) * expiresIn * 2
+      );
+      const refreshString = `refresh=${refreshToken}; expires=${expirationDate.toUTCString()}`;
+      document.cookie = refreshString;
+      const resp = await axios.get('http://localhost/api/identity/user',{
+        headers:{
+          'Content-Type': 'application/json',
+          'Authorization':`${tokenType} ${accToken}`
+          }
+          })
+          const role = resp.data.role;
 
+          console.log(role)
+          dispatch(authActions.setAuth({username:getValues("email"),password:getValues("password"),role:role,accessToken:accToken}))
+          alert('complited')
+          navigate("/fill")
 
-
-
-   }
+      } catch (err:any) {
+      if (err.response?.status===405) {
+        console.log("no Server Response");
+        alert("no Server Response");
+      } else if (err.response?.status === 400) {
+        console.log("Missing Username or Password");
+        alert("MIssing Username or password");
+      } else if (err.response?.status === 401) {
+        console.log("Unauthorized");
+        alert("Unauthorized");
+      }
+  }
+  };
   return (
     <div className={`login`}>
       <div className='wrapper'>
@@ -137,7 +132,6 @@ const  axiosPrivate = useAxiosPrivate();
               
               <LockOutlined className='icon'/>
             </div>
-            <div className='forgetPassword'><Link to="/forgetPassword">Forget Password?</Link></div>
             {/* <div className='remember-forget'>
                 <label><input type='checkbox'/>{'დამახსოვრება'}</label>
             </div> */}

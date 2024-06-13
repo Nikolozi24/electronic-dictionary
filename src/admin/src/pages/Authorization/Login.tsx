@@ -60,12 +60,12 @@ const  axiosPrivate = useAxiosPrivate();
       expirationDate.setDate(
         expirationDate.getDate() + (1 / (60 * 24)) * expiresIn
       );
-      const cookiestring = `jwt=${accToken};expires=${expirationDate.toUTCString()}`;
+      const cookiestring = `jwt=${accToken};max-age=${expiresIn}`;
       document.cookie = cookiestring;
       expirationDate.setDate(
         expirationDate.getDate() + (1 / (60 * 24)) * expiresIn * 2
       );
-      const refreshString = `refresh=${refreshToken}; expires=${expirationDate.toUTCString()}`;
+      const refreshString = `refresh=${refreshToken}; max-age=${2*expiresIn}`;
       document.cookie = refreshString;
       const resp = await axios.get('http://localhost/api/identity/user',{
         headers:{
@@ -78,8 +78,9 @@ const  axiosPrivate = useAxiosPrivate();
           console.log(role)
           dispatch(authActions.setAuth({username:getValues("email"),password:getValues("password"),role:role,accessToken:accToken}))
           alert('complited')
-          navigate("/fill")
 
+          navigate("/fill")
+          window.location.reload();
       } catch (err:any) {
       if (err.response?.status===405) {
         console.log("no Server Response");
@@ -113,7 +114,7 @@ const  axiosPrivate = useAxiosPrivate();
                     return fieldValue!="admin@example.com" || "this is bad email"
                 }
               })}
-              className={`${formState.errors.username?  "error" :""}`}
+              className={`${formState.errors.email?  "error" :""}`}
             />
            <UserOutlined  className='icon'/>
           </div>
@@ -135,7 +136,7 @@ const  axiosPrivate = useAxiosPrivate();
             {/* <div className='remember-forget'>
                 <label><input type='checkbox'/>{'დამახსოვრება'}</label>
             </div> */}
-              <button disabled={errors.password ||errors.username ? true : false} onClick={()=>{}} type='submit'>{'შესვლა'}</button>
+              <button disabled={errors.password ||errors.email? true : false} onClick={()=>{}} type='submit'>{'შესვლა'}</button>
 
            </form>
       </div>

@@ -4,14 +4,14 @@ import "./fillWord.css";
 import { useForm, useFieldArray, FieldValue } from "react-hook-form";
 
 import { DeleteFilled } from "@ant-design/icons"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import axios from "axios";
-import { Value } from "sass";
+import { NULL } from "sass";
 
 
-const FillWordToDatabase:React.FC = () => {
+const EditWordToDatabase:React.FC = () => {
  const jwt = GetCookie('jwt')
   type formType = {
     georgianHeadword: string;
@@ -30,25 +30,34 @@ const FillWordToDatabase:React.FC = () => {
     subTopicId:number;
 
     }
+    const { id } = useParams();
   
   const form = useForm<formType>({
-    defaultValues: {
-      georgianHeadword: "",
-      functionalLabel: "",
-      stylisticQualification: "",
-      englishHeadword: "",
-      georgianDefinition:"",
-      englishDefinition: "",
-      georgianIllustrationSentence: "",
-      englishIllustrationSentence: "",
-      source: "",
-      idiom: "",
-      synonym: "",
-      usageNote: "",
-      imageUrl:"",
-      subTopicId:0,
-      },
-      })
+    defaultValues: async()=>{
+        const response = await fetch(`http://localhost/api/entry/${id}`);
+        const data = await response.json();
+        return {
+            
+                georgianHeadword:data.georgianHeadword,
+                functionalLabel:data.functionalLabel,
+                stylisticQualification: data.stylisticQualification,
+                englishHeadword: data.englishHeadword,
+                georgianDefinition: data.georgianDefinition,
+                englishDefinition: data.englishDefinition,
+                georgianIllustrationSentence: data.georgianIllustrationSentenc ,
+                englishIllustrationSentence: data.englishIllustrationSentence ,
+                source: data.source ,
+                idiom: data.idiom ,
+                synonym: data.synonym ,
+                usageNote:  data.usageNote ,
+                imageUrl:  data.imageUrl , 
+                subTopicId: data.subTopicId ,
+
+        }
+
+        },
+
+    })
     const [subThematic, setSubThematic] = useState([{
       id:1,
       georgianName:"",
@@ -93,36 +102,16 @@ useEffect(()=>{
 
   const fun = async ()=>{
     console.log(jwt)
-    try{
       const response = await axios.get('http://localhost/api/topic',{
           headers:{
               'Content-Type':'application/json',
               'Authorization':"Bearer "+ jwt
           }
   });
-
   const thematis = response.data
   console.log(thematis)
   setThematic(thematis)
-    }
-    catch(err:any){
-      if(err.response.statusCode===401){
-          const refresh = GetCookie('refresh');
-          const response  = axios.post('http://localhost/api/identity/refresh', {
-            refreshToken:refresh
-          },{
-            withCredentials:true,
-            headers:{
-              'Content-Type':'application/json'
-            }
-          })
-         const jwtValue = (await response).data.accessToken;
-         const expireIn  = (await response).data.expiresIn;
-         const Refresh = (await response).data.refreshToken;
-        document.cookie = `jwt=${jwtValue}; max-age=${expireIn}`;
-        document.cookie = `refresh=${Refresh}; max-age=${expireIn}`;
-      }
-    }  
+  
   }
 fun()
 
@@ -156,40 +145,28 @@ const handleThematicSelect  = ()=>{
           const formData = new FormData();
           formData.append('file' , file);
 
-          fetch('http://localhost:80/api/multimedia/', {
-            method: 'POST',
-            body: formData
-        })
+          const response = axios.post("http://localhost/api/multimedia/", {...formData},
+          {
+            headers:{
+              'Content-Type':'application/json',
+              'Authorization':"Bearer "+ jwt
+            }
+          }
+          ).then(resp=>console.log(resp.data));
         }
-      setValue("imageUrl", "testUrl")
-      const el = document.getElementById('Sub-thematic')
-      const value = el?.value;
-    
-      const response = axios.post("http://localhost/api/entry",{...getValues() , subTopicId: parseInt(value)},{
-        headers:{
-              "Content-Type":'application/json',
-              'Authorization':"Bearer "+jwt
-        },
-       
-      })
+        setValue("imageUrl", "TestUrl")
+        const el = document.getElementById("Subthematic");
+        const value = el.value;
+        const resp = axios.put("http://localhost/api/entry",{...getValues(), subTopicId: parseInt(value), id:id},{
 
-  }catch(err:any){
-    if(err.response.statusCode===401){
-      const refresh = GetCookie('refresh');
-      const response  = axios.post('http://localhost/api/identity/refresh', {
-        refreshToken:refresh
-      },{
-        withCredentials:true,
-        headers:{
-          'Content-Type':'application/json'
-        }
-      })
-     const jwtValue = ( response).data.accessToken;
-     const expireIn  = ( response).data.expiresIn;
-     const Refresh = ( response).data.refreshToken;
-    document.cookie = `jwt=${jwtValue}; max-age=${expireIn}`;
-    document.cookie = `refresh=${Refresh}; max-age=${expireIn}`;
-  }
+          headers:{
+            'Content-Type':'application/json',
+            'Authorization':"Bearer "+ jwt
+          }
+        })
+
+  }catch(err){
+    console.log(err)
   }
 }
   
@@ -210,7 +187,7 @@ const handleThematicSelect  = ()=>{
             })}
      </select>
    
-      <select name="thematic" id="Sub-thematic" onChange={()=>handleThematicSelect()}  className="minimal" >
+      <select name="thematic" id="Subthematic" onChange={()=>handleThematicSelect()}  className="minimal" >
             {
             subThematic?.map((item) => {
                 return <option key={item.id}  onClick={()=>{
@@ -273,7 +250,7 @@ const handleThematicSelect  = ()=>{
         <input
           type="text"
           {...register("idiom", {})}
-          placeholder={`  იდიომა`}
+          placeholder={`იდიომა`}
         />
         <input
           type="text"
@@ -291,11 +268,11 @@ const handleThematicSelect  = ()=>{
   <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" stroke-linejoin="round" stroke-linecap="round" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon"><polyline points="16 16 12 12 8 16"></polyline><line y2="21" x2="12" y1="12" x1="12"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
 </div>
         <button  className="submit-button" type="submit">
-          Add word
+         ედითი
         </button>
       </form>
     </div>
   );
 };
 
-export default FillWordToDatabase;
+export default EditWordToDatabase;

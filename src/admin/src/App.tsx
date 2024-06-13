@@ -13,18 +13,29 @@ import Delete from "./pages/Delete/Delete.tsx";
 import Added from "./pages/AddTopicPage/Added/Added.tsx";
 import AddedFailed from "./pages/AddTopicPage/Added/Failed.tsx";
 import Login from "./pages/Authorization/Login.tsx";
-import RequireAuth from "./components/ProtectedRouting/RequireAuth.tsx";
+
 import Missing from "./pages/MissingPage/Missing.tsx";
-import Main from "./pages/Main/main.tsx";
+
 import AddSubTopic from "./pages/addSubTopics/AddSubTopic";
 import FillWordToDatabase from "./pages/FillWord/FillWord.tsx";
 import axios from "./components/API/axios.tsx";
 import ResetPassword from "./pages/resetPassword/ResetPassword.tsx";
 import Welcome from "./pages/WelComePage/Welcome.tsx";
-import { Header } from "antd/es/layout/layout";
+import WordList from "./pages/FillWord/WordList.tsx";
 import { useState, useEffect } from "react";
 import GetCookie from "./components/Utilities/Coookies/GetCookie.ts";
 import ForgetPassword from "./pages/ForgetPassword/ForgetPassword.tsx";
+import EditWordToDatabase from "./pages/FillWord/editWord.tsx";
+
+
+// Example: Context for managing user role
+
+
+// Usage Example:
+
+
+
+
 function App() {
   const [role, setRole] = useState("");
   const jwt = GetCookie("jwt");
@@ -44,6 +55,7 @@ function App() {
   }, []);
   return (
     <div className="app">
+
       <Router>
         <Routes>
           {/* // routes we want to protetc */}
@@ -65,7 +77,9 @@ function App() {
         { role==="super_admin"&&  <Route path="/added" element={<Added />} />}
         { role==="super_admin"&&  <Route path="/added-failed" element={<AddedFailed />} />}
          { role==="super_admin"&& <Route path="*" element={<Missing />} />}
-         
+         { role==="super_admin"&& <Route path="/update/Entry/:id" element={<EditWordToDatabase/>} />}
+         { role==="super_admin"&& <Route path="/EntryList" element={<WordList/>} />}
+\
           {/* </Route> */}
         <Route path="/login" element={<Login />} />
         </Routes>

@@ -85,23 +85,29 @@ const Header: React.FC = () => {
               <span className="links-name">სიტყვის შევსება</span>
             </Link>
           </li>
-         {role==="super_admin"&& <li className="list-item">
+         {role=="super_admin"&& <li className="list-item">
             <Link to="/addUsers">
               <AiOutlineUserAdd className="icon" />
               <span className="links-name">მომხარებლის დამატება</span>
             </Link>
 
           </li>}
-         {role==="super_admin"&&  <li className="list-item">
+         {role=="super_admin"&&  <li className="list-item">
             <Link to="/addTopic">
               < FaEdit className="icon" />
               <span className="links-name">თემატიკის დამატება</span>
             </Link>
           </li>}
-           {role==="super_admin"&&  <li className="list-item ">
+           {role=="super_admin"&&  <li className="list-item ">
               <Link to="/subTematic">
               < FaEdit className="icon" />
                 <span className="links-name">ქვეთემატიკის დამატება</span>
+              </Link>
+            </li>}
+           {role=="super_admin"&&  <li className="list-item ">
+              <Link to="/EntryList">
+              < FaEdit className="icon" />
+                <span className="links-name">სიტყვების ცხრილი</span>
               </Link>
             </li>}
         </ul>

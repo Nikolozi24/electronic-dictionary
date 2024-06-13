@@ -61,11 +61,7 @@ const AddSubTopic: React.FC = () => {
       dataIndex:"GeorgianMeaning",
       key:"GeorgianMeaning",
     },
-    {
-      title:"Thematic",
-      dataIndex:"EnglishMeaning",
-      key:"EnglishMEaning",
-    },
+  
   ]
           // აქ ცხრილის მონაცემების მასივს ვქმნი
           const [thematic, setThematic] = useState([

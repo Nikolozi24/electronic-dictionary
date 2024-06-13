@@ -13,8 +13,9 @@ const Welcome:React.FC = () => {
    
     useEffect(()=>{
         if(jwt===""){
-            navigate("/login")
+            navigate('/login')
         }
+       
         const fun = async ()=>{
             console.log(jwt)
         
@@ -27,11 +28,6 @@ const Welcome:React.FC = () => {
                 }
         })
     const role = response.data.role;
-
-    if(role!="admin" || role!="super_admin"){
-        console.log("role does't exist")
-        navigate('/login')
-    }
 setRole(role);
 const email = response.data.email;
 setEmail(email);
@@ -48,7 +44,7 @@ catch(err){
     return (
    
    
-    (role==="admin" || role==="super_admin") && <><Header/>
+   <><Header/>
     <div className='welcomeMessage'>
         <h1>Welcome: {email}</h1>
         <div className='forgetPassword'><Link to="/forgetPassword">change Password Password?</Link></div>

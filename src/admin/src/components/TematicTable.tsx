@@ -19,7 +19,7 @@ import axios from 'axios';
  interface dataType {
     key:number;
     GeorgianMeaning:string;
-    EnglishMEaning:string;
+    EnglishMeaning:string;
  }
 
 const Thematic:React.FC = () => {
@@ -50,7 +50,7 @@ const Thematic:React.FC = () => {
     fun()
     }
 
-    ,[])
+    ,[thematic.length])
   const [isOpen , setIsOpen] = useState<boolean>(false)
   const onSave=(geo:string, english:string, id:any)=>{
         const response = axios.post("http://localhost/api/topic",{
@@ -65,6 +65,7 @@ const Thematic:React.FC = () => {
       })
 
     setIsOpen(false)
+    document.location.reload;
   }
   
   const  columns: TableColumnsType<dataType> = [
@@ -109,6 +110,7 @@ const Thematic:React.FC = () => {
     },
   ]
 // აქ ცხრილის მონაცემების მასივს ვქმნი
+
   const data: dataType[]= thematic.map(item=>{
     // ამოვიღებ დესტრუქტურიზაციით იმ ველებს რომლებიც მჭირდება
     const {id, georgianName, englishName } = item;

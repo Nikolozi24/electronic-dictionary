@@ -9,6 +9,7 @@ import Header from "../../components/Header/Header";
 import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import axios from "axios";
 import { NULL } from "sass";
+import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
 
 
 const EditWordToDatabase:React.FC = () => {
@@ -102,15 +103,20 @@ useEffect(()=>{
 
   const fun = async ()=>{
     console.log(jwt)
+    try{
       const response = await axios.get('http://localhost/api/topic',{
           headers:{
               'Content-Type':'application/json',
               'Authorization':"Bearer "+ jwt
           }
   });
-  const thematis = response.data
-  console.log(thematis)
-  setThematic(thematis)
+const thematis = response.data
+console.log(thematis)
+setThematic(thematis)
+}
+catch(err:any){
+  AxiosErrorHandling(err);
+}
   
   }
 fun()
@@ -166,7 +172,7 @@ const handleThematicSelect  = ()=>{
         })
 
   }catch(err){
-    console.log(err)
+    AxiosErrorHandling(err);
   }
 }
   

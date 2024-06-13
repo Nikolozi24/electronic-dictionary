@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { Input, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Input, Modal, Select } from 'antd';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { thematicActions } from '../Store/redux/thematicSlice';
+import GetCookie from '../Utilities/Coookies/GetCookie';
+import { Option } from 'antd/es/mentions';
+import axios from 'axios';
 
 interface Props {
   onSave: (username: string, email: string, password: string, role: string) => void;
@@ -9,21 +12,33 @@ interface Props {
 }
 
 const AddUserComponent: React.FC<Props> = ({ onSave, onCancel }) => {
-
+  const jwt = GetCookie("jwt")
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
+  const [roles, setRoles] = useState([]);
   const [isOpen , setIsOpen] = useState<boolean>(true);
   const navigate = useNavigate(); 
+  useEffect(()=>{
+        const resp = axios.get("http://localhost/api/identity/user-roles",{
+              headers:{
+                "Content-Type":"application/json",
+                "Authorization":"Bearer "+jwt
+              }
+        }).then(res=>res.data).then(res=>setRoles(res));
+
+  },[])
   
   const handleCancel= () => {
-
+    
     onCancel();
     setIsOpen(false);
     navigate('/fill')
   }
   const handleSave = () => {
-    onSave(email, password, role);
+    const el = document.getElementById("role")
+    setRole(el.value)
+   onSave(email, password, role);
     navigate('/added')
   };
   return (
@@ -54,11 +69,13 @@ const AddUserComponent: React.FC<Props> = ({ onSave, onCancel }) => {
       />
       <br />
       <br />
-      <Input
-        placeholder="Role"
-        value={role}
-        onChange={(e) => setRole(e.target.value)}
-      />
+      <select id="role" defaultValue={"please Select Role"}>
+                {
+                  roles.map(item=>{
+                    return <option value={item} key={item}>{item}</option>
+                  })
+                }
+        </select>
     </Modal>
   );
 };

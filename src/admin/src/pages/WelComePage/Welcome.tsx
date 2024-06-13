@@ -4,6 +4,7 @@ import GetCookie from '../../components/Utilities/Coookies/GetCookie'
 import Header from '../../components/Header/Header'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import AxiosErrorHandling from '../../components/Utilities/ErrorHandling/AxiosErrorHandling'
 const Welcome:React.FC = () => {
     const navigate = useNavigate();
     const [email, setEmail]= useState('')
@@ -32,10 +33,8 @@ setRole(role);
 const email = response.data.email;
 setEmail(email);
 }   
-catch(err){
-    if(err==400){
-        console.log('jwt removed')
-    }
+catch(err:any){
+  AxiosErrorHandling(err);
 }
     }
     fun();

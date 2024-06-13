@@ -4,6 +4,7 @@ import "./ResetPassword.css"
 import { useNavigate } from 'react-router-dom'
 
 import axios from 'axios'
+import AxiosErrorHandling from '../../components/Utilities/ErrorHandling/AxiosErrorHandling'
 
 const ResetPassword:React.FC = () => {
        const navigate = useNavigate();
@@ -20,10 +21,14 @@ const ResetPassword:React.FC = () => {
        const handleSubmit=(e:any)=>{
         e.preventDefault();
         console.log(getValues())
+        try{
             const response = axios.post("http://localhost/api/identity/resetPassword", getValues())
         alert("პაროლი წარმატებით შეიცვალა")
         navigate('/')
-
+        }
+        catch(err:any){
+          AxiosErrorHandling(err);
+        }
        }
 
 

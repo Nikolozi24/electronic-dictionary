@@ -3,6 +3,7 @@ import AddUserComponent from '../../components/AddUserComponent';
 import Header from '../../components/Header/Header';
 import GetCookie from '../../components/Utilities/Coookies/GetCookie';
 import axios from 'axios';
+import AxiosErrorHandling from '../../components/Utilities/ErrorHandling/AxiosErrorHandling';
 
 const AddUser: React.FC = () => {
 
@@ -23,8 +24,8 @@ const AddUser: React.FC = () => {
     })
     console.log("addUserBro!")
    }
-   catch(err){
-    alert(err);
+   catch(err:any){
+   AxiosErrorHandling(err)
    }
   };
 

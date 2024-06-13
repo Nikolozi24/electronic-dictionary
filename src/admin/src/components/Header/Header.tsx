@@ -14,6 +14,7 @@ import axios from "axios";
 
 import "./Header.css"
 import RemoveCookie from "../Utilities/Coookies/RemoveCookie";
+import AxiosErrorHandling from "../Utilities/ErrorHandling/AxiosErrorHandling";
 const Header: React.FC = () => {
 
   const isLogin = true;
@@ -49,6 +50,7 @@ const Header: React.FC = () => {
   useEffect(() => {
     const fun = async () => {
       console.log(jwt);
+      try{
       const response = await axios.get("http://localhost/api/identity/user", {
         headers: {
           "Content-Type": "application/json",
@@ -57,6 +59,10 @@ const Header: React.FC = () => {
       });
       const role = response.data.role;
       setRole(role);
+    }
+    catch(err:any){
+      AxiosErrorHandling(err);
+    }
     };
     fun();
   }, []);

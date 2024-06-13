@@ -9,6 +9,7 @@ import Header from "../../components/Header/Header";
 import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import axios from "axios";
 import { Value } from "sass";
+import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
 
 
 const FillWordToDatabase:React.FC = () => {
@@ -66,7 +67,6 @@ const FillWordToDatabase:React.FC = () => {
           if(jwt===""){
               navigate('/login')
           }
-         
           const fun = async ()=>{
               console.log(jwt)
             try{
@@ -78,10 +78,8 @@ const FillWordToDatabase:React.FC = () => {
                   }
           })
         }
-  catch(err){
-      if(err==400){
-          console.log('jwt removed')
-      }
+  catch(err:any){
+    AxiosErrorHandling(err)
   }
       }
       fun();
@@ -106,22 +104,7 @@ useEffect(()=>{
   setThematic(thematis)
     }
     catch(err:any){
-      if(err.response.statusCode===401){
-          const refresh = GetCookie('refresh');
-          const response  = axios.post('http://localhost/api/identity/refresh', {
-            refreshToken:refresh
-          },{
-            withCredentials:true,
-            headers:{
-              'Content-Type':'application/json'
-            }
-          })
-         const jwtValue = (await response).data.accessToken;
-         const expireIn  = (await response).data.expiresIn;
-         const Refresh = (await response).data.refreshToken;
-        document.cookie = `jwt=${jwtValue}; max-age=${expireIn}`;
-        document.cookie = `refresh=${Refresh}; max-age=${expireIn}`;
-      }
+    AxiosErrorHandling(err);
     }  
   }
 fun()
@@ -164,7 +147,6 @@ const handleThematicSelect  = ()=>{
       setValue("imageUrl", "testUrl")
       const el = document.getElementById('Sub-thematic')
       const value = el?.value;
-    
       const response = axios.post("http://localhost/api/entry",{...getValues() , subTopicId: parseInt(value)},{
         headers:{
               "Content-Type":'application/json',
@@ -174,22 +156,7 @@ const handleThematicSelect  = ()=>{
       })
 
   }catch(err:any){
-    if(err.response.statusCode===401){
-      const refresh = GetCookie('refresh');
-      const response  = axios.post('http://localhost/api/identity/refresh', {
-        refreshToken:refresh
-      },{
-        withCredentials:true,
-        headers:{
-          'Content-Type':'application/json'
-        }
-      })
-     const jwtValue = ( response).data.accessToken;
-     const expireIn  = ( response).data.expiresIn;
-     const Refresh = ( response).data.refreshToken;
-    document.cookie = `jwt=${jwtValue}; max-age=${expireIn}`;
-    document.cookie = `refresh=${Refresh}; max-age=${expireIn}`;
-  }
+    AxiosErrorHandling(err)
   }
 }
   

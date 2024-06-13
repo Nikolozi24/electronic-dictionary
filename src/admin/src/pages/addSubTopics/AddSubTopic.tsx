@@ -9,6 +9,7 @@ import { useNavigate, useNavigation , Link} from "react-router-dom";
 import { CloseCircleTwoTone, EditTwoTone, PlusCircleOutlined } from "@ant-design/icons";
 import { Flex, Layout, Table, TableColumnsType } from "antd";
 import TranslationComponent from "../../components/TranslationComponent/TranslationComponent";
+import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
 // just for testing thematic list
 interface dataType {
   key:number;
@@ -24,7 +25,8 @@ const AddSubTopic: React.FC = () => {
 
     useEffect(()=>{
       const fun = async ()=>{
-        console.log(jwt)      
+        console.log(jwt)     
+        try{ 
           const response = await axios.get('http://localhost/api/topic',{
               headers:{
                   'Content-Type':'application/json',
@@ -34,12 +36,17 @@ const AddSubTopic: React.FC = () => {
       const thematis = response.data
       setThematic(thematis)
       }
+      catch(err:any){
+        AxiosErrorHandling(err);
+      }
+    }
     fun()
     }
 
     ,[])
   const [isOpen , setIsOpen] = useState<boolean>(false)
   const onSave=(geo:string, english:string, id:any)=>{
+    try{
         const response = axios.post("http://localhost/api/topic",{
               georgianName:geo,
               englishName:english
@@ -50,8 +57,11 @@ const AddSubTopic: React.FC = () => {
             'Authorization':"Bearer "+jwt
           }
       })
-
     setIsOpen(false)
+    }
+    catch(err:any){
+      AxiosErrorHandling(err);
+    }
   }
   
   const  columns: TableColumnsType<dataType> = [
@@ -88,12 +98,14 @@ const AddSubTopic: React.FC = () => {
     useEffect(()=>{
       const fun = async ()=>{
         console.log(jwt)
+        try{
           const response = await axios.get('http://localhost/api/topic',{
               headers:{
                   'Content-Type':'application/json',
                   'Authorization':"Bearer "+jwt
               }
       })
+
       const thematis = response.data.map((item:{})=>{
             return {
               id:item.id,
@@ -103,6 +115,10 @@ const AddSubTopic: React.FC = () => {
 
       )
       setThematic(thematis)
+    }
+    catch(err:any){
+      AxiosErrorHandling(err);
+    }
       }
     fun()
     }
@@ -138,8 +154,8 @@ const AddSubTopic: React.FC = () => {
            )
           console.log(response)
   }
-  catch(err){
-    alert(err)
+  catch(err:any){
+   AxiosErrorHandling(err)
   }
     
     console.log(obj);

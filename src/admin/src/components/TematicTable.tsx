@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { thematicActions } from './Store/redux/thematicSlice';
 import GetCookie from './Utilities/Coookies/GetCookie';
 import axios from 'axios';
+import AxiosErrorHandling from './Utilities/ErrorHandling/AxiosErrorHandling';
 ;
 
   // costum კომპონენტი
@@ -94,6 +95,7 @@ const Thematic:React.FC = () => {
       dataIndex:"delete",
       render:(_,record)=>{
         return <Link style={{width:'100%'}} to={`/delete/${record.key}`} onClick={()=>{
+          try{
           const response = axios.delete(`http://localhost/api/topic/${record.key}`,
     {
         headers:{
@@ -101,7 +103,10 @@ const Thematic:React.FC = () => {
           'Authorization':"Bearer "+jwt
         },
         withCredentials:true
-    })
+    })}
+    catch(err:any){
+      AxiosErrorHandling(err);
+    }
 
 
 

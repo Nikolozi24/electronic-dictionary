@@ -26,6 +26,7 @@ import { useState, useEffect } from "react";
 import GetCookie from "./components/Utilities/Coookies/GetCookie.ts";
 import ForgetPassword from "./pages/ForgetPassword/ForgetPassword.tsx";
 import EditWordToDatabase from "./pages/FillWord/editWord.tsx";
+import AxiosErrorHandling from "./components/Utilities/ErrorHandling/AxiosErrorHandling.tsx";
 
 
 // Example: Context for managing user role
@@ -38,10 +39,14 @@ import EditWordToDatabase from "./pages/FillWord/editWord.tsx";
 
 function App() {
   const [role, setRole] = useState("");
+  const [user , setUser] = useState({
+    isAdmin:false,
+    isSuperAdmin:false});
   const jwt = GetCookie("jwt");
   useEffect(() => {
     const fun = async () => {
       console.log(jwt);
+      try{
       const response = await axios.get("http://localhost/api/identity/user", {
         headers: {
           "Content-Type": "application/json",
@@ -50,9 +55,15 @@ function App() {
       });
       const role = response.data.role;
       setRole(role);
+      setUser(response.data)
+      }
+      catch(err:any){
+        AxiosErrorHandling(err);
+      }
     };
     fun();
   }, []);
+  
   return (
     <div className="app">
 
@@ -68,17 +79,17 @@ function App() {
           <Route path="/resetPassword" element={<ResetPassword />} />
 
         
-         { role==="super_admin"&& <Route path="/addTopic" element={<AddTopic />} />}
-         {role==="super_admin"&&  <Route path={`/update/:ID`} element={<UpdateThematic />} />}
-          {role==="super_admin"&& <Route path="/subTematic" element={<AddSubTopic />} />}
+         {user.isSuperAdmin && <Route path="/addTopic" element={<AddTopic />} />}
+         {user.isSuperAdmin &&  <Route path={`/update/:ID`} element={<UpdateThematic />} />}
+          {user.isSuperAdmin && <Route path="/subTematic" element={<AddSubTopic />} />}
 
-         {role==="super_admin"&&  <Route path="/addUsers" element={<AddUser />} />}
-         {role==="super_admin"&&  <Route path="/delete/:id" element={<Delete />} />}
-        { role==="super_admin"&&  <Route path="/added" element={<Added />} />}
-        { role==="super_admin"&&  <Route path="/added-failed" element={<AddedFailed />} />}
-         { role==="super_admin"&& <Route path="*" element={<Missing />} />}
-         { role==="super_admin"&& <Route path="/update/Entry/:id" element={<EditWordToDatabase/>} />}
-         { role==="super_admin"&& <Route path="/EntryList" element={<WordList/>} />}
+         {user.isSuperAdmin &&  <Route path="/addUsers" element={<AddUser />} />}
+         {user.isSuperAdmin &&  <Route path="/delete/:id" element={<Delete />} />}
+        { user.isSuperAdmin &&  <Route path="/added" element={<Added />} />}
+        { user.isSuperAdmin &&  <Route path="/added-failed" element={<AddedFailed />} />}
+         { user.isSuperAdmin && <Route path="*" element={<Missing />} />}
+         { user.isSuperAdmin && <Route path="/update/Entry/:id" element={<EditWordToDatabase/>} />}
+         {user.isSuperAdmin && <Route path="/EntryList" element={<WordList/>} />}
 \
           {/* </Route> */}
         <Route path="/login" element={<Login />} />

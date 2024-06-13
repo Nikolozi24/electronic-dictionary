@@ -7,7 +7,7 @@ import Header from '../../components/Header/Header.tsx';
 import { Link, useNavigate } from 'react-router-dom';
 import GetCookie from '../../components/Utilities/Coookies/GetCookie.ts';
 import axios from 'axios';
-
+import AxiosErrorHandling from '../../components/Utilities/ErrorHandling/AxiosErrorHandling.tsx';
 import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
 import { Button, Flex, Layout, Table, TableColumnsType } from 'antd';
@@ -57,22 +57,7 @@ return obj
     console.log(WordLis)
   }
   catch(err:any){
-        if(err.response.statusCode===401){
-          const refresh = GetCookie('refresh');
-          const response  = axios.post('http://localhost/api/identity/refresh', {
-            refreshToken:refresh
-          },{
-            withCredentials:true,
-            headers:{
-              'Content-Type':'application/json'
-            }
-          })
-         const jwtValue = (await response).data.accessToken;
-         const expireIn  = (await response).data.expiresIn;
-         const Refresh = (await response).data.refreshToken;
-        document.cookie = `jwt=${jwtValue}; max-age=${expireIn}`;
-        document.cookie = `refresh=${Refresh}; max-age=${expireIn}`;
-      }
+       AxiosErrorHandling(err);    
   }
   }
 fun()
@@ -82,6 +67,8 @@ fun()
 
   const [WordCount , setWordCount] = useState(0);
   useEffect(()=>{
+      const fun =async ()=>{
+        try{
         const length = axios.get("http://localhost/api/entry/count?pageNumber=1&pageSize=200000",{
 
          headers:{
@@ -90,7 +77,12 @@ fun()
               }
         }).then(res=>res.data).then(res=>setWordCount(res));
         console.log("Length",length)
-
+      }
+      catch(err:any){
+        AxiosErrorHandling(err);
+      }
+      }
+      fun();
     }
 
   ,[])
@@ -140,6 +132,7 @@ fun()
 
           if(record.status==='InActive')
             return (<><Button onClick={()=>{
+                  try{
                 const response =  axios.put(`http://localhost/api/Entry/activate/${record.key}`,{},
                   {
                     headers:{
@@ -151,7 +144,10 @@ fun()
                 {
                   document.location.reload
                 }
-                
+              }
+              catch(err:any){
+                AxiosErrorHandling(err);
+              }
                 
               }}>გააქტიურება</Button>
              
@@ -159,6 +155,7 @@ fun()
               </>)
           else
              return (<><Button onClick={()=>{
+              try{
               const response = axios.put(`http://localhost/api/Entry/deactivate/${record.key}`,{},
                 {
                   headers:{
@@ -170,7 +167,10 @@ fun()
               {
                 location.reload
               }
-            
+              }
+              catch(err:any){
+                AxiosErrorHandling(err);
+              }
             }
             
             }>დეაქტივაცია</Button></>)
@@ -191,6 +191,7 @@ fun()
         dataIndex:"delete",
         render:(_,record)=>{
           return <Link style={{width:'100%'}} to={`/delete/${record.key}`} onClick={()=>{
+            try{
             const response = axios.delete(`http://localhost/api/Entry/${record.key}`,
       {
           headers:{
@@ -199,6 +200,10 @@ fun()
           },
           withCredentials:true
       })
+    }
+    catch(err:any){
+      AxiosErrorHandling(err);
+    }
     }}><CloseCircleTwoTone width={10}/></Link>
     }
   }

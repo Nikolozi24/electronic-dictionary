@@ -8,6 +8,7 @@ import { useDispatch} from 'react-redux';
 import Cookies from 'universal-cookie';
 import { authActions } from '../../components/Store/redux/authSlice';
 import axios from 'axios';
+import AxiosErrorHandling from '../../components/Utilities/ErrorHandling/AxiosErrorHandling.js';
 
 
 
@@ -82,16 +83,7 @@ const  axiosPrivate = useAxiosPrivate();
           navigate("/fill")
           window.location.reload();
       } catch (err:any) {
-      if (err.response?.status===405) {
-        console.log("no Server Response");
-        alert("no Server Response");
-      } else if (err.response?.status === 400) {
-        console.log("Missing Username or Password");
-        alert("MIssing Username or password");
-      } else if (err.response?.status === 401) {
-        console.log("Unauthorized");
-        alert("Unauthorized");
-      }
+      AxiosErrorHandling(err);
   }
   };
   return (

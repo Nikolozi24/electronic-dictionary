@@ -214,7 +214,7 @@ const handleThematicSelect  = ()=>{
           {...register("functionalLabel", {
             required: "მეტყველების ნაწილის ველი სავალდებულოა!",
           })}
-          placeholder={"ნეტყველების ნაწილი"}
+          placeholder={"მეტყველების ნაწილი"}
         />
         <input
           type="text"

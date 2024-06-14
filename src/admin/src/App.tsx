@@ -45,7 +45,7 @@ function App() {
   const jwt = GetCookie("jwt");
   useEffect(() => {
     const fun = async () => {
-      console.log(jwt);
+
       try{
       const response = await axios.get("http://localhost/api/identity/user", {
         headers: {

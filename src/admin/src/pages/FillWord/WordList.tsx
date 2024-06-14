@@ -13,14 +13,14 @@ import { Pagination } from 'antd';
 import { Button, Flex, Layout, Table, TableColumnsType } from 'antd';
 import { CloseCircleTwoTone, EditTwoTone, PlusCircleOutlined } from '@ant-design/icons';
 import TranslationComponent from '../../components/TranslationComponent/TranslationComponent.tsx';
-interface dataType {
-    key:number;
-    GeorgianMeaning:string;
-    EnglishMeaning:string;
-    functionalLabel:string;
-    status:string;
-    }
-    const WordList: React.FC = () => {
+const WordList: React.FC = () => {
+      interface dataType {
+          key:number;
+          GeorgianMeaning:string;
+          EnglishMeaning:string;
+          functionalLabel:string;
+          status:string;
+          }
   const [current, setCurrent] = useState(1);
     const navigate = useNavigate();
     const [WordList, setWordList] = useState([{}]);
@@ -29,17 +29,15 @@ interface dataType {
   
     const pageSize = 10;
     useEffect(()=>{
-      const fun = async ()=>{
-        console.log(jwt)      
+      const fun = async ()=>{     
         try{
-          const response = await axios.get(`http://localhost/api/Entry?pageNumber=${current}&pageSize=${10}`,{
+          const response = await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}`,{
               headers:{
                   'Content-Type':'application/json',
                   'Authorization':"Bearer "+jwt
               }
       })
     const WordLis1 = (response.data)
-  console.log(WordLis1)
 const WordLis = (response.data)?.map(item=>{
   const obj ={
     key:item.id,
@@ -54,7 +52,6 @@ return obj
 
 })
       setWordList(WordLis)
-    console.log(WordLis)
   }
   catch(err:any){
        AxiosErrorHandling(err);    
@@ -69,14 +66,13 @@ fun()
   useEffect(()=>{
       const fun =async ()=>{
         try{
-        const length = axios.get("http://localhost/api/entry/count?pageNumber=1&pageSize=200000",{
+        const length = axios.get("http://localhost/api/entry/count",{
 
          headers:{
                   'Content-Type':'application/json',
                   'Authorization':"Bearer "+jwt
               }
-        }).then(res=>res.data).then(res=>setWordCount(res));
-        console.log("Length",length)
+        }).then(res=>res.data).then(res=>{setWordCount(res);console.log(res)});
       }
       catch(err:any){
         AxiosErrorHandling(err);
@@ -89,10 +85,7 @@ fun()
   const [modalIsOpen, setModalOpen] = useState(false);
 
     function onSave(georgianName: string, englishName: string, id?: number){
-        console.log(id);
-        console.log(georgianName);
-        console.log(englishName);
-        localStorage
+       // localStorage
         setModalOpen(false);
     }
     const  columns: TableColumnsType<dataType> = [
@@ -133,7 +126,8 @@ fun()
           if(record.status==='InActive')
             return (<><Button onClick={()=>{
                   try{
-                const response =  axios.put(`http://localhost/api/Entry/activate/${record.key}`,{},
+                    const fun  = async ()=>{
+                const response = await  axios.put(`http://localhost/api/Entry/activate/${record.key}`,{},
                   {
                     headers:{
                       'Content-Type':'application/json',
@@ -141,9 +135,9 @@ fun()
                     }
                   }
                 );
-                {
-                  document.location.reload
-                }
+                location.reload();
+              }
+              fun();
               }
               catch(err:any){
                 AxiosErrorHandling(err);
@@ -156,7 +150,8 @@ fun()
           else
              return (<><Button onClick={()=>{
               try{
-              const response = axios.put(`http://localhost/api/Entry/deactivate/${record.key}`,{},
+                const fun  = async ()=>{
+              const response = await axios.put(`http://localhost/api/Entry/deactivate/${record.key}`,{},
                 {
                   headers:{
                     'Content-Type':'application/json',
@@ -164,9 +159,9 @@ fun()
                   }
                 }
               );
-              {
-                location.reload
-              }
+              location.reload();
+            }
+            fun();
               }
               catch(err:any){
                 AxiosErrorHandling(err);
@@ -182,7 +177,7 @@ fun()
         title:<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>რედაქტირება</span>,
         dataIndex:"update",
         render:(_,record)=>{
-            return <Link to={`/update/Entry/${record.key}`} onClick={()=>{console.log(record.key)}}><EditTwoTone width={10}/></Link>
+            return <Link to={`/update/Entry/${record.key}`} onClick={()=>{}}><EditTwoTone width={10}/></Link>
         }
       },
       {

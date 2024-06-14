@@ -68,7 +68,7 @@ const FillWordToDatabase:React.FC = () => {
               navigate('/login')
           }
           const fun = async ()=>{
-              console.log(jwt)
+        
             try{
           
               const response = await axios.get('http://localhost/api/identity/user',{
@@ -90,7 +90,6 @@ const FillWordToDatabase:React.FC = () => {
 useEffect(()=>{
 
   const fun = async ()=>{
-    console.log(jwt)
     try{
       const response = await axios.get('http://localhost/api/topic',{
           headers:{
@@ -100,7 +99,6 @@ useEffect(()=>{
   });
 
   const thematis = response.data
-  console.log(thematis)
   setThematic(thematis)
     }
     catch(err:any){
@@ -113,49 +111,49 @@ fun()
 
   useEffect(()=>{
     const Thmatic = thematic.filter(item=> {return item.id == thetamticId});
-    console.log(Thmatic)
+    
     setSubThematic(Thmatic[0].subTopics)
-    console.log(Thmatic[0].subThopics)
 
   }
 ,[thetamticId])
 const handleThematicSelect  = ()=>{
   var selectElement = document.getElementById("thematic");
   var selectedValue = selectElement.value;
-   console.log(selectedValue)
    setThematicId(selectedValue);
   }
 
 
   const { register, control , setValue, getValues } = form;
-  console.log(thetamticId)
+  
   const handleSubmit=(e:any)=>{
     e.preventDefault()
-    console.log(getValues())
     try{
         const file = getValues("imageUrl")[0];
         console.log("file" , file);
-        if(file){
-          const formData = new FormData();
-          formData.append('file' , file);
-
-          fetch('http://localhost:80/api/multimedia/', {
-            method: 'POST',
-            body: formData
-        })
+      const formData = new FormData();
+      formData.append('file', file)
+      console.log(formData)
+  const resp1 =  fetch('http://localhost/api/multimedia', {
+        method:'POST',
+        body:formData,
+        headers: {Authorization: `Bearer ${jwt}`}
+      }).then(resp => resp.json())
+        .then(json => console.log(JSON.stringify(json)))
+         console.log("response of  image ", response)
+         console.log(resp1);
+         const el = document.getElementById('Sub-thematic')
+         const value = el?.value;
+         const resp = axios.post("http://localhost/api/entry",{...getValues() , subTopicId: parseInt(value)},{
+           headers:{
+                 "Content-Type":'application/json',
+                 'Authorization':"Bearer "+jwt
+           },
+          
+         })
         }
-      setValue("imageUrl", "testUrl")
-      const el = document.getElementById('Sub-thematic')
-      const value = el?.value;
-      const response = axios.post("http://localhost/api/entry",{...getValues() , subTopicId: parseInt(value)},{
-        headers:{
-              "Content-Type":'application/json',
-              'Authorization':"Bearer "+jwt
-        },
-       
-      })
+     
 
-  }catch(err:any){
+  catch(err:any){
     AxiosErrorHandling(err)
   }
 }
@@ -198,7 +196,7 @@ const handleThematicSelect  = ()=>{
           {...register("functionalLabel", {
             required: "მეტყველების ნაწილის ველი სავალდებულოა!",
           })}
-          placeholder={"ნეტყველების ნაწილი"}
+          placeholder={"მეტყველების ნაწილი"}
         />
         <input
           type="text"

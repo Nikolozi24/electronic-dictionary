@@ -9,7 +9,6 @@ const ForgetPassword:React.FC = () => {
 const handleSubmit=(e:any)=>{
 
         const value = document.getElementById('email')?.value;
-        console.log(value)
         try{
         const response = axios.post("http://localhost/api/identity/forgotPassword", {email:value});
         alert("წარმატებით გაიგზავნა!");

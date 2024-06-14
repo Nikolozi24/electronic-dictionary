@@ -30,8 +30,7 @@ const AddUser: React.FC = () => {
   };
 
   const handleCancel = () => {
-   
-    console.log('Cancelled');
+
   };
 
   return (

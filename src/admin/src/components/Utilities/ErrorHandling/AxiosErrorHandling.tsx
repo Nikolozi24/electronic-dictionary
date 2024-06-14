@@ -1,10 +1,15 @@
 import React from 'react'
 import GetCookie from '../Coookies/GetCookie';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 export default function AxiosErrorHandling(err:any) {
+    const navigate = useNavigate();
     if(err.response.status===400){
         const fun = async ()=>{
         const refresh = GetCookie('refresh');
+        console.log(refresh)
+        console.log(refresh=="")
+      
         const response  =  await axios.post('http://localhost/api/identity/refresh', {
           refreshToken:refresh
         },{

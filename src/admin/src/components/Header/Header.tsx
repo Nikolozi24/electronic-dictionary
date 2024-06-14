@@ -37,7 +37,6 @@ const Header: React.FC = () => {
     ),
   });
   useEffect(() => {
-    console.log(isActive);
   }, [isActive]);
   const handleActive = () => {
     setIsActive((prev) => !prev);
@@ -49,7 +48,7 @@ const Header: React.FC = () => {
   const jwt = GetCookie("jwt");
   useEffect(() => {
     const fun = async () => {
-      console.log(jwt);
+   
       try{
       const response = await axios.get("http://localhost/api/identity/user", {
         headers: {
@@ -66,7 +65,7 @@ const Header: React.FC = () => {
     };
     fun();
   }, []);
-  console.log(role)
+
   return (
       <div className={`sidebar ${isActive ? "active" : ""}`}>
         <div className="logo-content">

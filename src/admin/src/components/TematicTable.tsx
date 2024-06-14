@@ -38,7 +38,7 @@ const Thematic:React.FC = () => {
 
     useEffect(()=>{
       const fun = async ()=>{
-        console.log(jwt)      
+          
           const response = await axios.get('http://localhost/api/topic',{
               headers:{
                   'Content-Type':'application/json',
@@ -133,7 +133,6 @@ const Thematic:React.FC = () => {
       
 const dispatch = useDispatch()
   
-console.log(data)
 
     
   return (

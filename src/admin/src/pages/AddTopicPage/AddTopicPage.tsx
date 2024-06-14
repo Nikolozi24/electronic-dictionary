@@ -10,9 +10,7 @@ const AddTopic: React.FC = () => {
   const [modalIsOpen, setModalOpen] = useState(false);
 
     function onSave(georgianName: string, englishName: string, id?: number){
-        console.log(id);
-        console.log(georgianName);
-        console.log(englishName);
+    
         localStorage
         setModalOpen(false);
     }

@@ -18,10 +18,7 @@ const Welcome:React.FC = () => {
         }
        
         const fun = async ()=>{
-            console.log(jwt)
-        
           try{
-        
             const response = await axios.get('http://localhost/api/identity/user',{
                 headers:{
                     'Content-Type':'application/json',

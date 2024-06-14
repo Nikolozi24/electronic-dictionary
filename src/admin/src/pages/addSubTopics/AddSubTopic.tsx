@@ -14,8 +14,6 @@ import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosEr
 interface dataType {
   key:number;
   GeorgianMeaning:string;
-  EnglishMEaning:string;
-  subthematics:string[];
 }
 
 const AddSubTopic: React.FC = () => {
@@ -24,8 +22,7 @@ const AddSubTopic: React.FC = () => {
     const jwt = GetCookie('jwt');
 
     useEffect(()=>{
-      const fun = async ()=>{
-        console.log(jwt)     
+      const fun = async ()=>{    
         try{ 
           const response = await axios.get('http://localhost/api/topic',{
               headers:{
@@ -88,7 +85,7 @@ const AddSubTopic: React.FC = () => {
       const obj = {
               key:id,
               GeorgianMeaning:georgianName,
-              EnglishMeaning:englishName
+             
         }
         return obj
       }
@@ -97,7 +94,6 @@ const AddSubTopic: React.FC = () => {
 
     useEffect(()=>{
       const fun = async ()=>{
-        console.log(jwt)
         try{
           const response = await axios.get('http://localhost/api/topic',{
               headers:{
@@ -123,7 +119,7 @@ const AddSubTopic: React.FC = () => {
     fun()
     }
     ,[])
-    console.log(thematic)
+
 
   const navigate = useNavigate();
   // იღებს ინფორმაციას ველებიდან და  უბრალოდდ აკონსოლებს მათ
@@ -152,13 +148,11 @@ const AddSubTopic: React.FC = () => {
            }
            }
            )
-          console.log(response)
+         
   }
   catch(err:any){
    AxiosErrorHandling(err)
   }
-    
-    console.log(obj);
     navigate('/added')
 
 

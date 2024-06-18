@@ -26,7 +26,7 @@ import { useState, useEffect } from "react";
 import GetCookie from "./components/Utilities/Coookies/GetCookie.ts";
 import ForgetPassword from "./pages/ForgetPassword/ForgetPassword.tsx";
 import EditWordToDatabase from "./pages/FillWord/editWord.tsx";
-import AxiosErrorHandling from "./components/Utilities/ErrorHandling/AxiosErrorHandling.tsx";
+import AxiosErrorHandling from "./components/Utilities/ErrorHandling/AxiosErrorHandling";
 
 
 // Example: Context for managing user role

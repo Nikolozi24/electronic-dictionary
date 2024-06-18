@@ -26,13 +26,13 @@ const Header: React.FC = () => {
         RemoveCookie('refresh');
       }}>
         <BiLogOut className="icon" />
-        <span className="links-name">Log out</span>
+        <span className="links-name">გამოსვლა</span>
       </Link>
     ),
     out: (
       <Link to="/login" >
         <FaUser className="icon" />
-        <span className="links-name">Log in</span>
+        <span className="links-name">შესვლა</span>
       </Link>
     ),
   });
@@ -79,38 +79,39 @@ const Header: React.FC = () => {
         </button>
         <ul className="list">
           <li className="list-item">
-            <Link to="/">
+            <Link title="მთავარი" to="/">
               <GrHomeRounded className="icon" />
               <span className="links-name">მთავარი</span>
             </Link>
           </li>
           <li className="list-item">
-            <Link to="/fill">
+            <Link title=" სიტყვის შევსება" to="/fill">
               <BsDatabaseAdd className="icon" />
               <span className="links-name">სიტყვის შევსება</span>
             </Link>
           </li>
          {role=="super_admin"&& <li className="list-item">
-            <Link to="/addUsers">
+            <Link title="მომხამრებლის დამატება" to="/addUsers">
               <AiOutlineUserAdd className="icon" />
-              <span className="links-name">მომხარებლის დამატება</span>
+              <span className="links-name">მომხმარებლის დამატება</span>
             </Link>
 
           </li>}
          {role=="super_admin"&&  <li className="list-item">
-            <Link to="/addTopic">
+            <Link  title="თემატიკის დამატება"to="/addTopic">
               < FaEdit className="icon" />
-              <span className="links-name">თემატიკის დამატება</span>
+              <span className="links-name">თემატიკის
+                   დამატება</span>
             </Link>
           </li>}
            {role=="super_admin"&&  <li className="list-item ">
-              <Link to="/subTematic">
+              <Link title="ქვეთემატიკის დამატება"to="/subTematic">
               < FaEdit className="icon" />
                 <span className="links-name">ქვეთემატიკის დამატება</span>
               </Link>
             </li>}
            {role=="super_admin"&&  <li className="list-item ">
-              <Link to="/EntryList">
+              <Link title="სიტყვების ცხრილი " to="/EntryList">
               < FaEdit className="icon" />
                 <span className="links-name">სიტყვების ცხრილი</span>
               </Link>

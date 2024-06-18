@@ -1,0 +1,123 @@
+.text-center{
+        text-align: center;
+}
+.border-2{
+    border-width: 2px;
+}
+.h-10{
+    height: 2.5rem; /* 40px */
+}
+.rounded-full{
+    border-radius: 9999px;
+}
+
+.w-10{
+	width: 2.5rem; /* 40px */
+}
+.hover-bg-yellow-400:hover{
+    background-color: rgb(250 204 21);
+
+} 
+div.searchBar{
+    display: flex;
+    justify-content: center;
+    height:100px;
+    padding: 1px 4px;
+    width: 150%;
+    background-color: rgb(255, 255, 255);
+    border-bottom:2px solid  ;
+    margin-bottom: 20px;
+}
+/* From uiverse.io by @satyamchaudharydev */
+/* removing default style of button */
+
+.form button {
+    border: none;
+    background: none;
+    color: #1a3058;
+
+  }
+  /* styling of whole input container */
+  .form {
+    --timing: 0.3s;
+    --width-of-input: 670px;
+    --height-of-input: 50px;
+    --border-height: 2px;
+    --input-bg: #817d7db2;
+    --border-color: #76ff07bb;
+    --border-radius: 30px;
+    --after-border-radius: 1px;
+    position: relative;
+    width: var(--width-of-input);
+    height: var(--height-of-input);
+    display: flex;
+    align-items: center;
+    padding-inline: 0.8em;
+    border-radius: var(--border-radius);
+    transition: border-radius 0.5s ease;
+    background: var(--input-bg,#156938);
+  
+
+
+  }
+  /* styling of Input */
+  .input {
+    font-size: 1.2rem;
+    text-align: center;
+    background-color: transparent;
+    width: 600px;
+    height: 100%;
+    
+    padding-inline: 0.5em;
+    padding-block: 0.7em;
+    border: none;
+  }
+  /* styling of animated border */
+  .form:before {
+    content: "";
+    position: absolute;
+    background: var(--border-color);
+    transform: scaleX(0);
+    transform-origin: center;
+    width: 100%;
+    height: var(--border-height);
+    left: 0;
+    bottom: 0;
+    border-radius: 1px;
+    transition: transform var(--timing) ease;
+  }
+  /* Hover on Input */
+  .form:focus-within {
+    border-radius: var(--after-border-radius);
+  }
+  
+  input:focus {
+    outline: none;
+  }
+  /* here is code of animated border */
+  .form:focus-within:before {
+    transform: scale(1);
+  }
+  /* styling of close button */
+  /* == you can click the close button to remove text == */
+  .reset {
+    border: none;
+    background: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+  /* close button shown when typing */
+  input:not(:placeholder-shown) ~ .reset {
+    opacity: 1;
+    visibility: visible;
+  }
+  /* sizing svg icons */
+  .form svg {
+    width: 17px;
+    margin-top: 3px;
+  }
+div.wordList{
+    padding: 4px;
+    width: 910px;
+    background-color: rgba(190, 166, 68, 0.753);
+}

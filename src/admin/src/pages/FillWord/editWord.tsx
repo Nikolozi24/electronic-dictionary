@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./fillWord.css";
 
-import { useForm, useFieldArray, FieldValue } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
-import { DeleteFilled } from "@ant-design/icons"
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import axios from "axios";
-import { NULL } from "sass";
+
 import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
 
 
@@ -51,7 +50,7 @@ const EditWordToDatabase:React.FC = () => {
                 idiom: data.idiom ,
                 synonym: data.synonym ,
                 usageNote:  data.usageNote ,
-                imageUrl:  data.imageUrl , 
+                imageUrl:  data.imageUrl,
                 subTopicId: data.subTopicId ,
 
         }
@@ -134,47 +133,57 @@ fun()
 const handleThematicSelect  = ()=>{
   var selectElement = document.getElementById("thematic");
   var selectedValue = selectElement.value;
-   console.log(selectedValue)
+  if(selectedValue=="none"){
+    return ;
+  }
+  else{
    setThematicId(selectedValue);
+  }
   }
 
 
-  const { register, control , setValue, getValues } = form;
+  const { register, setValue, getValues } = form;
   console.log(thetamticId)
   const handleSubmit=(e:any)=>{
     e.preventDefault()
     console.log(getValues())
     try{
+      const fun = async()=>{
         const file = getValues("imageUrl")[0];
         console.log("file" , file);
-        if(file){
+        if(typeof(file)!== typeof("s")){
           const formData = new FormData();
           formData.append('file' , file);
 
-          const response = axios.post("http://localhost/api/multimedia/", {...formData},
-          {
+        const res = await fetch('http://localhost:80/api/multimedia/', {
+            method: 'POST',
+            body: formData,
             headers:{
-              'Content-Type':'application/json',
-              'Authorization':"Bearer "+ jwt
+                Authorization:"Bearer "+jwt
             }
-          }
-          ).then(resp=>console.log(resp.data));
-        }
-        setValue("imageUrl", "TestUrl")
+        })
+        .then(response => response.json()).then(
+          data=>{console.log(data); setValue("imageUrl", data)}
+        )
+      }
         const el = document.getElementById("Subthematic");
         const value = el.value;
-        const resp = axios.put("http://localhost/api/entry",{...getValues(), subTopicId: parseInt(value), id:id},{
+        const resp = await axios.put("http://localhost/api/entry",{...getValues(), subTopicId: parseInt(value), id:id},{
 
           headers:{
             'Content-Type':'application/json',
             'Authorization':"Bearer "+ jwt
           }
         })
+      }
+      fun();
 
   }catch(err){
     AxiosErrorHandling(err);
   }
 }
+
+
   
   return (
     <div className="fillWordForm">
@@ -184,6 +193,7 @@ const handleThematicSelect  = ()=>{
   
       <form className="formFill" onSubmit={(e)=>handleSubmit(e)} >
       <select name="thematic" id="thematic" onChange={()=>handleThematicSelect()}  className="minimal" >
+       <option value="none"   >აირჩეთ თემატიკა </option>;
             {
             thematic.map((item) => {
                 return <option key={item.id}  onClick={()=>{

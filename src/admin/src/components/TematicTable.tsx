@@ -63,10 +63,10 @@ const Thematic:React.FC = () => {
             "Content-Type":"application/json",
             'Authorization':"Bearer "+jwt
           }
-      })
+      }).then(res=>{ setIsOpen(false); document.location.reload()})
 
-    setIsOpen(false)
-    document.location.reload;
+   
+    
   }
   
   const  columns: TableColumnsType<dataType> = [

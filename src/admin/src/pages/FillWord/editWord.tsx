@@ -31,11 +31,15 @@ const EditWordToDatabase:React.FC = () => {
 
     }
     const { id } = useParams();
-  
+    const [subTopicId, setSubTopicId] = useState(0)
+    const [subTopic, setSubTopic] = useState({})
   const form = useForm<formType>({
     defaultValues: async()=>{
         const response = await fetch(`http://localhost/api/entry/${id}`);
         const data = await response.json();
+        setSubTopicId(data.subTopic.id);
+        setSubTopic(data.subTopic);
+        console.log(subTopicId)
         return {
             
                 georgianHeadword:data.georgianHeadword,
@@ -44,18 +48,19 @@ const EditWordToDatabase:React.FC = () => {
                 englishHeadword: data.englishHeadword,
                 georgianDefinition: data.georgianDefinition,
                 englishDefinition: data.englishDefinition,
-                georgianIllustrationSentence: data.georgianIllustrationSentenc ,
+                georgianIllustrationSentence: data.georgianIllustrationSentence ,
                 englishIllustrationSentence: data.englishIllustrationSentence ,
                 source: data.source ,
                 idiom: data.idiom ,
                 synonym: data.synonym ,
                 usageNote:  data.usageNote ,
                 imageUrl:  data.imageUrl,
-                subTopicId: data.subTopicId ,
+                subTopicId: data?.subTopic?.id ,
 
         }
 
         },
+        
 
     })
     const [subThematic, setSubThematic] = useState([{
@@ -98,6 +103,7 @@ const EditWordToDatabase:React.FC = () => {
   [])
 
       const [thetamticId, setThematicId] = useState(thematic[0].id);
+      const [isHide, setisHide] = useState(false);
 useEffect(()=>{
 
   const fun = async ()=>{
@@ -137,6 +143,7 @@ const handleThematicSelect  = ()=>{
     return ;
   }
   else{
+    setisHide(true)
    setThematicId(selectedValue);
   }
   }
@@ -147,28 +154,15 @@ const handleThematicSelect  = ()=>{
   const handleSubmit=(e:any)=>{
     e.preventDefault()
     console.log(getValues())
+    const el = document.getElementById('Sub-thematic')
+    const value = el?.value;
     try{
       const fun = async()=>{
         const file = getValues("imageUrl")[0];
         console.log("file" , file);
-        if(typeof(file)!== typeof("s")){
-          const formData = new FormData();
-          formData.append('file' , file);
-
-        const res = await fetch('http://localhost:80/api/multimedia/', {
-            method: 'POST',
-            body: formData,
-            headers:{
-                Authorization:"Bearer "+jwt
-            }
-        })
-        .then(response => response.json()).then(
-          data=>{console.log(data); setValue("imageUrl", data)}
-        )
-      }
-        const el = document.getElementById("Subthematic");
-        const value = el.value;
-        const resp = await axios.put("http://localhost/api/entry",{...getValues(), subTopicId: parseInt(value), id:id},{
+      
+        console.log({...getValues(), subTopicId:subTopicId, id:id})
+        const resp = await axios.put("http://localhost/api/entry",{...getValues(), subTopicId:parseInt(value), id:id},{
 
           headers:{
             'Content-Type':'application/json',
@@ -190,28 +184,31 @@ const handleThematicSelect  = ()=>{
       <Header>
 
       </Header>
-  
-      <form className="formFill" onSubmit={(e)=>handleSubmit(e)} >
-      <select name="thematic" id="thematic" onChange={()=>handleThematicSelect()}  className="minimal" >
-       <option value="none"   >აირჩეთ თემატიკა </option>;
-            {
+      <form className="formFill" onSubmit={(e)=>handleSubmit(e)} >   
+      <select name="thematic" id="thematic" onChange={() => handleThematicSelect()} className="minimal" >
+          <option value="none"   >აირჩეთ თემატიკა </option>;
+          {
             thematic.map((item) => {
-                return <option key={item.id}  onClick={()=>{
-                  setThematicId(item.id);
-                  console.log(item.id)
-                }} value={item.id}>  {item.georgianName} </option>;
+              return <option key={item.id} onClick={() => {
+                setThematicId(item.id);
+                console.log(item.id)
+              }} value={item.id}>  {item.georgianName} </option>;
             })}
-     </select>
-   
-      <select name="thematic" id="Subthematic" onChange={()=>handleThematicSelect()}  className="minimal" >
+        </select>
+
+
+
+        <select name="thematic" id="Sub-thematic" onChange={() => handleThematicSelect()} className="minimal" >
+          {
+            !isHide && <option value={subTopic?.id}  >{subTopic?.georgianName}</option>}
             {
             subThematic?.map((item) => {
-                return <option key={item.id}  onClick={()=>{
-                  
-                }} value={item.id}>  {item.georgianName} </option>;
+              return <option key={item?.id} onClick={() => {
+
+              }} value={item?.id}>  {item?.georgianName} </option>;
             })}
-     </select>
-   
+        </select>
+
         <input
           type="text"
           {...register("georgianHeadword", {
@@ -278,11 +275,7 @@ const handleThematicSelect  = ()=>{
           {...register("usageNote", {})}
           placeholder={`  დამატებითი კომენტარი`}
         />
-        <div className="input-div">
-          <label htmlFor="photo">photo</label>
-   <input id="photo" className="input" {...register("imageUrl",{})}   type="file"/>
-  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" stroke-linejoin="round" stroke-linecap="round" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon"><polyline points="16 16 12 12 8 16"></polyline><line y2="21" x2="12" y1="12" x1="12"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
-</div>
+      
         <button  className="submit-button" type="submit">
          ედითი
         </button>

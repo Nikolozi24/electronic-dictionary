@@ -15,7 +15,8 @@ const { SubMenu } = Menu;
 const { Sider } = Layout;
 
 
-const NavBar:React.FC = () => {
+const NavBar:React.FC = (props) => {
+  const {handleFilterByThematic} = props
     const [item,setItem] = useState([{
       subTopics:[{}]
     }]);
@@ -68,7 +69,7 @@ const NavBar:React.FC = () => {
       item.map(item=>{
     return   <SubMenu key={item.id}  title={`${item.georgianName}`}>
           {
-         item.subTopics.map(subTopic=>{ return<Menu.Item key={subTopic.id}>{subTopic.georgianName}</Menu.Item> 
+         item.subTopics.map(subTopic=>{ return<Menu.Item onClick={(id)=>handleFilterByThematic(subTopic.id)} key={subTopic.id}>{subTopic.georgianName}</Menu.Item> 
 
 
            })}

@@ -4,6 +4,7 @@ import "./AddSubTopic.css";
 import Header from "../../components/Header/Header";
 import "./InputStyle.scss";
 import axios from "axios";
+
 import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import { useNavigate, useNavigation, Link } from "react-router-dom";
 import {
@@ -18,6 +19,7 @@ import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosEr
 interface dataType {
   key: number;
   GeorgianMeaning: string;
+  EnglishMeaning: string;
 }
 
 const AddSubTopic: React.FC = () => {
@@ -41,27 +43,35 @@ const AddSubTopic: React.FC = () => {
     fun();
   }, []);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const onSave = (geo: string, english: string, id: any) => {
+  const [isOpen1, setIsOpen1] = useState<boolean>(false);
+
+  const onSave1 = (geo: string, english: string, id: any) => {
     try {
-      const response = axios.post(
-        "http://localhost/api/topic",
+      const fun = async ()=>{
+        console.log(geo, english, id)
+      const response =  await axios.put(
+        "http://localhost/api/topic/subTopic",
         {
           georgianName: geo,
           englishName: english,
+          id:parseInt(id)
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + jwt,
+            'Authorization': "Bearer " + jwt,
           },
         }
       );
       setIsOpen(false);
+      location.reload();
+    }
+    fun();
     } catch (err: any) {
       AxiosErrorHandling(err);
     }
   };
-
+  const [currentEdit, setCurrentEdit] = useState({id:1, englishName:"", georgianName:""})
   const columns: TableColumnsType<dataType> = [
     {
       title: "ქვეთემატიკა", // რაც  გამოჩნდება ცხრილის სვეტის სათაურში
@@ -75,6 +85,16 @@ const AddSubTopic: React.FC = () => {
       key: "EnglishMEaning",
     },
     {
+      key:"update",
+      title:"რედაქტირება",
+      dataIndex:"update",
+      render:(_,record)=>{
+          return <button onClick={()=>{    setCurrentEdit({id:record.key, georgianName: record.GeorgianMeaning , englishName:record.EnglishMeaning}); setIsOpen1(true)}}>
+              <EditTwoTone width={10}/>
+          </button>
+      }
+    },
+    {
       key: "delete",
       title: "წაშლა",
       dataIndex: "delete",
@@ -85,13 +105,12 @@ const AddSubTopic: React.FC = () => {
             onClick={() => {
               const func = async () => {
                 try {
-                  const response = await axios
-                    .delete(
+                  const response = await axios.delete(
                       `http://localhost/api/topic/subTopic/${record.key}`,
                       {
                         headers: {
                           "Content-Type": "application/json",
-                          Authorization: "Bearer " + jwt,
+                          'Authorization': "Bearer " + jwt,
                         },
                         withCredentials: true,
                       }
@@ -113,7 +132,6 @@ const AddSubTopic: React.FC = () => {
       },
     },
   ];
-
   const [thematic, setThematic] = useState([
     {
       id: 1,
@@ -127,9 +145,10 @@ const AddSubTopic: React.FC = () => {
         return false;
       }
     });
-
+    
     return true;
   };
+
   const [SubThematics, setSubThematics] = useState([]);
   //   useEffect(()=>{
   //     const fun = async ()=>{
@@ -260,6 +279,16 @@ const AddSubTopic: React.FC = () => {
   return (
     <>
       <div className="add-sub-topic-header">
+      <TranslationComponent
+
+  georgianName={currentEdit.georgianName}
+  englishName={currentEdit.englishName}
+  id={currentEdit.id}
+  title="სიტყვის რედაქტირება"
+  isOpen={isOpen1}
+  onSave={onSave1}
+  onCancel={()=>{setIsOpen1(false)}}
+/>
         <Header />
       </div>
       <div className="add sub-tematic">
@@ -278,6 +307,7 @@ const AddSubTopic: React.FC = () => {
                 onClick={() => {
                   setIsOpen(true);
                 }}
+                onAbort={()=>{setIsOpen(false)}}
               >
                 <PlusCircleOutlined /> ქვეთემატიკის დამატება{" "}
               </button>

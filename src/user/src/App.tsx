@@ -8,7 +8,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import './App.css'
-
+import WordPage from './Pages/WordPage/WordPage';
 function App() {
 
 
@@ -18,6 +18,7 @@ function App() {
             <Routes>
 
                <Route path='/' element={<Main/>}/>
+               <Route path='/:id' element={<WordPage/>}/>
             </Routes>
       </Router>
                 

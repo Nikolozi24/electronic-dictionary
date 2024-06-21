@@ -127,7 +127,7 @@ fun()
             return (<><Button onClick={()=>{
                   try{
                     const fun  = async ()=>{
-                const response = await  axios.put(`http://localhost/api/Entry/activate/${record.key}`,{},
+                const response = await  axios.put(`http://localhost/api/entry/activate/${record.key}`,{},
                   {
                     headers:{
                       'Content-Type':'application/json',
@@ -185,21 +185,24 @@ fun()
         title:<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>წაშლა</span>,
         dataIndex:"delete",
         render:(_,record)=>{
-          return <Link style={{width:'100%'}} to={`/delete/${record.key}`} onClick={()=>{
+          return <button style={{width:'100%'}}  onClick={()=>{
             try{
-            const response = axios.delete(`http://localhost/api/Entry/${record.key}`,
+              const fun = async() =>{
+            const response = await axios.delete(`http://localhost/api/entry/${record.key}`,
       {
           headers:{
             "Content-Type":"application/json",
             'Authorization':"Bearer "+jwt
           },
-          withCredentials:true
-      })
+      }).then(res=>location.reload())
+   
+    }
+    fun()
     }
     catch(err:any){
       AxiosErrorHandling(err);
     }
-    }}><CloseCircleTwoTone width={10}/></Link>
+    }}><CloseCircleTwoTone width={10}/></button>
     }
   }
   ]
@@ -233,7 +236,7 @@ fun()
       {
         <>
         <Table  onChange={()=>{navigate("#")}} columns={columns} pagination={false} dataSource={WordList}></Table> 
-        <Pagination current={current} onChange={onChange} total={WordCount} />;
+        <Pagination current={current} onChange={onChange} total={WordCount} />
         </>
         
         

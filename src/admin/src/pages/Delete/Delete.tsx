@@ -6,18 +6,8 @@ import AxiosErrorHandling from '../../components/Utilities/ErrorHandling/AxiosEr
 const Delete:React.FC = () => {
     const BASE_URL = 'http://localhost:5173'
     const navigate = useNavigate();
-    const {id} = useParams();
-    useEffect(()=>{
-      try{
-            console.log("object ",id, "will be deleted! ")
-            const response = axios.delete(`/delete/${id}`)
-      }
-      catch(err:any){
-        AxiosErrorHandling(err);
-      }
 
 
-    },[])
   return (
     <div>
         

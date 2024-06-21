@@ -57,6 +57,7 @@ function App() {
       setRole(role);
       setUser(response.data)
       }
+      
       catch(err:any){
         AxiosErrorHandling(err);
       }

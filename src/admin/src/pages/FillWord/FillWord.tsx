@@ -138,35 +138,67 @@ const FillWordToDatabase: React.FC = () => {
       setThematicId(selectedValue);
     }
   }
-
-
-
+  
   const { register, control, setValue, getValues } = form;
+  
+// const handleUpload =(event)=>{
+
+//     // event.preventDefault();
+    
+//     // const fileInput = document.getElementById('photo');
+//     // const file = fileInput.files[0];
+    
+//     // if (file) {
+//     //     const formData = new FormData();
+//     //     formData.append('file', file);
+        
+//     //     fetch('http://localhost:80/api/multimedia/', {
+//     //         method: 'POST',
+//     //         body: formData
+//     //     })
+//     //     .then(response => response.json())
+//     //     .then(data => {
+//     //         document.getElementById('status')?.textContent = 'File uploaded successfully!';
+//     //         console.log('Success:', data);
+//     //         console.log(data);
+//     //         setValue("imageUrl", data);
+//     //     })
+//     // } else {
+//     //     document.getElementById('status')?.textContent = 'Please select a file!';
+//     // }
+
+// }
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
     try {
-
+        
       const file = getValues("imageUrl")[0];
       console.log("file", file);
       const formData = new FormData();
       formData.append('file', file)
       console.log(formData)
-
+    const fun =  async ()=>{
 
       const el = document.getElementById('Sub-thematic')
       const value = el?.value;
-      fetch('http://localhost:80/api/multimedia/', {
+      if(file){
+   
+        const response = await fetch('http://localhost:80/api/multimedia/', {
         method: 'POST',
         body: formData,
         headers: {
-          Authorization: "Bearer " + jwt
+          'Authorization': "Bearer " + jwt
         }
-      })
-        .then(response => response.json()).then(
-          data => { console.log(data); setValue("imageUrl", data) }
-        )
-      const resp = axios.post("http://localhost/api/entry", { ...getValues(), subTopicId: parseInt(value) }, {
+      }).then(res=>res.json()).then(data=>setValue("imageUrl", data))
+   
+  }
+    else{
+      setValue("imageUrl", null)
+
+    }
+   
+      const resp = await axios.post("http://localhost/api/entry", { ...getValues(), subTopicId: parseInt(value) }, {
         headers: {
           "Content-Type": 'application/json',
           'Authorization': "Bearer " + jwt
@@ -174,11 +206,12 @@ const FillWordToDatabase: React.FC = () => {
 
       })
     }
-
-
-    catch (err: any) {
-      AxiosErrorHandling(err)
-    }
+    fun()
+  }
+  catch (err: any) {
+    AxiosErrorHandling(err)
+    alert(err);
+  }
 
   }
 
@@ -190,7 +223,7 @@ const FillWordToDatabase: React.FC = () => {
 
       <form className="formFill" onSubmit={(e) => handleSubmit(e)} >
         <select name="thematic" id="thematic" onChange={() => handleThematicSelect()} className="minimal" >
-          <option value="none"   >აირჩეთ თემატიკა </option>;
+          <option value="none">აირჩეთ თემატიკა </option>;
           {
             thematic.map((item) => {
               return <option key={item.id} onClick={() => {
@@ -280,8 +313,9 @@ const FillWordToDatabase: React.FC = () => {
         <div className="input-div">
           <label htmlFor="photo">photo</label>
           <input id="photo" className="input" {...register("imageUrl", {})} type="file" />
-          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" stroke-linejoin="round" stroke-linecap="round" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon"><polyline points="16 16 12 12 8 16"></polyline><line y2="21" x2="12" y1="12" x1="12"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg>
+          {/* <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" stroke-linejoin="round" stroke-linecap="round" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon"><polyline points="16 16 12 12 8 16"></polyline><line y2="21" x2="12" y1="12" x1="12"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg> */}
         </div>
+        <div id="status"></div>
         <button className="submit-button" type="submit">
           Add word
         </button>

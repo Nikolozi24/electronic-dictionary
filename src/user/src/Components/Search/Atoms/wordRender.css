@@ -1,0 +1,9 @@
+.wordRender{
+    margin: 2px 10px;
+   
+}
+.wordRender:hover{
+    background-color: aqua;
+    transition:3s ease-in-out all;
+    
+}

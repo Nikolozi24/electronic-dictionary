@@ -18,13 +18,20 @@
     background-color: rgb(250 204 21);
 
 } 
+div.searchBarArea{
+  
+  width: 100%;
+  background-color: #D4B08F
+  margin: 20px 4px;
+}
 div.searchBar{
     display: flex;
     justify-content: center;
     height:100px;
     padding: 1px 4px;
-    width: 150%;
-    background-color: rgb(255, 255, 255);
+    width:100%;
+    background-color: #016367;
+  
     border-bottom:2px solid  ;
     margin-bottom: 20px;
 }
@@ -34,7 +41,7 @@ div.searchBar{
 .form button {
     border: none;
     background: none;
-    color: #1a3058;
+
 
   }
   /* styling of whole input container */
@@ -43,7 +50,7 @@ div.searchBar{
     --width-of-input: 670px;
     --height-of-input: 50px;
     --border-height: 2px;
-    --input-bg: #817d7db2;
+    --input-bg: #ffffffb2;
     --border-color: #76ff07bb;
     --border-radius: 30px;
     --after-border-radius: 1px;
@@ -90,7 +97,7 @@ div.searchBar{
   .form:focus-within {
     border-radius: var(--after-border-radius);
   }
-  
+
   input:focus {
     outline: none;
   }
@@ -106,18 +113,24 @@ div.searchBar{
     opacity: 0;
     visibility: hidden;
   }
+  ul.wordRenderList{
+   position: relative
+
+
+  }
   /* close button shown when typing */
   input:not(:placeholder-shown) ~ .reset {
     opacity: 1;
     visibility: visible;
   }
+
   /* sizing svg icons */
   .form svg {
     width: 17px;
     margin-top: 3px;
   }
 div.wordList{
-    padding: 4px;
-    width: 910px;
-    background-color: rgba(190, 166, 68, 0.753);
+  background-color: #7575756b;
+  margin-top: 10px;
+  padding-bottom: 10px;
 }

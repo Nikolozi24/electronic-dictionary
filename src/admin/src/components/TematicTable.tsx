@@ -1,6 +1,6 @@
 import { useState, useEffect} from 'react'
 import {useNavigate}  from 'react-router-dom'
-import { Table , Flex, Layout } from 'antd'
+import { Table , Flex, Layout, Button } from 'antd'
 import type { TableColumnsType } from 'antd';
 import {Link} from 'react-router-dom';
 import TranslationComponent from './TranslationComponent/TranslationComponent';
@@ -21,6 +21,7 @@ import AxiosErrorHandling from './Utilities/ErrorHandling/AxiosErrorHandling';
     key:number;
     GeorgianMeaning:string;
     EnglishMeaning:string;
+    status:string;
  }
 
 const Thematic:React.FC = () => {
@@ -82,6 +83,61 @@ const Thematic:React.FC = () => {
       key:"EnglishMEaning",
     },
     {
+      key:"status",
+      title:<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>აქტივაცია/დეაქტივაცია</span>,
+      dataIndex:"status",
+      render: (_,record)=>{
+
+        if(record.status==='InActive')
+          return (<><Button onClick={()=>{
+                try{
+                  const fun  = async ()=>{
+              const response = await  axios.put(`http://localhost/api/topic/activate/${record.key}`,{},
+                {
+                  headers:{
+                    'Content-Type':'application/json',
+                    'Authorization':"Bearer "+jwt
+                  }
+                }
+              );
+              location.reload();
+            }
+            fun();
+            }
+            catch(err:any){
+              AxiosErrorHandling(err);
+            }
+              
+            }}>გააქტიურება</Button>
+           
+            
+            </>)
+        else
+           return (<><Button onClick={()=>{
+            try{
+              const fun  = async ()=>{
+            const response = await axios.put(`http://localhost/api/topic/deactivate/${record.key}`,{},
+              {
+                headers:{
+                  'Content-Type':'application/json',
+                  'Authorization':"Bearer "+jwt
+                }
+              }
+            );
+            location.reload();
+          }
+          fun();
+            }
+            catch(err:any){
+              AxiosErrorHandling(err);
+            }
+          }
+          
+          }>დეაქტივაცია</Button></>)
+
+      }
+    },
+    {
       key:"update",
       title:"რედაქტირება",
       dataIndex:"update",
@@ -118,12 +174,13 @@ const Thematic:React.FC = () => {
 
   const data: dataType[]= thematic.map(item=>{
     // ამოვიღებ დესტრუქტურიზაციით იმ ველებს რომლებიც მჭირდება
-    const {id, georgianName, englishName } = item;
+    const {id, georgianName, englishName, status } = item;
     // ვქმნი ობიექტს შესაბბამისი ველებით და ვაბრუნებ
       const obj = {
               key:id,
               GeorgianMeaning:georgianName,
-              EnglishMeaning:englishName
+              EnglishMeaning:englishName,
+              status:status
         }
         return obj
       }

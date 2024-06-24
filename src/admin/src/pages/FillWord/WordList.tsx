@@ -13,6 +13,7 @@ import { Pagination } from 'antd';
 import { Button, Flex, Layout, Table, TableColumnsType } from 'antd';
 import { CloseCircleTwoTone, EditTwoTone, PlusCircleOutlined } from '@ant-design/icons';
 import TranslationComponent from '../../components/TranslationComponent/TranslationComponent.tsx';
+import Search from '../../components/Search/Search.tsx';
 const WordList: React.FC = () => {
       interface dataType {
           key:number;
@@ -22,6 +23,7 @@ const WordList: React.FC = () => {
           status:string;
           }
   const [current, setCurrent] = useState(1);
+  const [value, setValue] = useState("")
     const navigate = useNavigate();
     const [WordList, setWordList] = useState([{}]);
     const [pageNumber, setPageNumber] = useState(1);
@@ -31,7 +33,7 @@ const WordList: React.FC = () => {
     useEffect(()=>{
       const fun = async ()=>{     
         try{
-          const response = await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}`,{
+          const response = await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}`,{
               headers:{
                   'Content-Type':'application/json',
                   'Authorization':"Bearer "+jwt
@@ -60,7 +62,7 @@ return obj
 fun()
 }
 
-,[current])
+,[current,value])
 
   const [WordCount , setWordCount] = useState(0);
   useEffect(()=>{
@@ -212,7 +214,10 @@ fun()
     const onChange: PaginationProps['onChange'] = (page) => {
       setCurrent(page);
     }
-  
+    const handleChange= (e)=>{
+          const val = e.target.value;
+          setValue(val)
+    }
     
     
     
@@ -220,6 +225,12 @@ fun()
     return ( 
       <div className='thematic'>
             <Header/>
+            {/* <input type='text' value={value} onChange={(e)=>handleChange(e)}/> */}
+          
+
+            <Search value={value} handleChange={handleChange}/>
+       
+            
             <div style={ {marginLeft: '',  width:'80vw'}} >
             <TranslationComponent
 

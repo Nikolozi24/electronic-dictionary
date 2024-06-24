@@ -9,6 +9,7 @@ import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import axios from "axios";
 
 import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
+import Item from "antd/es/list/Item";
 
 
 const EditWordToDatabase:React.FC = () => {
@@ -29,40 +30,41 @@ const EditWordToDatabase:React.FC = () => {
     imageUrl:  any;
     subTopicId:number;
 
-    }
-    const { id } = useParams();
-    const [subTopicId, setSubTopicId] = useState(0)
-    const [subTopic, setSubTopic] = useState({})
+  }
+  const { id } = useParams();
+  const [subTopicId, setSubTopicId] = useState(0)
+  const [subTopic, setSubTopic] = useState({})
   const form = useForm<formType>({
     defaultValues: async()=>{
-        const response = await fetch(`http://localhost/api/entry/${id}`);
-        const data = await response.json();
-        setSubTopicId(data.subTopic.id);
-        setSubTopic(data.subTopic);
-        console.log(subTopicId)
-        return {
-            
-                georgianHeadword:data.georgianHeadword,
-                functionalLabel:data.functionalLabel,
-                stylisticQualification: data.stylisticQualification,
-                englishHeadword: data.englishHeadword,
-                georgianDefinition: data.georgianDefinition,
-                englishDefinition: data.englishDefinition,
-                georgianIllustrationSentence: data.georgianIllustrationSentence ,
+      const response = await fetch(`http://localhost/api/entry/${id}`);
+      const data = await response.json();
+      setSubTopicId(data.subTopic.id);
+      setSubTopic(data.subTopic);
+      console.log(subTopicId)
+      return {
+        
+        georgianHeadword:data.georgianHeadword,
+        functionalLabel:data.functionalLabel,
+        stylisticQualification: data.stylisticQualification,
+        englishHeadword: data.englishHeadword,
+        georgianDefinition: data.georgianDefinition,
+        englishDefinition: data.englishDefinition,
+        georgianIllustrationSentence: data.georgianIllustrationSentence ,
                 englishIllustrationSentence: data.englishIllustrationSentence ,
                 source: data.source ,
                 idiom: data.idiom ,
                 synonym: data.synonym ,
                 usageNote:  data.usageNote ,
-                imageUrl:  data.imageUrl,
+                imageUrl: data.imageUrl,
                 subTopicId: data?.subTopic?.id ,
-
-        }
-
-        },
-        
-
-    })
+                
+              }
+              
+            },
+            
+            
+          })
+          const { register, setValue, getValues } = form;
     const [subThematic, setSubThematic] = useState([{
       id:1,
       georgianName:"",
@@ -146,10 +148,15 @@ const handleThematicSelect  = ()=>{
     setisHide(true)
    setThematicId(selectedValue);
   }
+
+  
   }
 
+useEffect(()=>{
+  console.log(getValues("imageUrl"))
 
-  const { register, setValue, getValues } = form;
+},[getValues("imageUrl")])
+
   console.log(thetamticId)
   const handleSubmit=(e:any)=>{
     e.preventDefault()
@@ -160,9 +167,27 @@ const handleThematicSelect  = ()=>{
       const fun = async()=>{
         const file = getValues("imageUrl")[0];
         console.log("file" , file);
-      
+        const formData = new FormData();
+        formData.append('file', file)
+        console.log(formData)
+        if(file!="h"){
+   
+          const response = await fetch('http://localhost/api/multimedia/', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Authorization': "Bearer " + jwt
+          }
+        }).then(res=>res.json()).then(data=>setValue("imageUrl", data))
+     
+    }
+      else{
+        setValue("imageUrl", null)
+  
+      }
+        
         console.log({...getValues(), subTopicId:subTopicId, id:id})
-        const resp = await axios.put("http://localhost/api/entry",{...getValues(), subTopicId:parseInt(value), id:id},{
+        const resp = await axios.put("http://localhost/api/entry",{...getValues(), subTopicId:parseInt(value), id:parseInt(id)},{
 
           headers:{
             'Content-Type':'application/json',
@@ -275,9 +300,9 @@ const handleThematicSelect  = ()=>{
           {...register("usageNote", {})}
           placeholder={`  დამატებითი კომენტარი`}
         />
-      
+           <input id="photo" className="" {...register("imageUrl", {})}  type="file" />
         <button  className="submit-button" type="submit">
-         ედითი
+         რედაქტირება
         </button>
       </form>
     </div>

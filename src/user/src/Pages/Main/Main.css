@@ -4,6 +4,28 @@
     box-sizing: border-box;
 
 }
-.mainLayout{
-    background-color: rgb(216, 145, 52);
+a{
+    color:black;
+}
+div.main_page{
+    background-color:#db8c32;
+    padding: 20px;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+div.main_page_container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+
+}
+div.Searching_div{
+    width: 50vw;
+    margin: 30px auto;
+   height: 100%;
 }

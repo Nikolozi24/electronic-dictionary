@@ -1,0 +1,10 @@
+div.normalWordRender{
+    border-bottom: 1px solid rgba(200, 221, 168, 0.575);
+    
+}
+div.normalWordRender h4{
+    color: bisque;
+}
+div.normalWordRender h3{
+    color: rgb(119, 46, 4);
+}

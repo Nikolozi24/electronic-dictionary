@@ -63,18 +63,18 @@ const NavBar:React.FC = (props) => {
       mode="inline"
       defaultSelectedKeys={['1']}
       defaultOpenKeys={['']}
-      style={{ height: '100%', borderRight: 0 }}
+      style={{ height: '100%', borderRight: 0, backgroundColor:'#c14f00',padding:'3px 4px',  }}
     >
     {
       item.map(item=>{
-    return   <SubMenu key={item.id}  title={`${item.georgianName}`}>
+    return  item.status=="Active"?  <SubMenu key={item.id}  title={`${item.georgianName}`}> 
           {
-         item.subTopics.map(subTopic=>{ return<Menu.Item onClick={(id)=>handleFilterByThematic(subTopic.id)} key={subTopic.id}>{subTopic.georgianName}</Menu.Item> 
-
+              item.subTopics.map(subTopic=> { return subTopic.status=="Active"? <Menu.Item onClick={(id)=>handleFilterByThematic(subTopic.id)} key={subTopic.id}>{subTopic.georgianName}</Menu.Item> 
+                :<></>
 
            })}
         
-     </SubMenu>
+     </SubMenu>:<></>
        }
       )  
  }

@@ -57,7 +57,7 @@ function App() {
       setRole(role);
       setUser(response.data)
       }
-      
+
       catch(err:any){
         AxiosErrorHandling(err);
       }
@@ -84,7 +84,7 @@ function App() {
          {user.isSuperAdmin &&  <Route path={`/update/:ID`} element={<UpdateThematic />} />}
           {user.isSuperAdmin && <Route path="/subTematic" element={<AddSubTopic />} />}
 
-         {user.isSuperAdmin &&  <Route path="/addUsers" element={<AddUser />} />}
+         {  <Route path="/addUsers" element={<AddUser />} />}
          {user.isSuperAdmin &&  <Route path="/delete/:id" element={<Delete />} />}
         { user.isSuperAdmin &&  <Route path="/added" element={<Added />} />}
         { user.isSuperAdmin &&  <Route path="/added-failed" element={<AddedFailed />} />}

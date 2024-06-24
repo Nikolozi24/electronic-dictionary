@@ -20,9 +20,10 @@ const AddUser: React.FC = () => {
     {
       headers:{
           "Content-Type":'application/json',
-      }
+          "Authorization":'Bearer '+jwt
+        }
     })
-    console.log("addUserBro!")
+  
    }
    catch(err:any){
    AxiosErrorHandling(err)

@@ -9,20 +9,23 @@ import {
 } from "react-router-dom";
 import './App.css'
 import WordPage from './Pages/WordPage/WordPage';
+
 function App() {
 
-
-  return (
-    <div className='app'>
+  
+  
+  return (<>
       <Router>
-            <Routes>
-
-               <Route path='/' element={<Main/>}/>
-               <Route path='/:id' element={<WordPage/>}/>
-            </Routes>
-      </Router>
+        <Routes>
+        
+        <Route path='/' element={<Main/>}/>
+        <Route path='/:id' element={<WordPage/>}/>
+        </Routes>
+        </Router>
+  
+        </>
                 
-    </div>  
+ 
   )
 }
 

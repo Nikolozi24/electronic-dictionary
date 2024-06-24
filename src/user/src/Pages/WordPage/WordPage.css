@@ -1,0 +1,78 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+div.wordPageForUser{
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 5%;
+    left: 0%;
+    
+    height: 100%;
+    width: 100%;
+    text-align: start;
+    padding: 10px;
+    background-color: #e0a85eb0;
+}
+div.wordPageForUser> h1.georgianHeadword>span{
+    font-size:26px;
+    text-align: center;
+    color:#973131;
+   
+    padding: 17px 10px;
+
+}
+div.wordPageForUser> h2.englishHeadword> span{
+    font-size:26px;
+    text-align: center;
+    margin-bottom: 40px;
+    color:rgb(0, 0, 0);
+  
+
+
+}
+div.wordPageForUser> h6.stlyeQualification
+{
+    margin-top: 25px;
+    font-size: 15px;
+    display: inline-block;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding-bottom: 20px;
+
+    border-bottom: 4px solid rgb(153, 153, 89);
+    font-style: italic;
+}
+div.wordPageForUser> h6.functionalLabel{
+  
+    margin-top: 25px;
+    font-size: 15px;
+    display: inline-block;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding-bottom: 20px;
+    border-bottom: 1px solid yellow;
+    font-style: italic;
+
+}
+
+div.wordPageForUser> h6.functionalLabel>span{
+  
+
+    display: inline-block;
+  
+    color: black;
+    padding: 3px;
+
+
+}
+div.wordPageForUser>article{
+
+    width: 100%;
+    background-color: #b46f1398;
+    margin-top: 20px;
+    align-items: center;
+    text-align: left;
+    padding: 20px 40px;
+}

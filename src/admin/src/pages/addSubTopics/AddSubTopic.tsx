@@ -12,7 +12,7 @@ import {
   EditTwoTone,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-import { Flex, Layout, Table, TableColumnsType } from "antd";
+import { Button, Flex, Layout, Table, TableColumnsType } from "antd";
 import TranslationComponent from "../../components/TranslationComponent/TranslationComponent";
 import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
 // just for testing thematic list
@@ -20,6 +20,7 @@ interface dataType {
   key: number;
   GeorgianMeaning: string;
   EnglishMeaning: string;
+  status:string;
 }
 
 const AddSubTopic: React.FC = () => {
@@ -83,6 +84,60 @@ const AddSubTopic: React.FC = () => {
       title: "subthematic",
       dataIndex: "EnglishMeaning",
       key: "EnglishMEaning",
+    },
+    {
+      key:"status",
+      title:<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>აქტივაცია/დეაქტივაცია</span>,
+      dataIndex:"status",
+      render: (_,record)=>{
+
+        if(record.status=='InActive')
+          return (<><Button onClick={()=>{
+                try{
+                  const fun  = async ()=>{
+              const response = await  axios.put(`http://localhost/api/topic/subTopic/activate/${record.key}`,{},
+                {
+                  headers:{
+                    'Content-Type':'application/json',
+                    'Authorization':"Bearer "+jwt
+                  }
+                }
+              );
+              location.reload();
+            }
+            fun();
+            }
+            catch(err:any){
+              AxiosErrorHandling(err);
+            }
+              
+            }}>გააქტიურება</Button>
+           
+            
+            </>)
+        else
+           return (<><Button onClick={()=>{
+            try{
+              const fun  = async ()=>{
+            const response = await axios.put(`http://localhost/api/topic/subTopic/deactivate/${record.key}`,{},
+              {
+                headers:{
+                  'Content-Type':'application/json',
+                  'Authorization':"Bearer "+jwt
+                }
+              }
+            );
+            location.reload();
+          }
+          fun();
+            }
+            catch(err:any){
+              AxiosErrorHandling(err);
+            }
+          } 
+          }>დეაქტივაცია</Button></>)
+
+      }
     },
     {
       key:"update",
@@ -210,6 +265,7 @@ const AddSubTopic: React.FC = () => {
             id: subTopic.id,
             georgianName: subTopic.georgianName,
             englishName: subTopic.englishName,
+            status:subTopic.status
           }));
         const uniqueSubTopics = Array.from(
           new Set(flattenedSubTopics.map((subTopic) => subTopic.id))
@@ -228,12 +284,13 @@ const AddSubTopic: React.FC = () => {
   // აქ ცხრილის მონაცემების მასივს ვქმნი
   const data: dataType[] = SubThematics.map((item) => {
     // ამოვიღებ დესტრუქტურიზაციით იმ ველებს რომლებიც მჭირდება
-    const { id, georgianName, englishName } = item;
+    const { id, georgianName, englishName, status } = item;
     // ვქმნი ობიექტს შესაბბამისი ველებით და ვაბრუნებ
     const obj = {
       key: id,
       GeorgianMeaning: georgianName,
       EnglishMeaning: englishName,
+      status:status,
     };
     return obj;
   });
@@ -275,7 +332,7 @@ const AddSubTopic: React.FC = () => {
     navigate("/added");
   };
   const [thematicId, setThematicId] = useState(0);
-
+  console.log(SubThematics)
   return (
     <>
       <div className="add-sub-topic-header">

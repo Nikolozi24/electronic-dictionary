@@ -10,7 +10,8 @@ import "./Main.css"
 import Word from "../../Components/WordRender/Word";
 import ToolTip from "../../Components/Footer/ToolTip";
 import { Pagination } from 'antd';
-
+import { Link } from "react-router-dom";
+import { HomeOutlined } from "@ant-design/icons";
 
 
 
@@ -18,9 +19,13 @@ import { Pagination } from 'antd';
 
 const Main:React.FC = () => {
   const [words, setWords] = useState([{}])
-  const [wordCount, setWordCount] = useState(90)
+  const [wordCount, setWordCount] = useState(0)
   const [value, setValue] = useState("")
   const [current, setCurrent] = useState(1);
+  const SearchStyle = {
+    width:'70%',
+    margin:'2px auto'
+  }
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrent(page);
   }
@@ -49,20 +54,21 @@ const Main:React.FC = () => {
 }
   return (  
   <div className="main_page">
+       <div className='SearchingWordPage'>
+          <Link style={{paddingLeft:'20px', color:"black"}} to="/"><HomeOutlined/>მთავარი</Link>
+            <Search value={value} words={words} styleAdditional={SearchStyle} setValue={setValue}/>
+        </div>
   <div className="main_page_container">
     <div>
 
           <NavBar handleFilterByThematic={handleFilterByThematic}/>     
     </div>
       <div className="Searching_div">
-          <Search value={value} words={words}  setValue={setValue}/>
 
-         <ul>
+          <ul>
             {
               words?.map(item=>{
                   return item.status=="Active"? <Word word={item}/> :<></>
-
-
               })
             }
          </ul>

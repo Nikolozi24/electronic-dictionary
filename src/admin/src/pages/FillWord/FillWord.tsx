@@ -9,29 +9,14 @@ import Header from "../../components/Header/Header";
 import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import axios from "axios";
 import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
-
+import { fillWord } from "../../components/TypeDef/Types";
+import { Topics } from "../../../../user/src/Components/TypeDef/Types";
 
 const FillWordToDatabase: React.FC = () => {
   const jwt = GetCookie('jwt')
-  type formType = {
-    georgianHeadword: string;
-    functionalLabel: string;
-    stylisticQualification: string;
-    englishHeadword: string;
-    georgianDefinition: string
-    englishDefinition: string;
-    georgianIllustrationSentence: string;
-    englishIllustrationSentence: string;
-    source: string;
-    idiom: string;
-    synonym: string;
-    usageNote: string;
-    imageUrl: any;
-    subTopicId: number;
 
-  }
 
-  const form = useForm<formType>({
+  const form = useForm<fillWord>({
     defaultValues: {
       georgianHeadword: "",
       functionalLabel: "",
@@ -52,12 +37,7 @@ const FillWordToDatabase: React.FC = () => {
   const [subThematic, setSubThematic] = useState([{
 
   }]);
-  const [thematic, setThematic] = useState([
-    {
-      id: 1,
-      georgianName: "",
-      englishName: ""
-    }])
+  const [thematic, setThematic] = useState<Topics>([{id:0,status:"", georgianName:"", englishName:"" }])
   const navigate = useNavigate();
   useEffect(() => {
     if (jwt === "") {
@@ -84,7 +64,7 @@ const FillWordToDatabase: React.FC = () => {
 
     
 
-  const [thetamticId, setThematicId] = useState(thematic[0].id);
+  const [thetamticId, setThematicId] = useState<number>(thematic[0].id);
   useEffect(() => {
 
     const fun = async () => {

@@ -6,17 +6,27 @@
 div.wordPageForUser{
     margin: 0;
     display: flex;
+    width: 600px;
+    margin: 4px auto;
     flex-direction: column;
-    position: absolute;
-    top: 5%;
-    left: 0%;
-    
-    height: 100%;
-    width: 100%;
     text-align: start;
     padding: 10px;
-    background-color: #e0a85eb0;
+    background-color: #ffffff65;
+
 }
+
+div.SearchingWordPage{
+    background-color: #973131;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    position: absolute;
+    left:0;
+    top:0;
+
+}
+
 div.wordPageForUser> h1.georgianHeadword>span{
     font-size:26px;
     text-align: center;
@@ -24,6 +34,18 @@ div.wordPageForUser> h1.georgianHeadword>span{
    
     padding: 17px 10px;
 
+}
+div.navigationWord{
+    
+    display: flex;
+    width: 100%;
+    position: relative;
+    transform:translateX(30vw)
+
+}
+div.wrapper_div{
+    display: flex;
+    height: 100%;
 }
 div.wordPageForUser> h2.englishHeadword> span{
     font-size:26px;

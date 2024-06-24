@@ -1,6 +1,6 @@
 div.container_search{
     padding: 10px;
-    background-color: #c14f00;
+   background-color: none;
     border-radius: 10px;
     width:100%;
  position: relative;
@@ -19,7 +19,16 @@ font-size: 20px;
 
 }
 
-div.container_search>ul{
+div.container_search>ul.WordList{
+    display: none ;
+    list-style-type: none;
+    width: 100%;
+    text-align: left;
+    padding-left: 20px;
+    text-decoration: underline;
+}
+div.container_search>ul.WordList{
+    display: inline-block ;
     list-style-type: none;
     width: 100%;
     text-align: left;
@@ -30,6 +39,12 @@ div.container_search>ul>li{
         border-bottom: 1px solid ;
 }
 div.container_search>ul>li:hover{
-      background-color: chocolate;
+    background-color: chocolate;
+
       cursor: pointer;
+}
+div.container_search.focused{
+    visibility: visible;
+    background-color: #c14f00;
+    
 }

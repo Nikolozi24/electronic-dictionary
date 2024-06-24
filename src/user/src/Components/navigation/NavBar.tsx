@@ -58,7 +58,7 @@ const NavBar:React.FC = (props) => {
 
   //   </Menu>
 
-   
+  
     <Menu
       mode="inline"
       defaultSelectedKeys={['1']}

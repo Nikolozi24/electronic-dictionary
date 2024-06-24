@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import AxiosErrorHandling from '../../Components/Utilities/ErrorHandling/AxiosErrorHandling'
 import axios from 'axios'
 import "./WordPage.css"
+import { HomeOutlined } from '@ant-design/icons'
 import {FacebookShareButton} from 'react-share'
+import Search from '../../Components/Searching/Search'
 
 const WordPage:React.FC = () => {
+  const navigate = useNavigate();
     const {id} = useParams()
   const [word, setWord ] = useState({})
+
   
     useEffect(()=>{
         try{
             const fun =  async () =>{
-                const response = await axios.get(`http://localhost/api/entry/${id}`,{
+              const response = await axios.get(`http://localhost/api/entry/${id}`,{
                   headers:{
                     "Content-Type":"application/json"
                   }
@@ -25,18 +29,43 @@ const WordPage:React.FC = () => {
         }
 
 
-    },[])
-    
-  return (
-    
-    
-    <div className='wordPageForUser'>
+    },[id])
+    const [value, setValue] = useState("")
+    const [current, setCurrent] = useState(1);
+    const [words, setWords] = useState([{}])
+ 
+    useEffect(()=>{
+      const fun= async ()=>{
+   const resp =  await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}`,{
+        headers:{
+          "Content-Type":'application/json'
+        }
+      }).then(res=>res.data).then( data=>{
+        setWords(data)
+      })
+    }
+    fun()
+  
+    },[value, current])
+    const SearchStyle = {
+      width:'70%',
+      margin:'2px auto'
+    }
+    function renderWord (word:{}){
+      return      <div>
+        <div className='SearchingWordPage'>
+          <Link style={{paddingLeft:'20px', color:"black"}} to="/"><HomeOutlined/>მთავარი</Link>
+            <Search value={value} words={words} styleAdditional={SearchStyle} setValue={setValue}/>
+        </div>
+
+        <div className='wordPageForUser'>
+
         {word?.georgianHeadword!=="n/a" && <h1 className='georgianHeadword'><span>{word?.georgianHeadword}</span> </h1>}
        { word?.functionalLabel!=="n/a" &&  <h6 className='functionalLabel'><span>{word?.functionalLabel}</span></h6>}
         {word?.stylisticQualification!=="n/a"&& <h6 className='stlyeQualification'><span>{word?.stylisticQualification}</span></h6>}
           {word?.englishHeadword!=="n/a"&& <h2 className="englishHeadword"><span>{word?.englishHeadword}</span> </h2>}
           <h4> {word?.georgianDefinition} <br/> {word?.englishDefinition}</h4>
-       {word?.georgianIllustrationSentence && <>
+       {word?.georgianIllustrationSentence!="n/a" && <>
           <article>
             <span>{word?.georgianIllustrationSentence}</span>
            </article>
@@ -55,7 +84,18 @@ const WordPage:React.FC = () => {
         
         <FacebookShareButton url={`youtube.com`}>share to youtube</FacebookShareButton>
         <FacebookShareButton url={`http://localhost:5174/${word?.id}`}>share to facebook</FacebookShareButton>
-      </div>
+        </div>
+        </div>
+       
+     
+    }
+   function renderError(){
+      return <>
+          <h1>სიტყვა ვერ მოიძებნა</h1>
+            <button onClick={()=>{navigate(-1)}}>უკან დაბრუნება</button>
+      </>
+    }
+  return (word.status=="Active"? renderWord(word):renderError()
   )
 }
 

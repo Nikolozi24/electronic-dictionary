@@ -1,4 +1,4 @@
-export type Root = Root2[]
+export type Topics= Topic[]
 
 export interface Entry{
   id: number

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Entry } from '../TypeDef/Types';
 interface SearchProps{
-  words:[{}];
+ words:Entry[];
  setValue:(e:any) => void;
   value:string;
   styleAdditional:{};
@@ -36,10 +36,10 @@ console.log(words)
                 setValue(val)
             }}  />
            {
-             value!=="" && <ul className='WordList'>
+             value!=="" &&<ul className='WordList' style={{ position:"absolute" , top:'70px'}}>
              {
               words?.map(item=>{
-                  return item.status=="Active"? <li key={item?.id}><Link to={`/${item?.id}`}>{item?.georgianHeadword}</Link></li>:<></>
+                  return item.status=="Active"? <li key={item?.id}><Link style={{color:"black"}} to={`/${item?.id}`}>{item?.georgianHeadword}  -  {item.englishHeadword}</Link></li>:<></>
 
               })}
             </ul>

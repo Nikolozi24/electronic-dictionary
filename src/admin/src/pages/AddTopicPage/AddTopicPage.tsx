@@ -7,7 +7,7 @@ import Header from '../../components/Header/Header.tsx';
 
 
 const AddTopic: React.FC = () => {
-  const [modalIsOpen, setModalOpen] = useState(false);
+  const [modalIsOpen, setModalOpen] = useState<boolean>(false);
 
     function onSave(georgianName: string, englishName: string, id?: number){
     

@@ -11,30 +11,14 @@ import axios from "axios";
 import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
 import Item from "antd/es/list/Item";
 
+import { SubTopic, fillWord } from "../../components/TypeDef/Types";
 
 const EditWordToDatabase:React.FC = () => {
  const jwt = GetCookie('jwt')
-  type formType = {
-    georgianHeadword: string;
-    functionalLabel:string;
-    stylisticQualification: string;
-    englishHeadword: string;
-    georgianDefinition:string
-    englishDefinition: string;
-    georgianIllustrationSentence: string;
-    englishIllustrationSentence:string;
-    source: string;
-    idiom: string;
-    synonym: string;
-    usageNote: string;
-    imageUrl:  any;
-    subTopicId:number;
-
-  }
   const { id } = useParams();
   const [subTopicId, setSubTopicId] = useState(0)
-  const [subTopic, setSubTopic] = useState({})
-  const form = useForm<formType>({
+  const [subTopic, setSubTopic] = useState<SubTopic>()
+  const form = useForm<fillWord>({
     defaultValues: async()=>{
       const response = await fetch(`http://localhost/api/entry/${id}`);
       const data = await response.json();
@@ -64,14 +48,14 @@ const EditWordToDatabase:React.FC = () => {
             
             
           })
-          const { register, setValue, getValues } = form;
+    const { register, setValue, getValues, watch } = form;
     const [subThematic, setSubThematic] = useState([{
       id:1,
       georgianName:"",
       englishName:""
       
     }]);
-    const [thematic, setThematic] = useState([
+    const [thematic, setThematic] = useState<[{id:number; georgianName:string; englishName:string;}]>([
       {
         id:1,
         georgianName:"",
@@ -129,7 +113,7 @@ catch(err:any){
 fun()
 
   },[])
-
+const [imageURL,setImageURL] = useState<string>('')
   useEffect(()=>{
     const Thmatic = thematic.filter(item=> {return item.id == thetamticId});
     console.log(Thmatic)
@@ -154,6 +138,9 @@ const handleThematicSelect  = ()=>{
 
 useEffect(()=>{
   console.log(getValues("imageUrl"))
+  getValues();
+  const val = getValues("imageUrl")
+  setImageURL(val)
 
 },[getValues("imageUrl")])
 
@@ -165,29 +152,8 @@ useEffect(()=>{
     const value = el?.value;
     try{
       const fun = async()=>{
-        const file = getValues("imageUrl")[0];
-        console.log("file" , file);
-        const formData = new FormData();
-        formData.append('file', file)
-        console.log(formData)
-        if(file!="h"){
-   
-          const response = await fetch('http://localhost/api/multimedia/', {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Authorization': "Bearer " + jwt
-          }
-        }).then(res=>res.json()).then(data=>setValue("imageUrl", data))
-     
-    }
-      else{
-        setValue("imageUrl", null)
-  
-      }
-        
         console.log({...getValues(), subTopicId:subTopicId, id:id})
-        const resp = await axios.put("http://localhost/api/entry",{...getValues(), subTopicId:parseInt(value), id:parseInt(id)},{
+        const resp = await axios.put("http://localhost/api/entry",{...getValues(),imageUrl:imageURL, subTopicId:parseInt(value), id:parseInt(id)},{
 
           headers:{
             'Content-Type':'application/json',
@@ -202,8 +168,32 @@ useEffect(()=>{
   }
 }
 
+useEffect(()=>{
+  try{
+  const fun = async()=>{
+  const file = getValues("imageUrl")?.[0]
+  console.log("file" , file);
+  const formData = new FormData();
+  if(file){
+  formData.append('file',file)
+  }
+  const response = await fetch('http://localhost/api/multimedia/', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Authorization': "Bearer " + jwt
+    }
+  }).then(res=>res.json()).then(data=>setValue("imageUrl", data))
+  }
+  fun();
+  console.log(getValues("imageUrl"))
+  }
+  catch(err){
+    AxiosErrorHandling(err);
+  }
 
-  
+},[document.getElementById("photo")?.value])
+useEffect(()=>{},[watch("imageUrl")])
   return (
     <div className="fillWordForm">
       <Header>
@@ -300,7 +290,9 @@ useEffect(()=>{
           {...register("usageNote", {})}
           placeholder={`  დამატებითი კომენტარი`}
         />
-           <input id="photo" className="" {...register("imageUrl", {})}  type="file" />
+           <input id="photo" className="" {...register("imageUrl")}  type="file" />
+
+           { getValues("imageUrl") && <img  id="image" src={getValues("imageUrl")}/>}
         <button  className="submit-button" type="submit">
          რედაქტირება
         </button>

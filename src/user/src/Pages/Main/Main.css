@@ -1,14 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
 *{
     margin: 0;
+    font-family: "Roboto Condensed", sans-serif;
     padding: 0;
     box-sizing: border-box;
-
 }
 a{
     color:black;
 }
+a:focus{
+    color:black;
+
+}
 div.main_page{
-    background-color:#db8c32;
+   
     padding: 20px;
     width: 100vw;
     position: absolute;
@@ -22,10 +28,27 @@ div.main_page_container{
     display: flex;
     width: 100%;
     height: 100%;
-
+    background-color: azure;
 }
+div.Searching_div> ul.listOfWord >li{
+    
+    
+}
+div.Searching_div> ul.listOfWord{
+    padding: 20px;
+    margin: 40px auto;
+    background-color: aliceblue;
+}
+
 div.Searching_div{
+    box-shadow: 0px 10px 10px 10px grey;
+    border-radius: 20px;
     width: 50vw;
-    margin: 30px auto;
+
+    margin: 0px auto;
+    margin-top: 60px;
    height: 100%;
+}
+div.navigationBar{
+    height: 100%;
 }

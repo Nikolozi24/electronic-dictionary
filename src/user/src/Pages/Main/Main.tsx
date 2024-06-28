@@ -1,27 +1,27 @@
-import { Button, Layout, PaginationProps} from "antd"
+import {PaginationProps} from "antd"
 
 import NavBar from "../../Components/navigation/NavBar"
-import { Content, Footer } from "antd/es/layout/layout"
-import Sider from "antd/es/layout/Sider";
+import { Footer } from "antd/es/layout/layout"
+
 import Search from "../../Components/Searching/Search";
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import "./Main.css"
 import Word from "../../Components/WordRender/Word";
-import ToolTip from "../../Components/Footer/ToolTip";
 import { Pagination } from 'antd';
 import { Link } from "react-router-dom";
 import { HomeOutlined } from "@ant-design/icons";
+import { Entry } from "../../Components/TypeDef/Types";
 
 
 
 
 
 const Main:React.FC = () => {
-  const [words, setWords] = useState([{}])
-  const [wordCount, setWordCount] = useState(0)
-  const [value, setValue] = useState("")
-  const [current, setCurrent] = useState(1);
+  const [words, setWords] = useState<Entry[]>([])
+  const [wordCount, setWordCount] = useState<number>(0)
+  const [value, setValue] = useState<string>("")
+  const [current, setCurrent] = useState<number>(1);
   const SearchStyle = {
     width:'70%',
     margin:'2px auto'
@@ -38,34 +38,53 @@ const Main:React.FC = () => {
     }).then(res=>res.data).then( data=>{
       setWords(data)
     })
+ const resp2 =  await axios.get(`http://localhost/api/entry/count?searchText=${value}`,{
+      headers:{
+        "Content-Type":'application/json'
+      }
+    }).then(res=>res.data).then( data=>{
+        setWordCount(data)
+    })
   }
   fun()
 
-  },[value, current])
-  const handleFilterByThematic= async (id)=>{
 
-    const resp =  await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}&subTopicId=${id}`,{
+  },[value, current])
+  const handleFilterByThematic= async (id:number)=>{
+    
+    setCurrent(1);
+      
+
+    const resp =  await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}&${id!==null? `subTopicId=${id}`:""}`,{
       headers:{
         "Content-Type":'application/json'
       }
     }).then(res=>res.data).then( data=>{
       setWords(data)
     })
-}
+    const resp2 =  await axios.get(`http://localhost/api/entry/count?pageNumber=${current}&searchText=${value}&${id!==null? `subTopicId=${id}`:""}`,{
+      headers:{
+        "Content-Type":'application/json'
+      }
+    }).then(res=>res.data).then( data=>{
+      setWordCount(data)
+    })
+  }
   return (  
   <div className="main_page">
-       <div className='SearchingWordPage'>
-          <Link style={{paddingLeft:'20px', color:"black"}} to="/"><HomeOutlined/>მთავარი</Link>
+       <div className='SearchingWordPage' style={{backgroundColor:"#C14F00"}}>
+          <Link style={{paddingLeft:'20px', color:"black", }} to="/"><HomeOutlined/>მთავარი</Link>
+            {/* <Link style={{color:'black', marginLeft:"20px"}} to="/about-us">ჩვენს შესახებ</Link> */}
             <Search value={value} words={words} styleAdditional={SearchStyle} setValue={setValue}/>
         </div>
   <div className="main_page_container">
-    <div>
+    <div className="navigationBar" >
 
           <NavBar handleFilterByThematic={handleFilterByThematic}/>     
     </div>
       <div className="Searching_div">
 
-          <ul>
+          <ul className="listOfWord">
             {
               words?.map(item=>{
                   return item.status=="Active"? <Word word={item}/> :<></>
@@ -74,13 +93,11 @@ const Main:React.FC = () => {
          </ul>
     </div>
 </div>
-<Footer style={{backgroundColor:"#ab4040", width:'90vw', position:'relative',left:'0', marginBottom:'100px'}}>
+<Footer style={{background:"none", width:'98vw', display:'inline-block', left:'0', bottom:'0px'}}>
 
-<Pagination 
+  <Pagination 
   pageSizeOptions={[]} // Disable page size options
-  
-  current={current} onChange={onChange} total={words.length} 
-/>
+  current={current} onChange={onChange} total={wordCount}/>
   </Footer>
           {/* <ToolTip/> */}
   </div>

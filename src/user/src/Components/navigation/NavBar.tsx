@@ -9,17 +9,19 @@ import {
 } from '@ant-design/icons';
 
 import { Content } from 'antd/es/layout/layout';
+import { Topics } from '../TypeDef/Types';
 
 const { SubMenu } = Menu;
 
 const { Sider } = Layout;
 
+interface NaBarProsp{
+  handleFilterByThematic:(e:any)=>void
 
-const NavBar:React.FC = (props) => {
+}
+const NavBar:React.FC<NaBarProsp> = (props) => {
   const {handleFilterByThematic} = props
-    const [item,setItem] = useState([{
-      subTopics:[{}]
-    }]);
+    const [item,setItem] = useState<Topics>();
     useEffect(()=>{
       const fun = async ()=>{
         try{
@@ -37,7 +39,7 @@ const NavBar:React.FC = (props) => {
       }
     }
     fun();
-  },[item.length])
+  },[item?.length])
 
   return (
   //   <Menu mode="horizontal">
@@ -63,10 +65,11 @@ const NavBar:React.FC = (props) => {
       mode="inline"
       defaultSelectedKeys={['1']}
       defaultOpenKeys={['']}
-      style={{ height: '100%', borderRight: 0, backgroundColor:'#c14f00',padding:'3px 4px',  }}
+      style={{ height: '100%', margin:"12px 4px", borderRadius:"20px" , background:"none", backdropFilter:"blur(400px)",padding:'3px 4px', display:"inline-block", position:"relative" , top:"53px", left:'-20px' }}
     >
+        <Menu.Item onClick={(id)=>handleFilterByThematic(null)}>ყველა</Menu.Item>
     {
-      item.map(item=>{
+      item?.map(item=>{
     return  item.status=="Active"?  <SubMenu key={item.id}  title={`${item.georgianName}`}> 
           {
               item.subTopics.map(subTopic=> { return subTopic.status=="Active"? <Menu.Item onClick={(id)=>handleFilterByThematic(subTopic.id)} key={subTopic.id}>{subTopic.georgianName}</Menu.Item> 

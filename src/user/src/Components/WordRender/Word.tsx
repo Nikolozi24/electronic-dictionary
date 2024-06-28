@@ -1,8 +1,12 @@
 import React from 'react'
 import "./Word.css"
 import { Link } from 'react-router-dom';
+import { Entry } from '../TypeDef/Types';
 
-const Word:React.FC<WordProps> = (props) => {
+interface WordPorps{
+  word:Entry
+}
+const Word:React.FC<WordPorps> = (props) => {
     const {word} = props;
   return (
       <div className='normalWordRender'>

@@ -6,17 +6,18 @@ import "./WordPage.css"
 import { HomeOutlined } from '@ant-design/icons'
 import {FacebookShareButton} from 'react-share'
 import Search from '../../Components/Searching/Search'
+import { Entry } from '../../Components/TypeDef/Types'
 
 const WordPage:React.FC = () => {
   const navigate = useNavigate();
     const {id} = useParams()
-  const [word, setWord ] = useState({})
+  const [word, setWord ] = useState<Entry>()
 
   
     useEffect(()=>{
         try{
             const fun =  async () =>{
-              const response = await axios.get(`http://localhost/api/entry/${id}`,{
+               await axios.get(`http://localhost/api/entry/${id}`,{
                   headers:{
                     "Content-Type":"application/json"
                   }
@@ -30,13 +31,13 @@ const WordPage:React.FC = () => {
 
 
     },[id])
-    const [value, setValue] = useState("")
-    const [current, setCurrent] = useState(1);
-    const [words, setWords] = useState([{}])
+    const [value, setValue] = useState<string>("")
+    const [current, ] = useState<number>(1);
+    const [words, setWords] = useState<Entry[]>()
  
     useEffect(()=>{
       const fun= async ()=>{
-   const resp =  await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}`,{
+         await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}`,{
         headers:{
           "Content-Type":'application/json'
         }
@@ -51,7 +52,7 @@ const WordPage:React.FC = () => {
       width:'70%',
       margin:'2px auto'
     }
-    function renderWord (word:{}){
+    function renderWord (word:Entry){
       return      <div>
         <div className='SearchingWordPage'>
           <Link style={{paddingLeft:'20px', color:"black"}} to="/"><HomeOutlined/>მთავარი</Link>
@@ -95,7 +96,7 @@ const WordPage:React.FC = () => {
             <button onClick={()=>{navigate(-1)}}>უკან დაბრუნება</button>
       </>
     }
-  return (word.status=="Active"? renderWord(word):renderError()
+  return (word?.status=="Active"? renderWord(word):renderError()
   )
 }
 

@@ -107,6 +107,11 @@ button.remove-button::before{
     box-shadow: 0px 0px 100px rgb(1, 235, 252) , inset 0px 0px 10px rgb(1, 235, 252),0px 0px 5px rgb(255, 255, 255);
     animation: flicker 2s linear infinite;
   }
+  img#image{
+     width: 50%;
+     height: 100px;
+     margin: 20px auto;
+  }
   .icon {
     color: rgb(1, 235, 252);
     font-size: 2rem;

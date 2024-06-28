@@ -3,9 +3,12 @@ div.container_search{
    background-color: none;
     border-radius: 10px;
     width:100%;
- position: relative;
+    position: relative;
     display: flex;
     flex-direction: column;
+}
+* a{
+    color:black
 }
 div.container_search>input{
 width: 100%;
@@ -23,6 +26,7 @@ div.container_search>ul.WordList{
     display: none ;
     list-style-type: none;
     width: 100%;
+    background-color: #b3721e;
     text-align: left;
     padding-left: 20px;
     text-decoration: underline;
@@ -36,15 +40,10 @@ div.container_search>ul.WordList{
     text-decoration: underline;
 }
 div.container_search>ul>li{
-        border-bottom: 1px solid ;
-}
+    border-bottom: 1px solid ;
+    color: black;
+    }
 div.container_search>ul>li:hover{
-    background-color: chocolate;
-
+    background-color: rgb(219, 204, 194);
       cursor: pointer;
-}
-div.container_search.focused{
-    visibility: visible;
-    background-color: #c14f00;
-    
 }

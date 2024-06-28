@@ -9,8 +9,7 @@ import Header from "../../components/Header/Header";
 import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import axios from "axios";
 import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
-import { fillWord } from "../../components/TypeDef/Types";
-import { Topics } from "../../../../user/src/Components/TypeDef/Types";
+import { SubTopic, fillWord, Topic } from "../../components/TypeDef/Types";
 
 const FillWordToDatabase: React.FC = () => {
   const jwt = GetCookie('jwt')
@@ -34,10 +33,8 @@ const FillWordToDatabase: React.FC = () => {
       subTopicId: 0,
     },
   })
-  const [subThematic, setSubThematic] = useState([{
-
-  }]);
-  const [thematic, setThematic] = useState<Topics>([{id:0,status:"", georgianName:"", englishName:"" }])
+  const [subThematic, setSubThematic] = useState<SubTopic[]>([]);
+  const [thematic, setThematic] = useState<Topic[]>([])
   const navigate = useNavigate();
   useEffect(() => {
     if (jwt === "") {
@@ -64,7 +61,7 @@ const FillWordToDatabase: React.FC = () => {
 
     
 
-  const [thetamticId, setThematicId] = useState<number>(thematic[0].id);
+  const [thetamticId, setThematicId] = useState<number>(thematic[0]?.id);
   useEffect(() => {
 
     const fun = async () => {
@@ -92,7 +89,7 @@ const FillWordToDatabase: React.FC = () => {
       try {
         const Thmatic = thematic.filter(item => { return item.id == thetamticId });
 
-        setSubThematic(Thmatic[0].subTopics)
+        setSubThematic(Thmatic[0]?.subTopics)
 
       }
       catch (err: any) {
@@ -106,7 +103,7 @@ const FillWordToDatabase: React.FC = () => {
   useEffect(() => {
     const Thmatic = thematic.filter(item => { return item.id == thetamticId });
 
-    setSubThematic(Thmatic[0].subTopics)
+    setSubThematic(Thmatic[0]?.subTopics)
 
   }
     , [thetamticId])
@@ -156,10 +153,12 @@ const FillWordToDatabase: React.FC = () => {
     e.preventDefault()
     try {
         
-      const file = getValues("imageUrl")[0];
+      const file = getValues("imageUrl")?.[0];
       console.log("file", file);
       const formData = new FormData();
+      if(file){
       formData.append('file', file)
+      }
       console.log(formData)
     const fun =  async ()=>{
 
@@ -187,7 +186,7 @@ const FillWordToDatabase: React.FC = () => {
           'Authorization': "Bearer " + jwt
         },
 
-      })
+      }).then(res=>alert("წარმატებით დაემატა")).then(res=>document.location?.reload())
     }
     fun()
   }

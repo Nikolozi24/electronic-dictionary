@@ -18,8 +18,8 @@ import AxiosErrorHandling from "../Utilities/ErrorHandling/AxiosErrorHandling";
 const Header: React.FC = () => {
 
   const isLogin = true;
-  const [isActive, setIsActive] = useState(false);
-  const [login, setLogin] = useState({
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const [login, setLogin] = useState<{}>({
     in: (
       <Link to="/login" onClick={()=>{
         RemoveCookie('jwt')

@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { HomeOutlined } from "@ant-design/icons";
 import { Entry } from "../../Components/TypeDef/Types";
 
+import image from "../../Images/Background.jpeg"
 
 
 
@@ -71,8 +72,8 @@ const Main:React.FC = () => {
     })
   }
   return (  
-  <div className="main_page">
-       <div className='SearchingWordPage' style={{backgroundColor:"#C14F00"}}>
+  <div className="main_page" style={{backgroundImage:`url(${image}`, backgroundRepeat:'no-repeat' , backgroundSize:"cover"}} >
+       <div className='SearchingWordPage' >
           <Link style={{paddingLeft:'20px', color:"black", }} to="/"><HomeOutlined/>მთავარი</Link>
             {/* <Link style={{color:'black', marginLeft:"20px"}} to="/about-us">ჩვენს შესახებ</Link> */}
             <Search value={value} words={words} styleAdditional={SearchStyle} setValue={setValue}/>

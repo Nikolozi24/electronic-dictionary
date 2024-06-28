@@ -40,6 +40,14 @@ const NavBar:React.FC<NaBarProsp> = (props) => {
     }
     fun();
   },[item?.length])
+  const style= { height: '100%', margin:'12px 0px',
+                  borderRadius:"20px" ,width:"110%", 
+                  backdropFilter:"blur(30px)",
+                  background:'linear-gradient(140deg , #36BA98 30%, #E76F51 40%)',
+                  padding:'13px 14px', display:"inline-block",
+                   position:"relative" , top:"53px", 
+                   fontSize:"18px",
+                   left:'-20px' }
 
   return (
   //   <Menu mode="horizontal">
@@ -65,14 +73,14 @@ const NavBar:React.FC<NaBarProsp> = (props) => {
       mode="inline"
       defaultSelectedKeys={['1']}
       defaultOpenKeys={['']}
-      style={{ height: '100%', margin:"12px 4px", borderRadius:"20px" , background:"none", backdropFilter:"blur(400px)",padding:'3px 4px', display:"inline-block", position:"relative" , top:"53px", left:'-20px' }}
+      style={style}
     >
         <Menu.Item onClick={(id)=>handleFilterByThematic(null)}>ყველა</Menu.Item>
     {
       item?.map(item=>{
     return  item.status=="Active"?  <SubMenu key={item.id}  title={`${item.georgianName}`}> 
           {
-              item.subTopics.map(subTopic=> { return subTopic.status=="Active"? <Menu.Item onClick={(id)=>handleFilterByThematic(subTopic.id)} key={subTopic.id}>{subTopic.georgianName}</Menu.Item> 
+              item.subTopics.map(subTopic=> { return subTopic.status=="Active"? <Menu.Item style={{fontFamily:"fantasy"}} onClick={(id)=>handleFilterByThematic(subTopic.id)} key={subTopic.id}>{subTopic.georgianName}</Menu.Item> 
                 :<></>
 
            })}

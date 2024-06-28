@@ -17,5 +17,10 @@ div.normalWordRender h3{
     color: #2E2105
 }
 div.normalWordRender:hover{
-    background-color: #7C572D
+    width: 120%;
+    margin: 0;
+    position: relative;
+    margin-left: -10%;
+   transition: all 1s ease-in-out;
+    background:rgb(20, 100, 138)
 }

@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./fillWord.css";
-
 import { useForm } from "react-hook-form";
-
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import axios from "axios";
-
 import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
 import Item from "antd/es/list/Item";
-
 import { SubTopic, fillWord } from "../../components/TypeDef/Types";
+
 
 const EditWordToDatabase:React.FC = () => {
  const jwt = GetCookie('jwt')
@@ -162,6 +159,8 @@ useEffect(()=>{
         })
       }
       fun();
+      alert("რედაქტირება წარმატებით დამთავრდა ")
+      navigate("/EntryList")
 
   }catch(err){
     AxiosErrorHandling(err);
@@ -291,8 +290,15 @@ useEffect(()=>{},[watch("imageUrl")])
           placeholder={`  დამატებითი კომენტარი`}
         />
            <input id="photo" className="" {...register("imageUrl")}  type="file" />
+          { getValues("imageUrl") && <button type="button" onClick={(e)=>{
+            e.preventDefault();
+                const el = document.getElementById('photo');
+                 el.value = ""
+                  setImageURL("")
 
-           { getValues("imageUrl") && <img  id="image" src={getValues("imageUrl")}/>}
+            }}>ფოტოს წაშლა</button>
+          }
+           { getValues("imageUrl") && <img  id="image" src={getValues("imageUrl") || ""}/>}
         <button  className="submit-button" type="submit">
          რედაქტირება
         </button>

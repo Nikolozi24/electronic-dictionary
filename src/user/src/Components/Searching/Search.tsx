@@ -36,10 +36,10 @@ console.log(words)
                 setValue(val)
             }}  />
            {
-             value!=="" &&<ul className='WordList' style={{ position:"absolute" , top:'70px'}}>
+             value!=="" &&<ul className='WordList' style={{ position:"absolute" , zIndex:"50",top:'70px', padding:"20px 40px"}}>
              {
               words?.map(item=>{
-                  return item.status=="Active"? <li key={item?.id}><Link style={{color:"black"}} to={`/${item?.id}`}>{item?.georgianHeadword}  -  {item.englishHeadword}</Link></li>:<></>
+                  return item.status=="Active"? <li key={item?.id}><Link style={{color:"black", margin:"2px"}} to={`/${item?.id}`}>{item?.georgianHeadword}  -  {item.englishHeadword}</Link></li>:<></>
 
               })}
             </ul>

@@ -12,7 +12,7 @@ import { Pagination } from 'antd';
 import { Link } from "react-router-dom";
 import { HomeOutlined } from "@ant-design/icons";
 import { Entry } from "../../Components/TypeDef/Types";
-
+import MyFooter from "../../Components/footer/MyFooter";
 import image from "../../Images/Background.jpeg"
 
 
@@ -72,7 +72,7 @@ const Main:React.FC = () => {
     })
   }
   return (  
-  <div className="main_page" style={{backgroundImage:`url(${image}`, backgroundRepeat:'no-repeat' , backgroundSize:"cover"}} >
+  <div className="main_page" style={{backgroundImage:`url(${image}`, backgroundRepeat:'no-repeat' , backgroundSize:"cover", opacity:"0.95"}} >
        <div className='SearchingWordPage' >
           <Link style={{paddingLeft:'20px', color:"black", }} to="/"><HomeOutlined/>მთავარი</Link>
             {/* <Link style={{color:'black', marginLeft:"20px"}} to="/about-us">ჩვენს შესახებ</Link> */}
@@ -84,23 +84,26 @@ const Main:React.FC = () => {
           <NavBar handleFilterByThematic={handleFilterByThematic}/>     
     </div>
       <div className="Searching_div">
-
+      
           <ul className="listOfWord">
             {
               words?.map(item=>{
-                  return item.status=="Active"? <Word word={item}/> :<></>
+                return item.status=="Active"? <Word word={item}/> :<></>
               })
             }
          </ul>
-    </div>
-</div>
-<Footer style={{background:"none", width:'98vw', display:'inline-block', left:'0', bottom:'0px'}}>
-
+          
   <Pagination 
   pageSizeOptions={[]} // Disable page size options
   current={current} onChange={onChange} total={wordCount}/>
-  </Footer>
+    </div>
+</div>
+
+
+            
+
           {/* <ToolTip/> */}
+            <MyFooter></MyFooter>
   </div>
         
   )

@@ -5,9 +5,10 @@ import { thematicActions } from '../Store/redux/thematicSlice';
 import GetCookie from '../Utilities/Coookies/GetCookie';
 import { Option } from 'antd/es/mentions';
 import axios from 'axios';
+import AxiosErrorHandling from '../Utilities/ErrorHandling/AxiosErrorHandling';
 
 interface Props {
-  onSave: (username: string, email: string, password: string, role: string) => void;
+  onSave: ( email: string, password: string, role: string) => void;
   onCancel: () => void;
 }
 
@@ -37,10 +38,29 @@ const AddUserComponent: React.FC<Props> = ({ onSave, onCancel }) => {
   }
   const handleSave = () => {
     const el = document.getElementById("role")
-    setRole(el.value)
-   onSave(email, password, role);
-    navigate('/added')
-  };
+    setRole(el?.value)
+    const fun  = async()=>{
+
+    try{
+      const response =  await axios.post('http://localhost/api/identity/add-user',{
+         email:email,
+         password:password,
+         role:el?.value
+       },
+     {
+       headers:{
+           "Content-Type":'application/json',
+           "Authorization":'Bearer '+jwt
+         },
+         withCredentials:true
+     }).then(res=>navigate('/added'))
+    }
+    catch(err:any){
+    AxiosErrorHandling(err)
+    }
+   };
+   fun();
+  }
   return (
     <Modal
       title="Add User"
@@ -69,7 +89,8 @@ const AddUserComponent: React.FC<Props> = ({ onSave, onCancel }) => {
       />
       <br />
       <br />
-      <select id="role" defaultValue={"please Select Role"}>
+      <select id="role">
+        <option value={""}>გთხოვთ აირჩიოთ როლი</option>
                 {
                   roles.map(item=>{
                     return <option value={item} key={item}>{item}</option>

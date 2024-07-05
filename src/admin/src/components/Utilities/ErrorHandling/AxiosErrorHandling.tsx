@@ -30,7 +30,7 @@ else if(err.response.status===500){
     alert("შიდა სერვერის შეცდომა")
 }
 else if(err.response.status===400){
-        alert(err.response.title)
+        alert(err.response.errors)
 }
 else{
     alert("წარმოიშვა შეცდომა")

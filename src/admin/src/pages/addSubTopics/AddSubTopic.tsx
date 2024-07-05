@@ -24,8 +24,29 @@ interface dataType {
 }
 
 const AddSubTopic: React.FC = () => {
+  const [isViewer, setIsViewer] = useState<boolean>(false)
   const jwt = GetCookie("jwt");
+  useEffect(() => {
+    const fun = async () => {
 
+      try{
+      const response = await axios.get("http://localhost/api/identity/user", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + jwt,
+        },
+      });
+      const user = response.data;
+      const isVie= user.isViewer
+      setIsViewer(isVie)
+      }
+
+      catch(err:any){
+        AxiosErrorHandling(err);
+      }
+    };
+    fun();
+  }, []);
   useEffect(() => {
     const fun = async () => {
       try {
@@ -86,13 +107,26 @@ const AddSubTopic: React.FC = () => {
       key: "EnglishMEaning",
     },
     {
+      title:<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>სტატუსი</span>,
+      dataIndex:"functionalLabel",
       key:"status",
-      title:<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>აქტივაცია/დეაქტივაცია</span>,
+      render:(_,record)=>{
+          if(record.status==="InActive")
+              return<>არა აქტიური</>
+              else
+              return<>აქტიური</>
+
+      }
+    },
+      
+    {
+      key:"status",
+      title: !isViewer && <span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>აქტივაცია/დეაქტივაცია</span>,
       dataIndex:"status",
       render: (_,record)=>{
 
         if(record.status=='InActive')
-          return (<><Button onClick={()=>{
+          return (!isViewer && <><Button onClick={()=>{
                 try{
                   const fun  = async ()=>{
               const response = await  axios.put(`http://localhost/api/topic/subTopic/activate/${record.key}`,{},
@@ -116,7 +150,7 @@ const AddSubTopic: React.FC = () => {
             
             </>)
         else
-           return (<><Button onClick={()=>{
+           return ( !isViewer && <><Button onClick={()=>{
             try{
               const fun  = async ()=>{
             const response = await axios.put(`http://localhost/api/topic/subTopic/deactivate/${record.key}`,{},
@@ -141,21 +175,21 @@ const AddSubTopic: React.FC = () => {
     },
     {
       key:"update",
-      title:"რედაქტირება",
+      title:!isViewer && "რედაქტირება",
       dataIndex:"update",
       render:(_,record)=>{
-          return <button onClick={()=>{    setCurrentEdit({id:record.key, georgianName: record.GeorgianMeaning , englishName:record.EnglishMeaning}); setIsOpen1(true)}}>
+          return !isViewer&& <button onClick={()=>{    setCurrentEdit({id:record.key, georgianName: record.GeorgianMeaning , englishName:record.EnglishMeaning}); setIsOpen1(true)}}>
               <EditTwoTone width={10}/>
           </button>
       }
     },
     {
       key: "delete",
-      title: "წაშლა",
+      title: !isViewer&&"წაშლა",
       dataIndex: "delete",
       render: (_, record) => {
         return (
-          <button
+         !isViewer && <button
             style={{ width: "100%" }}
             onClick={() => {
               const func = async () => {
@@ -355,7 +389,7 @@ const AddSubTopic: React.FC = () => {
               <Layout>
                 {<Table columns={columns} dataSource={data}></Table>}
               </Layout>
-              <button
+              {!isViewer &&<button
                 style={{
                   width: "510px",
                   margin: "auto",
@@ -367,7 +401,7 @@ const AddSubTopic: React.FC = () => {
                 onAbort={()=>{setIsOpen(false)}}
               >
                 <PlusCircleOutlined /> ქვეთემატიკის დამატება{" "}
-              </button>
+              </button>}
             </Flex>
           </div>
 
@@ -414,7 +448,11 @@ const AddSubTopic: React.FC = () => {
                   ქვეთემატიკა ინგლისურად
                 </label>
               </div>
-              <button onClick={(e) => HandleSubmit(e)}>დამატება</button>
+              <div className="subtopic-close-add-button">
+
+              {<button onClick={(e) => {setIsOpen(false)}}>დახურვა</button>}
+              {<button onClick={(e) => HandleSubmit(e)}>დამატება</button>}
+              </div>
             </form>
           )}
         </div>

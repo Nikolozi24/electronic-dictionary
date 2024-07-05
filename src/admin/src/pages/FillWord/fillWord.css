@@ -33,9 +33,12 @@ form.formFill{
     display: flex;
     flex-direction: column;
     width: 40vw; 
-    padding: 20px 40px;
-    background:rgb(5, 175, 197);
+    border-radius: 20px;
+    box-shadow: 0px 0px 30px 10px;
+    padding: 50px 20px;
+    background: linear-gradient( to right ,rgb(62, 162, 175), rgba(13, 128, 143, 0.637));
     backdrop-filter: blur(30px);
+    margin: auto;
     
 }
 div.subtopic{
@@ -125,6 +128,17 @@ button.remove-button::before{
     height: 100%;
     cursor: pointer !important;
   }
+  span.Required{
+    color:rgb(68, 38, 38);
+    text-align: left;
+  }
+  .bg-red{
+    border:3px solid rgb(155, 0, 0);
+    background-color: rgb(163, 162, 162);
+  }
+  #Sub-thematic{
+    margin: 10px 0px;
+  }
   @keyframes flicker {
     0% {
       border: 2px solid rgb(1, 235, 252);
@@ -170,4 +184,9 @@ button.remove-button::before{
     100% {
       opacity: 1;
     }
+  }
+  @media  screen and (max-width:900px) {
+    form.formFill{
+      width: 80vw;
+  }
   }

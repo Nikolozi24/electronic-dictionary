@@ -10,6 +10,8 @@ import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import axios from "axios";
 import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
 import { SubTopic, fillWord, Topic } from "../../components/TypeDef/Types";
+import { Value } from "sass";
+
 
 const FillWordToDatabase: React.FC = () => {
   const jwt = GetCookie('jwt')
@@ -56,8 +58,7 @@ const FillWordToDatabase: React.FC = () => {
       }
     }
     fun();
-  },
-    [])
+  },[]);
 
     
 
@@ -118,7 +119,7 @@ const FillWordToDatabase: React.FC = () => {
     }
   }
   
-  const { register, control, setValue, getValues } = form;
+  const { register, control, setValue, getValues, formState , handleSubmit } = form;
   
 // const handleUpload =(event)=>{
 
@@ -147,10 +148,17 @@ const FillWordToDatabase: React.FC = () => {
 //     // }
 
 // }
+const [imageURL,setImageURL] = useState<string>('')
+useEffect(()=>{
+  console.log(getValues("imageUrl"))
+  getValues();
+  const val = getValues("imageUrl")
+  setImageURL(val)
 
-  const handleSubmit = (e: any) => {
+},[getValues("imageUrl")])
+
+  const Submit = () => {
    
-    e.preventDefault()
     try {
         
       const file = getValues("imageUrl")?.[0];
@@ -173,39 +181,39 @@ const FillWordToDatabase: React.FC = () => {
           'Authorization': "Bearer " + jwt
         }
       }).then(res=>res.json()).then(data=>setValue("imageUrl", data))
-   
-  }
+      fun()
+      
+    }
     else{
       setValue("imageUrl", null)
-
+      
     }
-   
-      const resp = await axios.post("http://localhost/api/entry", { ...getValues(), subTopicId: parseInt(value) }, {
-        headers: {
-          "Content-Type": 'application/json',
-          'Authorization': "Bearer " + jwt
-        },
-
-      }).then(res=>alert("წარმატებით დაემატა")).then(res=>document.location?.reload())
-    }
-    fun()
+    
+    const resp = await axios.post("http://localhost/api/entry", { ...getValues(), subTopicId: parseInt(value) }, {
+      headers: {
+        "Content-Type": 'application/json',
+        'Authorization': "Bearer " + jwt
+      },
+      
+    }).then(res=>alert("წარმატებით დაემატა")).then(res=>document.location?.reload())
   }
-  catch (err: any) {
-    AxiosErrorHandling(err)
-    alert(err);
-  }
-
-console.log(getValues())
-
+  fun()
+  
 }
-
+    catch(err: any) {
+      AxiosErrorHandling(err)
+      alert(err);
+    }
+}
   return (
     <div className="fillWordForm">
       <Header>
 
       </Header>
 
-      <form className="formFill" onSubmit={(e) => handleSubmit(e)} >
+      <form className="formFill" onSubmit={handleSubmit(()=>Submit(), ()=>{alert("error")})} noValidate>
+        <h3>*თუ ველი სავალდებულოა მაგრამ ცარიელია შეიყვანეთ n/a</h3>
+      <span className="Required" >სავალდებულო*</span>
         <select name="thematic" id="thematic" onChange={() => handleThematicSelect()} className="minimal" >
           <option value="none">აირჩეთ თემატიკა </option>;
           {
@@ -218,6 +226,7 @@ console.log(getValues())
         </select>
 
 
+        <span className="Required">სავალდებულო*</span>
 
         <select name="thematic" id="Sub-thematic" onChange={() => handleThematicSelect()} className="minimal" >
           {
@@ -227,58 +236,94 @@ console.log(getValues())
               }} value={item?.id}>  {item?.georgianName} </option>;
             })}
         </select>
+        <span className="Required">სავალდებულო*</span>
 
         <input
           type="text"
           {...register("georgianHeadword", {
-            required: "მეთაური სიტყვა სავალდებულოა!",
+            required: {
+              value:true,
+              message:"მეთაური სიტყვა სავალდებულოა!"},
+             pattern:{
+              value:/[\u10D0-\u10F9]+/g,
+              message:"სიტყვა უნდა იყოს ქართული!"
+             }
           })}
           placeholder={`  მეთაური სიტყვა`}
-        />
+          className={`${formState.errors?.georgianHeadword? "bg-red":""}`}
+          />
+        <p style={{}}>{formState.errors?.georgianHeadword?.message}</p>
+        <span className="Required">სავალდებულო*</span>
+       
         <input
           type="text"
           {...register("functionalLabel", {
             required: "მეტყველების ნაწილის ველი სავალდებულოა!",
           })}
           placeholder={"მეტყველების ნაწილი"}
+          className={`${formState.errors?.functionalLabel? "bg-red":""}`} 
         />
+        <div>{formState.errors?.functionalLabel?.message}</div>
+          <span className="Required">სავალდებულო*</span>
+
         <input
+         className={`${formState.errors?.stylisticQualification? "bg-red":""}`} 
           type="text"
-          {...register("stylisticQualification", { required: "ველი სავალდებულოა" })}
+          {...register("stylisticQualification", { required:{
+            value:true,
+            message:"სტილისტური კვალიფიკაციის ველი სავალდებულოა"
+            } })}
           placeholder={` სტილისტური კვალიფიკაცია`}
         />
+          <p style={{}}>{formState.errors?.stylisticQualification?.message}</p>
+          <span className="Required">სავალდებულო*</span>
         <input
+         className={`${formState.errors?.englishHeadword? "bg-red":""}`} 
           type="text"
           {...register("englishHeadword", {
             required: "მეთაური სიტყვის ექვივალენტი სავალდებულოა!",
           })}
           placeholder={`მეთაური სიტყვის ექვივალენტი`}
         />
+        <p style={{}}>{formState.errors?.englishHeadword?.message}</p>
+          <span className="Required">სავალდებულო*</span>
+
         <input
+         className={`${formState.errors?.georgianDefinition? "bg-red":""}`} 
           type="text"
           placeholder="მეთაური სიტყვის განმარტება"
-          {...register("georgianDefinition", { required: "ველი სავალდებულოა" })}
+          {...register("georgianDefinition", { required: "მეთაური სიტყვის ველი სავალდებულოა" })}
         />
+        <p style={{}}>{formState.errors?.georgianDefinition?.message}</p>
+          <span className="Required">სავალდებულო*</span>
+
         <input
+          className={`${formState.errors?.englishDefinition? "bg-red":""}`} 
           type="text"
-          {...register("englishDefinition", { required: "ველი სავალდებულოა" })}
+          {...register("englishDefinition", { required: "მეთაური სიტყვის განმარტება ინგლისურად სავალდებულოა" })}
           placeholder={` განმარტება ინგლისურად`}
         />
+        <p style={{}}>{formState.errors?.englishDefinition?.message}</p>
         <input
           type="text"
           placeholder="საილუსტრაციო წინადადება ქართულად"
-          {...register("georgianIllustrationSentence", { required: "ველი სავალდებულოა" })}
+          {...register("georgianIllustrationSentence")}
         />
+         
+
         <input
           type="text"
           placeholder="საილუსტრაციო წინადადების თარგმაანი ინგლისურად"
-          {...register("englishIllustrationSentence", { required: "ველი სავალდებულოა" })}
-        />
+          {...register("englishIllustrationSentence", { })}
+          />
+          <span className="Required">სავალდებულო*</span>
         <input
+           className={`${formState.errors?.source? "bg-red":""}`} 
           type="text"
-          {...register("source", { required: "ველი სავალდებულოა" })}
+          {...register("source", { required: " წყარო ველი სავალდებულოა (არ ქონის შემთხვევაში n/a)" })}
           placeholder={`კონტექსტის წყარო`}
         />
+        <p style={{}}>{formState.errors?.source?.message}</p>
         <input
           type="text"
           {...register("idiom", {})}
@@ -301,11 +346,12 @@ console.log(getValues())
   
         <div id="status"></div>
         <button className="submit-button" type="submit">
-          Add word
+          სიტყვის დამატება
         </button>
       </form>
+         
     </div>
-  );
-};
+  )
+}
 
-export default FillWordToDatabase;
+export default FillWordToDatabase

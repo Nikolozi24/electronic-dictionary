@@ -15,28 +15,52 @@ import AxiosErrorHandling from './Utilities/ErrorHandling/AxiosErrorHandling';
 ;
 
   // costum კომპონენტი
-
-//ცხრილის ველების  მნიშვნელობები
- interface dataType {
+  
+  //ცხრილის ველების  მნიშვნელობები
+  interface dataType {
     key:number;
     GeorgianMeaning:string;
     EnglishMeaning:string;
     status:string;
- }
-
-const Thematic:React.FC = () => {
-  const navigate = useNavigate();
+  }
+  
+  const Thematic:React.FC = () => {
+    const navigate = useNavigate();
   // დავუშვათ და გვაქვს სზოგადად წამოღებული 
   //ბაზიდად ტოპიკები რომელსაც აქვს ეს ველები 
   // შემდეგ ამას დავმაპავთ და მხოლოდ იმ ველებს 
   //ამოვიღებთ რომლებიც გამოსაჩენად გვჭირდება
-
   
-    // აქ განვსაზღვრავ თუ რა ველები არის საჭირო ცხრილის სახით გამოსაჩენათ
-    // 
-    const [thematic, setThematic] = useState([{}]);
-    const jwt = GetCookie('jwt');
-
+  
+  // აქ განვსაზღვრავ თუ რა ველები არის საჭირო ცხრილის სახით გამოსაჩენათ
+  // 
+  const [isViewer, setIsViewer] = useState<boolean>(false)
+  useEffect(() => {
+    const fun = async () => {
+  
+      try{
+      const response = await axios.get("http://localhost/api/identity/user", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + jwt,
+        },
+      });
+      const user = response.data;
+      const isVie= user.isViewer
+      setIsViewer(isVie)
+       
+      }
+  
+      catch(err:any){
+        AxiosErrorHandling(err);
+      }
+    };
+    fun();
+  }, []);
+  const [thematic, setThematic] = useState([{}]);
+  const jwt = GetCookie('jwt');
+  
+  
     useEffect(()=>{
       const fun = async ()=>{
           
@@ -83,13 +107,25 @@ const Thematic:React.FC = () => {
       key:"EnglishMEaning",
     },
     {
+      title:<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>სტატუსი</span>,
+      dataIndex:"functionalLabel",
       key:"status",
-      title:<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>აქტივაცია/დეაქტივაცია</span>,
+      render:(_,record)=>{
+          if(record.status==="InActive")
+              return<>არა აქტიური</>
+              else
+              return<>აქტიური</>
+
+      }
+    },
+    {
+      key:"status",
+      title:!isViewer &&<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>აქტივაცია/დეაქტივაცია</span>,
       dataIndex:"status",
       render: (_,record)=>{
 
         if(record.status==='InActive')
-          return (<><Button onClick={()=>{
+          return (!isViewer&&<><Button onClick={()=>{
                 try{
                   const fun  = async ()=>{
               const response = await  axios.put(`http://localhost/api/topic/activate/${record.key}`,{},
@@ -113,7 +149,7 @@ const Thematic:React.FC = () => {
             
             </>)
         else
-           return (<><Button onClick={()=>{
+           return (!isViewer&&<><Button onClick={()=>{
             try{
               const fun  = async ()=>{
             const response = await axios.put(`http://localhost/api/topic/deactivate/${record.key}`,{},
@@ -139,18 +175,18 @@ const Thematic:React.FC = () => {
     },
     {
       key:"update",
-      title:"რედაქტირება",
+      title:!isViewer&&"რედაქტირება",
       dataIndex:"update",
       render:(_,record)=>{
-          return <Link to={`/update/${record.key}`} onClick={()=>{console.log(record.key)}}><EditTwoTone width={10}/></Link>
+          return !isViewer && <Link to={`/update/${record.key}`} onClick={()=>{console.log(record.key)}}><EditTwoTone width={10}/></Link>
       }
     },
     {
       key:"delete",
-      title:"წაშლა",
+      title:!isViewer&&"წაშლა",
       dataIndex:"delete",
       render:(_,record)=>{
-        return <Link style={{width:'100%'}} to={`/delete/${record.key}`} onClick={()=>{
+        return !isViewer&&<Link style={{width:'100%'}} to={`/delete/${record.key}`} onClick={()=>{
           try{
           const response = axios.delete(`http://localhost/api/topic/${record.key}`,
     {
@@ -217,8 +253,8 @@ const dispatch = useDispatch()
     
       
       </Layout>
-  <button style={{width:'510px' , margin:'auto', backgroundColor:'green'
-  }} onClick={()=>{ setIsOpen(true)}}><PlusCircleOutlined /> თემატიკის დამატება</button>
+  { !isViewer&&<button style={{width:'510px' , margin:'auto', backgroundColor:'green'
+  }} onClick={()=>{ setIsOpen(true)}}><PlusCircleOutlined /> თემატიკის დამატება</button>}
     </Flex>
     </div>
 

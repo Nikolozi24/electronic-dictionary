@@ -12,6 +12,7 @@ import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosEr
 import Item from "antd/es/list/Item";
 
 import { SubTopic, fillWord } from "../../components/TypeDef/Types";
+import { NULL } from "sass";
 
 const EditWordToDatabase:React.FC = () => {
  const jwt = GetCookie('jwt')
@@ -48,7 +49,7 @@ const EditWordToDatabase:React.FC = () => {
             
             
           })
-    const { register, setValue, getValues, watch } = form;
+    const { register, setValue, getValues, watch , formState, handleSubmit} = form;
     const [subThematic, setSubThematic] = useState([{
       id:1,
       georgianName:"",
@@ -145,15 +146,16 @@ useEffect(()=>{
 },[getValues("imageUrl")])
 
   console.log(thetamticId)
-  const handleSubmit=(e:any)=>{
-    e.preventDefault()
+  const Submit=()=>{
+   
+    console.log('submit')
     console.log(getValues())
     const el = document.getElementById('Sub-thematic')
     const value = el?.value;
     try{
       const fun = async()=>{
         console.log({...getValues(), subTopicId:subTopicId, id:id})
-        const resp = await axios.put("http://localhost/api/entry",{...getValues(),imageUrl:imageURL, subTopicId:parseInt(value), id:parseInt(id)},{
+        await axios.put("http://localhost/api/entry",{...getValues(),imageUrl:imageURL, subTopicId:parseInt(value), id:parseInt(id)},{
 
           headers:{
             'Content-Type':'application/json',
@@ -162,6 +164,8 @@ useEffect(()=>{
         })
       }
       fun();
+      alert("რედაქტირება წარმატებით დამთავრდა ")
+      navigate("/EntryList")
 
   }catch(err){
     AxiosErrorHandling(err);
@@ -199,7 +203,7 @@ useEffect(()=>{},[watch("imageUrl")])
       <Header>
 
       </Header>
-      <form className="formFill" onSubmit={(e)=>handleSubmit(e)} >   
+      <form className="formFill" onSubmit={handleSubmit(()=>Submit(), ()=>{alert("error")})} noValidate >   
       <select name="thematic" id="thematic" onChange={() => handleThematicSelect()} className="minimal" >
           <option value="none"   >აირჩეთ თემატიკა </option>;
           {
@@ -224,75 +228,126 @@ useEffect(()=>{},[watch("imageUrl")])
             })}
         </select>
 
-        <input
-          type="text"
-          {...register("georgianHeadword", {
-            required: "მეთაური სიტყვა სავალდებულოა!",
-          })}
-          placeholder={`  მეთაური სიტყვა`}
-        />
-        <input
-          type="text"
-          {...register("functionalLabel", {
-            required: "მეტყველების ნაწილის ველი სავალდებულოა!",
-          })}
-          placeholder={"მეტყველების ნაწილი"}
-        />
-        <input
-          type="text"
-          {...register("stylisticQualification", {required:"ველი სავალდებულოა"})}
-          placeholder={` სტილისტური კვალიფიკაცია`}
-        />
-        <input
-          type="text"
-          {...register("englishHeadword", {
-            required: "მეთაური სიტყვის ექვივალენტი სავალდებულოა!",
-          })}
-          placeholder={`მეთაური სიტყვის ექვივალენტი`}
-        />
-          <input
-          type="text"
-          placeholder="მეთაური სიტყვის განმარტება"
-          {...register("georgianDefinition" , {required:"ველი სავალდებულოა"})}
-          />
-        <input
-          type="text"
-          {...register("englishDefinition", {required:"ველი სავალდებულოა"})}
-          placeholder={` განმარტება ინგლისურად`}
-        />
-                <input
-                type="text"
-                placeholder="საილუსტრაციო წინადადება ქართულად"
-                {...register("georgianIllustrationSentence" , {required:"ველი სავალდებულოა"})}
-                />
-                <input
-                type="text"
-                placeholder="საილუსტრაციო წინადადების თარგმაანი ინგლისურად"
-                {...register("englishIllustrationSentence" , {required:"ველი სავალდებულოა"})}
-                />
-        <input
-          type="text"
-          {...register("source", {required:"ველი სავალდებულოა"})}
-          placeholder={`კონტექსტის წყარო`}
-        />
-        <input
-          type="text"
-          {...register("idiom", {})}
-          placeholder={`იდიომა`}
-        />
-        <input
-          type="text"
-          {...register("synonym", {})}
-          placeholder={`  სინონიმი`}
-        />
-        <input
-          type="text"
-          {...register("usageNote", {})}
-          placeholder={`  დამატებითი კომენტარი`}
-        />
-           <input id="photo" className="" {...register("imageUrl")}  type="file" />
+        <span className="Required">სავალდებულო*</span>
 
-           { getValues("imageUrl") && <img  id="image" src={getValues("imageUrl")}/>}
+<input
+  type="text"
+  {...register("georgianHeadword", {
+    required: {
+      value:true,
+      message:"მეთაური სიტყვა სავალდებულოა!"},
+      pattern:{
+        value:/[\u10D0-\u10F9]+/g,
+        message:"სიტყვა უნდა იყოს ქართული!"
+       }
+  })}
+  placeholder={`  მეთაური სიტყვა`}
+  className={`${formState.errors?.georgianHeadword? "bg-red":""}`}
+  />
+<p style={{}}>{formState.errors?.georgianHeadword?.message}</p>
+<span className="Required">სავალდებულო*</span>
+
+<input
+  type="text"
+  {...register("functionalLabel", {
+    required: "მეტყველების ნაწილის ველი სავალდებულოა!",
+  })}
+  placeholder={"მეტყველების ნაწილი"}
+  className={`${formState.errors?.functionalLabel? "bg-red":""}`} 
+/>
+<div>{formState.errors?.functionalLabel?.message}</div>
+  <span className="Required">სავალდებულო*</span>
+
+<input
+ className={`${formState.errors?.stylisticQualification? "bg-red":""}`} 
+  type="text"
+  {...register("stylisticQualification", { required:{
+    value:true,
+    message:"სტილისტური კვალიფიკაციის ველი სავალდებულოა"
+    }})}
+  placeholder={` სტილისტური კვალიფიკაცია`}
+/>
+  <p style={{}}>{formState.errors?.stylisticQualification?.message}</p>
+  <span className="Required">სავალდებულო*</span>
+<input
+ className={`${formState.errors?.englishHeadword? "bg-red":""}`} 
+  type="text"
+  {...register("englishHeadword", {
+    required: "მეთაური სიტყვის ექვივალენტი სავალდებულოა!",
+  })}
+  placeholder={`მეთაური სიტყვის ექვივალენტი`}
+/>
+<p style={{}}>{formState.errors?.englishHeadword?.message}</p>
+  <span className="Required">სავალდებულო*</span>
+
+<input
+ className={`${formState.errors?.georgianDefinition? "bg-red":""}`} 
+  type="text"
+  placeholder="მეთაური სიტყვის განმარტება"
+  {...register("georgianDefinition", { required: "მეთაური სიტყვის ველი სავალდებულოა" })}
+/>
+<p style={{}}>{formState.errors?.georgianDefinition?.message}</p>
+  <span className="Required">სავალდებულო*</span>
+
+<input
+  className={`${formState.errors?.englishDefinition? "bg-red":""}`} 
+  type="text"
+  {...register("englishDefinition", { required: "მეთაური სიტყვის განმარტება ინგლისურად სავალდებულოა" })}
+  placeholder={` განმარტება ინგლისურად`}
+/>
+<p style={{}}>{formState.errors?.englishDefinition?.message}</p>
+<input
+  type="text"
+  placeholder="საილუსტრაციო წინადადება ქართულად"
+  {...register("georgianIllustrationSentence")}
+/>
+ 
+
+<input
+  type="text"
+  placeholder="საილუსტრაციო წინადადების თარგმაანი ინგლისურად"
+  {...register("englishIllustrationSentence", { })}
+  />
+  <span className="Required">სავალდებულო*</span>
+<input
+   className={`${formState.errors?.source? "bg-red":""}`} 
+  type="text"
+  {...register("source", { required: " წყარო ველი სავალდებულოა (არ ქონის შემთხვევაში n/a)" })}
+  placeholder={`კონტექსტის წყარო`}
+/>
+<p style={{}}>{formState.errors?.source?.message}</p>
+<input
+  type="text"
+  {...register("idiom", {})}
+  placeholder={`  იდიომა`}
+/>
+<input
+  type="text"
+  {...register("synonym", {})}
+  placeholder={`  სინონიმი`}
+/>
+<input
+  type="text"
+  {...register("usageNote", {})}
+  placeholder={`  დამატებითი კომენტარი`}
+/>
+
+
+  
+  {/* <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" stroke-linejoin="round" stroke-linecap="round" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon"><polyline points="16 16 12 12 8 16"></polyline><line y2="21" x2="12" y1="12" x1="12"></line><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path><polyline points="16 16 12 12 8 16"></polyline></svg> */}
+
+<div id="status"></div>
+
+           <input id="photo" className="" {...register("imageUrl")}  type="file" />
+           { getValues("imageUrl") && <img  id="image" src={getValues("imageUrl") || ""}/>}
+      { getValues("imageUrl") && <button type="button" onClick={(e)=>{
+       e.preventDefault();
+            const el = document.getElementById('photo');
+             el.value = ""
+             setImageURL("")
+      
+        }}>ფოტოს წაშლა</button>
+      }
         <button  className="submit-button" type="submit">
          რედაქტირება
         </button>

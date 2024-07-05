@@ -11,24 +11,7 @@ const AddUser: React.FC = () => {
 
 
   const handleSave = (email: string, password: string, role: string) => {
-   try{
-     const response = axios.post('http://localhost/api/identity/add-user',{
-        email:email,
-        password:password,
-        role:role
-      },
-    {
-      headers:{
-          "Content-Type":'application/json',
-          "Authorization":'Bearer '+jwt
-        }
-    })
-  
-   }
-   catch(err:any){
-   AxiosErrorHandling(err)
-   }
-  };
+  }
 
   const handleCancel = () => {
 

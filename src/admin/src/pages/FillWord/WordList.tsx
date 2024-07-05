@@ -14,6 +14,11 @@ import { Button, Flex, Layout, Table, TableColumnsType } from 'antd';
 import { CloseCircleTwoTone, EditTwoTone, PlusCircleOutlined } from '@ant-design/icons';
 import TranslationComponent from '../../components/TranslationComponent/TranslationComponent.tsx';
 import Search from '../../components/Search/Search.tsx';
+
+
+
+
+
 const WordList: React.FC = () => {
       interface dataType {
           key:number;
@@ -22,14 +27,37 @@ const WordList: React.FC = () => {
           functionalLabel:string;
           status:string;
           }
-  const [current, setCurrent] = useState(1);
-  const [value, setValue] = useState("")
+  const [current, setCurrent] = useState<number>(1);
+  const [value, setValue] = useState<string>("")
+  const[isViewer, setIsViewer] = useState<boolean>(false);
     const navigate = useNavigate();
     const [WordList, setWordList] = useState([{}]);
-    const [pageNumber, setPageNumber] = useState(1);
+    const [pageNumber, setPageNumber] = useState<number>(1);
     const jwt = GetCookie('jwt');
   
     const pageSize = 10;
+    useEffect(() => {
+      const fun = async () => {
+  
+        try{
+        const response = await axios.get("http://localhost/api/identity/user", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + jwt,
+          },
+        });
+        const user = response.data;
+        const isVie= user.isViewer
+        setIsViewer(isVie)
+         
+        }
+  
+        catch(err:any){
+          AxiosErrorHandling(err);
+        }
+      };
+      fun();
+    }, []);
     useEffect(()=>{
       const fun = async ()=>{     
         try{
@@ -121,12 +149,12 @@ fun()
       },
       {
         key:"status",
-        title:<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>აქტივაცია/დეაქტივაცია</span>,
+        title:!isViewer &&<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>აქტივაცია/დეაქტივაცია</span>,
         dataIndex:"status",
-        render: (_,record)=>{
+        render:  (_,record)=>{
 
           if(record.status==='InActive')
-            return (<><Button onClick={()=>{
+            return (!isViewer && <><Button onClick={()=>{
                   try{
                     const fun  = async ()=>{
                 const response = await  axios.put(`http://localhost/api/entry/activate/${record.key}`,{},
@@ -150,7 +178,7 @@ fun()
               
               </>)
           else
-             return (<><Button onClick={()=>{
+             return (!isViewer && <><Button onClick={()=>{
               try{
                 const fun  = async ()=>{
               const response = await axios.put(`http://localhost/api/Entry/deactivate/${record.key}`,{},
@@ -176,18 +204,18 @@ fun()
       },
       {
         key:"update",
-        title:<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>რედაქტირება</span>,
+        title:!isViewer && <span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>რედაქტირება</span>,
         dataIndex:"update",
         render:(_,record)=>{
-            return <Link to={`/update/Entry/${record.key}`} onClick={()=>{}}><EditTwoTone width={10}/></Link>
+            return !isViewer && <Link to={`/update/Entry/${record.key}`} onClick={()=>{}}><EditTwoTone width={10}/></Link>
         }
       },
       {
         key:"delete",
-        title:<span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>წაშლა</span>,
-        dataIndex:"delete",
+        title:!isViewer&& <span style={{ color: 'black',fontFamily:"monospace" , fontSize:"16px" }}>წაშლა</span>,
+        dataIndex: "delete",
         render:(_,record)=>{
-          return <button style={{width:'100%'}}  onClick={()=>{
+          return !isViewer && <button style={{width:'100%'}}  onClick={()=>{
             try{
               const fun = async() =>{
             const response = await axios.delete(`http://localhost/api/entry/${record.key}`,

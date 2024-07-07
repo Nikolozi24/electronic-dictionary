@@ -10,7 +10,8 @@ interface SearchProps{
   styleAdditional:{};
 }
 
-const Search:React.FC<SearchProps> = ({words, value, setValue, styleAdditional}) => {
+const Search:React.FC<SearchProps> = (props) => {
+  const {words, value, setValue, styleAdditional} = props
 
   function focuse(){
     const input = document.getElementById("Search")

@@ -1,0 +1,24 @@
+footer.footer{
+    background-color: #b44225;
+    width: 100%;
+    margin-left: -10px;
+    margin-top: 20px;
+    border-radius: 20px;
+    position: relative;
+    bottom: 0px;
+    color: black;
+    
+}
+ul{
+    list-style-type: none;
+}
+footer.footer>ul.footer-ul{
+    list-style-type:circle;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    width: 100%;
+    padding: 20px 4px;
+    
+}

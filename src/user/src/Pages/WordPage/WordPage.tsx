@@ -7,7 +7,7 @@ import { HomeOutlined } from '@ant-design/icons'
 import {FacebookShareButton} from 'react-share'
 import Search from '../../Components/Searching/Search'
 import { Entry } from '../../Components/TypeDef/Types'
-
+import MyFooter from '../../Components/footer/MyFooter'
 const WordPage:React.FC = () => {
   const navigate = useNavigate();
     const {id} = useParams()
@@ -33,7 +33,7 @@ const WordPage:React.FC = () => {
     },[id])
     const [value, setValue] = useState<string>("")
     const [current, ] = useState<number>(1);
-    const [words, setWords] = useState<Entry[]>()
+    const [words, setWords] = useState<Entry[]>([])
  
     useEffect(()=>{
       const fun= async ()=>{
@@ -83,11 +83,12 @@ const WordPage:React.FC = () => {
         <hr/>
         <img src={word?.imageUrl} alt='sityvis foto' width={400} />
         
-        <FacebookShareButton url={`youtube.com`}>share to youtube</FacebookShareButton>
+        {/* <FacebookShareButton url={`youtube.com`}>share to youtube</FacebookShareButton> */}
         <FacebookShareButton url={`http://localhost:5174/${word?.id}`}>share to facebook</FacebookShareButton>
         </div>
+          <MyFooter/>
         </div>
-       
+
      
     }
    function renderError(){

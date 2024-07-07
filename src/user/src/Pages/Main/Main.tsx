@@ -72,7 +72,7 @@ const Main:React.FC = () => {
     })
   }
   return (  
-  <div className="main_page" style={{backgroundImage:`url(${image}`, backgroundRepeat:'no-repeat' , backgroundSize:"cover", opacity:"0.95"}} >
+  <div className="main_page" style={{backgroundImage:`url(${image}`, backgroundRepeat:'no-repeat' , backgroundSize:"cover", height:"auto", opacity:"0.95"}} >
        <div className='SearchingWordPage' >
           <Link style={{paddingLeft:'20px', color:"black", }} to="/"><HomeOutlined/>მთავარი</Link>
             {/* <Link style={{color:'black', marginLeft:"20px"}} to="/about-us">ჩვენს შესახებ</Link> */}
@@ -94,16 +94,18 @@ const Main:React.FC = () => {
          </ul>
           
   <Pagination 
+  className="Pagination"
   pageSizeOptions={[]} // Disable page size options
   current={current} onChange={onChange} total={wordCount}/>
     </div>
 </div>
 
 
-            
+            <MyFooter/>
 
           {/* <ToolTip/> */}
-            <MyFooter></MyFooter>
+
+
   </div>
         
   )

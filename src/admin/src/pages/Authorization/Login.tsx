@@ -15,7 +15,7 @@ import AxiosErrorHandling from '../../components/Utilities/ErrorHandling/AxiosEr
 
 const Login = () => {
 const dispatch = useDispatch()
-const [roles,setRoles] = useState([]);
+const [roles,setRoles] = useState<string[]>();
 const  axiosPrivate = useAxiosPrivate();
 
   const navigate = useNavigate();

@@ -18,6 +18,7 @@ import AxiosErrorHandling from './Utilities/ErrorHandling/AxiosErrorHandling';
   
   //ცხრილის ველების  მნიშვნელობები
   interface dataType {
+   
     key:number;
     GeorgianMeaning:string;
     EnglishMeaning:string;
@@ -35,6 +36,8 @@ import AxiosErrorHandling from './Utilities/ErrorHandling/AxiosErrorHandling';
   // აქ განვსაზღვრავ თუ რა ველები არის საჭირო ცხრილის სახით გამოსაჩენათ
   // 
   const [isViewer, setIsViewer] = useState<boolean>(false)
+  //კომპონენტის ჩატვირთვის დროს მოაქვს მომხარებლის ინფორმაცია
+
   useEffect(() => {
     const fun = async () => {
   
@@ -208,7 +211,7 @@ import AxiosErrorHandling from './Utilities/ErrorHandling/AxiosErrorHandling';
   ]
 // აქ ცხრილის მონაცემების მასივს ვქმნი
 
-  const data: dataType[]= thematic.map(item=>{
+  const data: dataType[] = thematic?.map(item=>{
     // ამოვიღებ დესტრუქტურიზაციით იმ ველებს რომლებიც მჭირდება
     const {id, georgianName, englishName, status } = item;
     // ვქმნი ობიექტს შესაბბამისი ველებით და ვაბრუნებ

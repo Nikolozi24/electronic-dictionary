@@ -8,17 +8,19 @@ import axios from 'axios';
 import AxiosErrorHandling from '../Utilities/ErrorHandling/AxiosErrorHandling';
 
 interface Props {
-  onSave: ( email: string, password: string, role: string) => void;
+  onSave: () => void;
   onCancel: () => void;
+  isOpen:boolean
 }
 
-const AddUserComponent: React.FC<Props> = ({ onSave, onCancel }) => {
+const AddUserComponent: React.FC<Props> = (props) => {
+ const  { onSave, onCancel , isOpen} = props
   const jwt = GetCookie("jwt")
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
   const [roles, setRoles] = useState([]);
-  const [isOpen , setIsOpen] = useState<boolean>(true);
+ 
   const navigate = useNavigate(); 
   useEffect(()=>{
         const resp = axios.get("http://localhost/api/identity/user-roles",{
@@ -33,11 +35,12 @@ const AddUserComponent: React.FC<Props> = ({ onSave, onCancel }) => {
   const handleCancel= () => {
     
     onCancel();
-    setIsOpen(false);
+
     navigate('/fill')
   }
   const handleSave = () => {
     const el = document.getElementById("role")
+    
     setRole(el?.value)
     const fun  = async()=>{
 
@@ -53,13 +56,14 @@ const AddUserComponent: React.FC<Props> = ({ onSave, onCancel }) => {
            "Authorization":'Bearer '+jwt
          },
          withCredentials:true
-     }).then(res=>navigate('/added'))
+     }).then(res=>navigate('/added')).then(data=>onSave()).catch(err=>alert(err?.message))
     }
     catch(err:any){
-    AxiosErrorHandling(err)
+    AxiosErrorHandling()
     }
    };
    fun();
+  
   }
   return (
     <Modal

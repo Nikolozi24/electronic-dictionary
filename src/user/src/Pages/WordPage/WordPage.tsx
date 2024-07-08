@@ -9,11 +9,15 @@ import Search from '../../Components/Searching/Search'
 import { Entry } from '../../Components/TypeDef/Types'
 import MyFooter from '../../Components/footer/MyFooter'
 const WordPage:React.FC = () => {
+  // ნავიგაციის ფუნქცია
   const navigate = useNavigate();
+  // წამოვიღებთ აიდს იმ ობიექტისას რომელსაც ვარენდერებთ
     const {id} = useParams()
+    //ობიექტის ჩასასმელად ცვლადი
   const [word, setWord ] = useState<Entry>()
 
-  
+// ფუნქცია რომელიც ობიექტის ID=ის ვცლილებისას  მოაქვს შესაბამისი აიდის მქონე 
+// ობიექტი  
     useEffect(()=>{
         try{
             const fun =  async () =>{
@@ -31,10 +35,12 @@ const WordPage:React.FC = () => {
 
 
     },[id])
+    // მოსაძებნი სიტყვა ძებნისათვის
     const [value, setValue] = useState<string>("")
     const [current, ] = useState<number>(1);
+    //სიტყვებიი , search კომპონენტისთვის
     const [words, setWords] = useState<Entry[]>([])
- 
+ // ფუნქცია რომელიც გვერდებზე და მნიშვნელობაზე იცვლება
     useEffect(()=>{
       const fun= async ()=>{
          await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}`,{
@@ -52,6 +58,7 @@ const WordPage:React.FC = () => {
       width:'70%',
       margin:'2px auto'
     }
+    // არენდერებს ობიექტს 
     function renderWord (word:Entry){
       return      <div>
         <div className='SearchingWordPage'>
@@ -91,12 +98,14 @@ const WordPage:React.FC = () => {
 
      
     }
+    // ობიექტის არ არსებობის შემთვხვევაში დარენდერებს ამას
    function renderError(){
       return <>
           <h1>სიტყვა ვერ მოიძებნა</h1>
             <button onClick={()=>{navigate(-1)}}>უკან დაბრუნება</button>
       </>
     }
+    // თუ სიტყვა აქტიურია , მაშნ სიტყვას დაარენდერებს , თუ არა და შეცდომას
   return (word?.status=="Active"? renderWord(word):renderError()
   )
 }

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Modal, Select } from 'antd';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { thematicActions } from '../Store/redux/thematicSlice';
+import { Input, Modal } from 'antd';
+import {  useNavigate } from 'react-router-dom';
+
 import GetCookie from '../Utilities/Coookies/GetCookie';
-import { Option } from 'antd/es/mentions';
+
+
 import axios from 'axios';
 import AxiosErrorHandling from '../Utilities/ErrorHandling/AxiosErrorHandling';
 
@@ -13,7 +14,11 @@ interface Props {
   isOpen:boolean
 }
 
+
 const AddUserComponent: React.FC<Props> = (props) => {
+
+ 
+
  const  { onSave, onCancel , isOpen} = props
   const jwt = GetCookie("jwt")
   const [email, setEmail] = useState('');
@@ -35,8 +40,6 @@ const AddUserComponent: React.FC<Props> = (props) => {
   const handleCancel= () => {
     
     onCancel();
-
-    navigate('/fill')
   }
   const handleSave = () => {
     const el = document.getElementById("role")
@@ -45,7 +48,7 @@ const AddUserComponent: React.FC<Props> = (props) => {
     const fun  = async()=>{
 
     try{
-      const response =  await axios.post('http://localhost/api/identity/add-user',{
+      await axios.post('http://localhost/api/identity/add-user',{
          email:email,
          password:password,
          role:el?.value
@@ -56,10 +59,17 @@ const AddUserComponent: React.FC<Props> = (props) => {
            "Authorization":'Bearer '+jwt
          },
          withCredentials:true
-     }).then(res=>navigate('/added')).then(data=>onSave()).catch(err=>alert(err?.message))
+     }).then(res=>navigate('/added')).then(data=>onSave()).catch(err=>{
+      
+      if(err.response.status==400){
+        alert("ზოგიერთი ველი არასწორია!")
+      }
+     });
     }
     catch(err:any){
-    AxiosErrorHandling()
+      alert(err?.errors?.
+        PasswordTooShort);
+    AxiosErrorHandling(err)
     }
    };
    fun();
@@ -75,24 +85,34 @@ const AddUserComponent: React.FC<Props> = (props) => {
       okText="Save"
       onOk={handleSave}
       onCancel={handleCancel}
+      
     >
+     
+
     
       <br />
       <br />
       <Input
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          />
       <br />
+
+      
       <br />
       <Input.Password
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-      />
+        />
       <br />
       <br />
+      პაროლი უნდა იყოს მინიმუმ 6 სიმბოლო ,უნდა შეიცავდეს სიმბოლოებს ერთ დიდ სიმბოლოს(A,B,C,D ....), რიცხვს , პატარა სიმბოლოს(a,b,c,d,e,f) და სპეციალურ სიმბოლოს($,#,%.....)
+      <br /> 
+      <br /> 
+      <br /> 
       <select id="role">
         <option value={""}>გთხოვთ აირჩიოთ როლი</option>
                 {
@@ -101,6 +121,7 @@ const AddUserComponent: React.FC<Props> = (props) => {
                   })
                 }
         </select>
+     
     </Modal>
   );
 };

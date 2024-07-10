@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { RiFlutterFill } from "react-icons/ri";
 import { FcMenu } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { BsDatabaseAdd } from "react-icons/bs";
-import { GrContact , GrHomeRounded} from "react-icons/gr";
-import { FcAbout } from "react-icons/fc";
+import {  GrHomeRounded} from "react-icons/gr";
+
 import { BiLogOut } from "react-icons/bi";
 import { FaUser, FaEdit} from "react-icons/fa";
 import GetCookie from "../Utilities/Coookies/GetCookie";
@@ -17,7 +16,7 @@ const Header: React.FC = () => {
 
   const isLogin = true;
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [login, setLogin] = useState<{}>({
+  const [login, setLogin] = useState<{in:any, out:any}>({
     in: (
       <Link to="/login" onClick={()=>{
         RemoveCookie('jwt')
@@ -42,8 +41,8 @@ const Header: React.FC = () => {
 
 
 
-  const [role, setRole] = useState("");
-  const [isViwer, setisViwer] = useState(false);
+  const [role, setRole] = useState<string>("");
+  const [isViwer, setisViwer] = useState<boolean>(false);
   const jwt = GetCookie("jwt");
   useEffect(() => {
     const fun = async () => {
@@ -93,7 +92,7 @@ const Header: React.FC = () => {
          {role=="super_admin"&& <li className="list-item">
             <Link title="მომხამრებლის დამატება" to="/addUsers">
               <AiOutlineUserAdd className="icon" />
-              <span className="links-name">მომხამრებლის დამატება</span>
+              <span className="links-name"> დამატება</span>
             </Link>
 
           </li>}

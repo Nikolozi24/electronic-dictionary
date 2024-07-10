@@ -1,10 +1,13 @@
-import React from 'react'
+
 import GetCookie from '../Coookies/GetCookie';
 import axios from 'axios';
 
 export default function AxiosErrorHandling(err:any) {
  
-    if(err.response.status==400){
+  if(err.response.status==400){
+       
+ 
+
         const fun = async ()=>{
         const refresh = GetCookie('refresh');
         console.log(refresh)
@@ -29,9 +32,7 @@ export default function AxiosErrorHandling(err:any) {
 else if(err.response.status===500){
     alert("შიდა სერვერის შეცდომა")
 }
-else if(err.response.status===400){
-        alert(err.response.errors)
-}
+
 else{
     alert("წარმოიშვა შეცდომა")
 }

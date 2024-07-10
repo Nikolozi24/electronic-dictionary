@@ -88,7 +88,7 @@ const FillWordToDatabase: React.FC = () => {
 
     const fun = async () => {
       try {
-        const Thmatic = thematic.filter(item => { return item.id == thetamticId });
+        const Thmatic = thematic?.filter(item => { return item.id == thetamticId });
 
         setSubThematic(Thmatic[0]?.subTopics)
 
@@ -148,12 +148,13 @@ const FillWordToDatabase: React.FC = () => {
 //     // }
 
 // }
-const [imageURL,setImageURL] = useState<string>('')
+const [,setImageURL] = useState<string|null>('')
 useEffect(()=>{
   console.log(getValues("imageUrl"))
   getValues();
-  const val = getValues("imageUrl")
-  setImageURL(val)
+  
+  const value: string|null = getValues("imageUrl")
+  setImageURL(value)
 
 },[getValues("imageUrl")])
 
@@ -167,14 +168,15 @@ useEffect(()=>{
       if(file){
       formData.append('file', file)
       }
+      
       console.log(formData)
     const fun =  async ()=>{
-
-      const el = document.getElementById('Sub-thematic')
-      const value = el?.value;
+      
+    const el:HTMLSelectElement | null = document?.getElementById("Sub-thematic")
+      const value:string|undefined = el?.value;
       if(file){
    
-        const response = await fetch('http://localhost:80/api/multimedia/', {
+        await fetch('http://localhost:80/api/multimedia/', {
         method: 'POST',
         body: formData,
         headers: {
@@ -189,7 +191,7 @@ useEffect(()=>{
       
     }
     
-    const resp = await axios.post("http://localhost/api/entry", { ...getValues(), subTopicId: parseInt(value) }, {
+    await axios.post("http://localhost/api/entry", { ...getValues(), subTopicId: parseInt(value) }, {
       headers: {
         "Content-Type": 'application/json',
         'Authorization': "Bearer " + jwt

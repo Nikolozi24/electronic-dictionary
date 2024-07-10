@@ -14,7 +14,7 @@ import { Button, Flex, Layout, Table, TableColumnsType } from 'antd';
 import { CloseCircleTwoTone, EditTwoTone, PlusCircleOutlined } from '@ant-design/icons';
 import TranslationComponent from '../../components/TranslationComponent/TranslationComponent.tsx';
 import Search from '../../components/Search/Search.tsx';
-
+import { Entry } from '../../components/TypeDef/Types.tsx';
 
 
 
@@ -31,7 +31,7 @@ const WordList: React.FC = () => {
   const [value, setValue] = useState<string>("")
   const[isViewer, setIsViewer] = useState<boolean>(false);
     const navigate = useNavigate();
-    const [WordList, setWordList] = useState([{}]);
+    const [WordList, setWordList] = useState<dataType[]>([]);
     const [pageNumber, setPageNumber] = useState<number>(1);
     const jwt = GetCookie('jwt');
   
@@ -67,8 +67,8 @@ const WordList: React.FC = () => {
                   'Authorization':"Bearer "+jwt
               }
       })
-    const WordLis1 = (response.data)
-const WordLis = (response.data)?.map(item=>{
+  const respData:Entry[] = response.data;
+const WordLis:dataType[]= (respData)?.map(item=>{
   const obj ={
     key:item.id,
   GeorgianMeaning:item.georgianHeadword,
@@ -92,11 +92,11 @@ fun()
 
 ,[current,value])
 
-  const [WordCount , setWordCount] = useState(0);
+  const [WordCount , setWordCount] = useState<number>(0);
   useEffect(()=>{
       const fun =async ()=>{
         try{
-        const length = axios.get("http://localhost/api/entry/count",{
+        await axios.get("http://localhost/api/entry/count",{
 
          headers:{
                   'Content-Type':'application/json',
@@ -112,11 +112,12 @@ fun()
     }
 
   ,[])
-  const [modalIsOpen, setModalOpen] = useState(false);
+  const [modalIsOpen, setModalOpen] = useState<boolean>(false);
 
-    function onSave(georgianName: string, englishName: string, id?: number){
+    function onSave(georgianName:string, englishName: string, id?: number){
        // localStorage
         setModalOpen(false);
+        console.log(georgianName, englishName,id )
     }
     const  columns: TableColumnsType<dataType> = [
       {
@@ -157,7 +158,7 @@ fun()
             return (!isViewer && <><Button onClick={()=>{
                   try{
                     const fun  = async ()=>{
-                const response = await  axios.put(`http://localhost/api/entry/activate/${record.key}`,{},
+                          await  axios.put(`http://localhost/api/entry/activate/${record.key}`,{},
                   {
                     headers:{
                       'Content-Type':'application/json',
@@ -181,7 +182,7 @@ fun()
              return (!isViewer && <><Button onClick={()=>{
               try{
                 const fun  = async ()=>{
-              const response = await axios.put(`http://localhost/api/Entry/deactivate/${record.key}`,{},
+                   await axios.put(`http://localhost/api/Entry/deactivate/${record.key}`,{},
                 {
                   headers:{
                     'Content-Type':'application/json',
@@ -218,7 +219,7 @@ fun()
           return !isViewer && <button style={{width:'100%'}}  onClick={()=>{
             try{
               const fun = async() =>{
-            const response = await axios.delete(`http://localhost/api/entry/${record.key}`,
+               await axios.delete(`http://localhost/api/entry/${record.key}`,
       {
           headers:{
             "Content-Type":"application/json",
@@ -242,7 +243,7 @@ fun()
     const onChange: PaginationProps['onChange'] = (page) => {
       setCurrent(page);
     }
-    const handleChange= (e)=>{
+    const handleChange= (e:any)=>{
           const val = e.target.value;
           setValue(val)
     }

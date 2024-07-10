@@ -340,11 +340,12 @@ useEffect(()=>{},[watch("imageUrl")])
 
            <input id="photo" className="" {...register("imageUrl")}  type="file" />
            { getValues("imageUrl") && <img  id="image" src={getValues("imageUrl") || ""}/>}
-      { getValues("imageUrl") && <button type="button" onClick={(e)=>{
+      { getValues("imageUrl") && <button type="button" style={{ margin:"25px auto", width:"150px"}} onClick={(e)=>{
        e.preventDefault();
             const el = document.getElementById('photo');
              el.value = ""
              setImageURL("")
+             setValue("imageUrl", null)
       
         }}>ფოტოს წაშლა</button>
       }

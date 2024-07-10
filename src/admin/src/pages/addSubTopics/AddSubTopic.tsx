@@ -84,9 +84,8 @@ const AddSubTopic: React.FC = () => {
             'Authorization': "Bearer " + jwt,
           },
         }
-      );
-      setIsOpen(false);
-      location.reload();
+      ).then(dat=>{setIsOpen()});
+     
     }
     fun();
     } catch (err: any) {
@@ -359,11 +358,10 @@ const AddSubTopic: React.FC = () => {
             Authorization: "Bearer " + jwt,
           },
         }
-      );
+      ).then(res=>setIsOpen(false)).then(res=>navigate('/added')).catch(err=>alert(err?.message));
     } catch (err: any) {
       AxiosErrorHandling(err);
     }
-    navigate("/added");
   };
   const [thematicId, setThematicId] = useState(0);
   console.log(SubThematics)

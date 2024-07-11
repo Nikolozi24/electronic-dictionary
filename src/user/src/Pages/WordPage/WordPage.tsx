@@ -7,17 +7,20 @@ import { HomeOutlined } from '@ant-design/icons'
 import {FacebookShareButton} from 'react-share'
 import Search from '../../Components/Searching/Search'
 import { Entry } from '../../Components/TypeDef/Types'
+import { motion } from 'framer-motion'
 import MyFooter from '../../Components/footer/MyFooter'
-const WordPage:React.FC = () => {
-  // ნავიგაციის ფუნქცია
-  const navigate = useNavigate();
-  // წამოვიღებთ აიდს იმ ობიექტისას რომელსაც ვარენდერებთ
-    const {id} = useParams()
-    //ობიექტის ჩასასმელად ცვლადი
-  const [word, setWord ] = useState<Entry>()
 
-// ფუნქცია რომელიც ობიექტის ID=ის ვცლილებისას  მოაქვს შესაბამისი აიდის მქონე 
-// ობიექტი  
+const WordPage:React.FC = () => {
+  const navigate = useNavigate();
+  const {id} = useParams()
+  const [word, setWord ] = useState<Entry>()
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // Simulating a 2 second loading delay
+    return () => clearTimeout(timer);
+  }, []);
     useEffect(()=>{
         try{
             const fun =  async () =>{
@@ -35,12 +38,9 @@ const WordPage:React.FC = () => {
 
 
     },[id])
-    // მოსაძებნი სიტყვა ძებნისათვის
     const [value, setValue] = useState<string>("")
     const [current, ] = useState<number>(1);
-    //სიტყვებიი , search კომპონენტისთვის
     const [words, setWords] = useState<Entry[]>([])
- // ფუნქცია რომელიც გვერდებზე და მნიშვნელობაზე იცვლება
     useEffect(()=>{
       const fun= async ()=>{
          await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}`,{
@@ -58,9 +58,9 @@ const WordPage:React.FC = () => {
       width:'70%',
       margin:'2px auto'
     }
-    // არენდერებს ობიექტს 
     function renderWord (word:Entry){
-      return      <div>
+      return     <>
+       <div>
         <div className='SearchingWordPage'>
           <Link style={{paddingLeft:'20px', color:"black"}} to="/"><HomeOutlined/>მთავარი</Link>
             <Search value={value} words={words} styleAdditional={SearchStyle} setValue={setValue}/>
@@ -88,26 +88,39 @@ const WordPage:React.FC = () => {
         { word?.synonym!=="n/a" && <h4> სინონიმი: { word?.synonym}</h4>}
         { word?.usageNote!=="n/a" && <h4>დამატებითი კომენტარი: { word?.usageNote}</h4>}
         <hr/>
-        <img src={word?.imageUrl} alt='sityvis foto' width={400} />
-        
-        {/* <FacebookShareButton url={`youtube.com`}>share to youtube</FacebookShareButton> */}
+       {
+          word.imageUrl &&  <img src={word?.imageUrl} alt='sityvis foto' width={400} style={{margin:'5px auto', }} />
+      }
+
         <FacebookShareButton url={`http://localhost:5174/${word?.id}`}>share to facebook</FacebookShareButton>
         </div>
-          <MyFooter/>
         </div>
-
-     
+        <MyFooter/>
+        </>
     }
-    // ობიექტის არ არსებობის შემთვხვევაში დარენდერებს ამას
    function renderError(){
       return <>
-          <h1>სიტყვა ვერ მოიძებნა</h1>
+              <h2>გვერდი ვერ მოიძებნა </h2>
             <button onClick={()=>{navigate(-1)}}>უკან დაბრუნება</button>
-      </>
+             </>
     }
-    // თუ სიტყვა აქტიურია , მაშნ სიტყვას დაარენდერებს , თუ არა და შეცდომას
-  return (word?.status=="Active"? renderWord(word):renderError()
-  )
+
+
+  return  isLoading? <>
+       <motion.div
+  className="loader"
+  initial={{ opacity: 0, scale: 0 }}
+  animate={{ opacity: 1, scale: 1, rotate: 360 }}
+  transition={{
+    repeat:Infinity,
+    type: 'spring',
+    delay:0.2,
+    stiffness: 260,
+    damping: 20,
+  }}
+> </motion.div>
+  Loading...
+  </> : <>{(word?.status=="Active"? renderWord(word):renderError())}</>
 }
 
 export default WordPage

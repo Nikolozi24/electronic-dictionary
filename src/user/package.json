@@ -13,6 +13,7 @@
     "@ant-design/icons": "^5.3.7",
     "@mui/icons-material": "^5.15.20",
     "axios": "^1.7.2",
+    "framer-motion": "^11.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-share": "^5.1.0"

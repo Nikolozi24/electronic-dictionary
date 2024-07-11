@@ -11,7 +11,7 @@ const Word:React.FC<WordPorps> = (props) => {
   return (
       <div className='normalWordRender'>
         <Link to={`/${word?.id}`}>
-           <h3 className='georgianHeadword'><span>{word?.georgianHeadword}</span> </h3>
+           <h3 className='georgianHeadword'><span>{word?.georgianHeadword} - {word?.englishHeadword}</span> </h3>
            <h4 className='functionalLabel'><span>{word?.functionalLabel}</span></h4>
         </Link>
     </div>

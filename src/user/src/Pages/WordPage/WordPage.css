@@ -4,24 +4,23 @@
     box-sizing: border-box;
 }
 div.wordPageForUser{
-  
-
-    margin: auto;
+    margin-top: 70px;
     display: flex;
     width: 600px;
-    margin: 120px auto;
+
     flex-direction: column;
     text-align: start;
     padding: 10px;
+    background-color: #ffffff65;
 
 }
 
 div.SearchingWordPage{
- 
+    background-color: #973131;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 100vw;
     position: absolute;
     left:0;
     top:0;
@@ -94,7 +93,6 @@ div.wordPageForUser>article{
 
     width: 100%;
     background-color: #b46f1398;
-    opacity: 1;
     margin-top: 20px;
     align-items: center;
     text-align: left;

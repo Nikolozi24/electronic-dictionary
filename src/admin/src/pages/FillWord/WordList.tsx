@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // import { Button, Input, Modal } from 'antd';
 // import TranslationComponent from '../../components/TranslationComponent/TranslationComponent.tsx';
-
-
 import Header from '../../components/Header/Header.tsx';
 import { Link, useNavigate } from 'react-router-dom';
 import GetCookie from '../../components/Utilities/Coookies/GetCookie.ts';
@@ -11,31 +9,25 @@ import AxiosErrorHandling from '../../components/Utilities/ErrorHandling/AxiosEr
 import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
 import { Button, Flex, Layout, Table, TableColumnsType } from 'antd';
-import { CloseCircleTwoTone, EditTwoTone, PlusCircleOutlined } from '@ant-design/icons';
+import { CloseCircleTwoTone, EditTwoTone} from '@ant-design/icons';
 import TranslationComponent from '../../components/TranslationComponent/TranslationComponent.tsx';
 import Search from '../../components/Search/Search.tsx';
 import { Entry } from '../../components/TypeDef/Types.tsx';
-
-
-
-
+interface dataType {
+    key:number;
+    GeorgianMeaning:string;
+    EnglishMeaning:string;
+    functionalLabel:string;
+    status:string;
+    }
 const WordList: React.FC = () => {
-      interface dataType {
-          key:number;
-          GeorgianMeaning:string;
-          EnglishMeaning:string;
-          functionalLabel:string;
-          status:string;
-          }
   const [current, setCurrent] = useState<number>(1);
   const [value, setValue] = useState<string>("")
   const[isViewer, setIsViewer] = useState<boolean>(false);
     const navigate = useNavigate();
     const [WordList, setWordList] = useState<dataType[]>([]);
-    const [pageNumber, setPageNumber] = useState<number>(1);
+
     const jwt = GetCookie('jwt');
-  
-    const pageSize = 10;
     useEffect(() => {
       const fun = async () => {
   
@@ -113,7 +105,13 @@ fun()
 
   ,[])
   const [modalIsOpen, setModalOpen] = useState<boolean>(false);
-
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000); // Simulating a 2 second loading delay
+      return () => clearTimeout(timer);
+    }, []);
     function onSave(georgianName:string, englishName: string, id?: number){
        // localStorage
         setModalOpen(false);
@@ -251,8 +249,7 @@ fun()
     
     
     
-    return ( 
-      <div className='thematic'>
+    return isLoading?<h1>Loading..</h1>: <div className='thematic'>
             <Header/>
             {/* <input type='text' value={value} onChange={(e)=>handleChange(e)}/> */}
           
@@ -301,7 +298,7 @@ fun()
                 onCancel={() => setModalOpen(false)}
             /> 
         </div>
-    )
+    
 }
 
 

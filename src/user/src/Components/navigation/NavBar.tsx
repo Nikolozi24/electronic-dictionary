@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
 import AxiosErrorHandling from "../Utilities/ErrorHandling/AxiosErrorHandling";
-import { Layout, Menu } from 'antd';
-import {
-  MailOutlined,
-  AppstoreOutlined,
-  SettingOutlined,
-} from '@ant-design/icons';
+import {  Menu } from 'antd';
 
-import { Content } from 'antd/es/layout/layout';
 import { Topics } from '../TypeDef/Types';
 
 const { SubMenu } = Menu;
 
-const { Sider } = Layout;
 
 interface NaBarProsp{
   handleFilterByThematic:(e:any)=>void
@@ -40,15 +33,19 @@ const NavBar:React.FC<NaBarProsp> = (props) => {
     }
     fun();
   },[item?.length])
-  const style= {  margin:'12px 0px',
-                  borderRadius:"20px" ,width:"110%", 
-                  backdropFilter:"blur(30px)",
-                  background:'linear-gradient(140deg , #36BA98 30%, #E76F51 40%)',
-                  padding:'13px 14px', display:"inline-block",
-                   position:"relative" , top:"53px", 
-                   fontSize:"18px",
-                   opacity:"0.95",
-                   left:'-20px' }
+  const style:{}= { 
+    position: 'relative',
+    top: '90px',
+    left: '0',
+    backgroundColor: 'white',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    border: '1px solid #ddd',
+    borderTop: 'none',
+    width: '200px',
+    heigh:'100%',
+    padding: '10px',
+    zIndex: '1000',
+      }
 
   return (
   //   <Menu mode="horizontal">

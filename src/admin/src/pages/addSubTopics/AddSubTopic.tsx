@@ -25,6 +25,13 @@ interface dataType {
 
 const AddSubTopic: React.FC = () => {
   const [isViewer, setIsViewer] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // Simulating a 2 second loading delay
+    return () => clearTimeout(timer);
+  }, []);
   const jwt = GetCookie("jwt");
   useEffect(() => {
     const fun = async () => {
@@ -227,16 +234,6 @@ const AddSubTopic: React.FC = () => {
       englishName: "",
     },
   ]);
-  const CheckSafeSubTopic = (it: any) => {
-    SubThematics.map((item) => {
-      if (item.id === it.id) {
-        return false;
-      }
-    });
-    
-    return true;
-  };
-
   const [SubThematics, setSubThematics] = useState([]);
   //   useEffect(()=>{
   //     const fun = async ()=>{
@@ -363,10 +360,9 @@ const AddSubTopic: React.FC = () => {
       AxiosErrorHandling(err);
     }
   };
-  const [thematicId, setThematicId] = useState(0);
+
   console.log(SubThematics)
-  return (
-    <>
+  return  isLoading? <h1>Loading...</h1> : <>
       <div className="add-sub-topic-header">
       <TranslationComponent
 
@@ -456,7 +452,7 @@ const AddSubTopic: React.FC = () => {
         </div>
       </div>
     </>
-  );
+  
 };
 
 export default AddSubTopic;

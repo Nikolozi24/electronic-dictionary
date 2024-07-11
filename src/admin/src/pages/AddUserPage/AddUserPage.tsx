@@ -18,6 +18,13 @@ interface userInfo {
   isViewer: boolean;
 }
 const AddUser:React.FC = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // Simulating a 2 second loading delay
+    return () => clearTimeout(timer);
+  }, []);
   const [isOpen , setIsOpen] = useState<boolean>(false)
   const [users,setUsers] = useState<userInfo[]>([{
     id: 0,
@@ -186,15 +193,14 @@ const AddUser:React.FC = () => {
   };
  
       const data:userInfo[] = users?.map(item=>item)
-  return (
-    <div>
+  return isLoading?<h1>Loading...</h1>:<div>
       <Header/>
 
        <Table columns={columns}  dataSource={data}/>
        <Button onClick={()=>{setIsOpen(true)}}>Add user</Button>
       <AddUserComponent isOpen={isOpen} onSave={handleSave} onCancel={handleCancel} />
     </div>
-  );
+  
 };
 
 export default AddUser;

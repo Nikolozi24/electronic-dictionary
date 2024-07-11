@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { Button, Input, Modal } from 'antd';
 // import TranslationComponent from '../../components/TranslationComponent/TranslationComponent.tsx';
 import Thematic from '../../components/TematicTable.tsx';
@@ -8,16 +8,14 @@ import Header from '../../components/Header/Header.tsx';
 
 const AddTopic: React.FC = () => {
   const [modalIsOpen, setModalOpen] = useState<boolean>(false);
-
-    function onSave(georgianName: string, englishName: string, id?: number){
-    
-        localStorage
-        setModalOpen(false);
-    }
-
-
-    return ( 
-            <div className='thematic'>
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // Simulating a 2 second loading delay
+    return () => clearTimeout(timer);
+  }, []);
+    return  isLoading? <h1>Loading...</h1>    :      <div className='thematic'>
             <Header/>
             <Thematic />
             </div>
@@ -34,7 +32,7 @@ const AddTopic: React.FC = () => {
                 onCancel={() => setModalOpen(false)}
             /> */
         
-    )
+    
 }
 
 

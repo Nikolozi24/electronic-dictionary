@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
+
 import "./fillWord.css";
 
 import { useForm } from "react-hook-form";
-
-
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import axios from "axios";
 import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
 import { SubTopic, fillWord, Topic } from "../../components/TypeDef/Types";
-import { Value } from "sass";
+
 
 
 const FillWordToDatabase: React.FC = () => {
@@ -110,7 +109,7 @@ const FillWordToDatabase: React.FC = () => {
     , [thetamticId])
   const handleThematicSelect = () => {
     var selectElement = document.getElementById("thematic");
-    var selectedValue = selectElement.value;
+    var selectedValue = selectElement?.value;
     if (selectedValue == "none") {
       return;
     }
@@ -119,7 +118,7 @@ const FillWordToDatabase: React.FC = () => {
     }
   }
   
-  const { register, control, setValue, getValues, formState , handleSubmit } = form;
+  const { register, setValue, getValues, formState , handleSubmit } = form;
   
 // const handleUpload =(event)=>{
 

@@ -88,7 +88,7 @@ fun()
   useEffect(()=>{
       const fun =async ()=>{
         try{
-        await axios.get("http://localhost/api/entry/count",{
+        await axios.get(`http://localhost/api/entry/count?searchText=${value}`,{
 
          headers:{
                   'Content-Type':'application/json',
@@ -103,7 +103,7 @@ fun()
       fun();
     }
 
-  ,[])
+  ,[value])
   const [modalIsOpen, setModalOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     useEffect(() => {

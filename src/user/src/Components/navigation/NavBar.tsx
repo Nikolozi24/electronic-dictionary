@@ -34,17 +34,15 @@ const NavBar:React.FC<NaBarProsp> = (props) => {
     fun();
   },[item?.length])
   const style:{}= { 
-    position: 'relative',
-    top: '90px',
-    left: '0',
-    backgroundColor: 'white',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    border: '1px solid #ddd',
-    borderTop: 'none',
-    width: '200px',
-    heigh:'100%',
-    padding: '10px',
-    zIndex: '1000',
+    margin:'12px 0px',
+    borderRadius:"20px" ,width:"110%",
+    backdropFilter:"blur(30px)",
+    background:'linear-gradient(140deg , #36BA98 30%, #E76F51 40%)',
+    padding:'13px 14px', display:"inline-block",
+     position:"relative" , top:"53px",
+     fontSize:"18px",
+     opacity:"0.95",
+     left:'-20px'
       }
 
   return (

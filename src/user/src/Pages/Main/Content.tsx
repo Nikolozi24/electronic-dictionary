@@ -18,7 +18,9 @@ import {AnimatePresence, motion} from "framer-motion"
 import MyFooter from "../../Components/footer/MyFooter";
 
 
+
 const  Content:React.FC = () => {
+  //states
   const [words, setWords] = useState<Entry[]>([])
   const [wordCount, setWordCount] = useState<number>(0)
   const [value, setValue] = useState<string>("")
@@ -28,10 +30,11 @@ const  Content:React.FC = () => {
     width:'70%',
     margin:'2px auto'
   }
+  //for  knowing what page are current
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrent(page);
   }
-
+// for searcching
   useEffect(()=>{
     const fun= async ()=>{
      await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}&status=Active`,{
@@ -53,19 +56,20 @@ const  Content:React.FC = () => {
 
 
   },[value, current])
+  // when thematic change, word list must change,
   const handleFilterByThematic= async (id:number)=>{
     
     setCurrent(1);
       
 
-   await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}&${id!==null? `subTopicId=${id}`:""}`,{
+   await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}&${id!==null? `subTopicId=${id}`:""}&status=Active`,{
       headers:{
         "Content-Type":'application/json'
       }
     }).then(res=>res.data).then( data=>{
       setWords(data)
     })
-    await axios.get(`http://localhost/api/entry/count?pageNumber=${current}&searchText=${value}&${id!==null? `subTopicId=${id}`:""}`,{
+    await axios.get(`http://localhost/api/entry/count?pageNumber=${current}&searchText=${value}&${id!==null? `subTopicId=${id}`:""}&status=Active`,{
       headers:{
         "Content-Type":'application/json'
       }
@@ -75,7 +79,7 @@ const  Content:React.FC = () => {
   }
   
   return (  
-  <div className="main_page" style={{backgroundImage:`url(${image}`, backgroundRepeat:'no-repeat' , backgroundSize:"cover"}} >
+  <div className="main_page" style={{ backgroundRepeat:'no-repeat' , backgroundSize:"cover"}} >
        <div className='SearchingWordPage' >
          
           <Link style={{paddingLeft:'20px', color:"black", }} to="/"><HomeOutlined/>მთავარი</Link>
@@ -87,10 +91,10 @@ const  Content:React.FC = () => {
 
           <NavBar handleFilterByThematic={handleFilterByThematic}/>     
     </div>
-      <div className="Searching_div">
+      <div  className="Searching_div">
 <AnimatePresence >
 
-          <ul className="listOfWord">
+          <ul className="listOfWord" >
             {
               words?.map(item=>{
                 return item.status=="Active"?
@@ -105,23 +109,24 @@ const  Content:React.FC = () => {
     duration:10,
     type: "spring",
     stiffness: 260,
-    damping: 20
+    damping: 20,
   }}
-> <Word word={item}/></motion.div> 
+> <li data-aos="fade-left"><Word  word={item}/></li></motion.div>
 :<></>
 })
 }
          </ul>
 </AnimatePresence>
-    </div>
-</div>
-<Footer style={{background:"none", width:'98vw', display:'inline-block', left:'0', bottom:'0px'}}>
 
   <Pagination 
+  className="pagination"
   pageSizeOptions={[]} // Disable page size options
   current={current} onChange={onChange} total={wordCount}/>
-  </Footer>
-    <MyFooter/>
+    </div>
+</div> 
+  
+    <MyFooter className=""  />
+  
   </div>
         
   )

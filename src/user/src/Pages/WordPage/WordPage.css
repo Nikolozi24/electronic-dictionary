@@ -7,7 +7,7 @@ div.wordPageForUser{
     margin-top: 70px;
     display: flex;
     width: 600px;
-
+ min-width: 800px;
     flex-direction: column;
     text-align: start;
     padding: 10px;
@@ -20,6 +20,7 @@ div.SearchingWordPage{
     display: flex;
     justify-content: center;
     align-items: center;
+    min-width: 850px;
     width: 100vw;
     position: absolute;
     left:0;
@@ -97,4 +98,9 @@ div.wordPageForUser>article{
     align-items: center;
     text-align: left;
     padding: 20px 40px;
+}
+footer.wordPage-pagination{
+    display: block;
+    position: relative;
+    width:100%;
 }

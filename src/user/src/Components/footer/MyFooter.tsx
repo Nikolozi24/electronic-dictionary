@@ -7,10 +7,12 @@ interface SocialProps{
   text:string,
   link:string
   icon:any
-
-
 }
-const MyFooter = () => {
+interface FooterProps{
+  className:string
+}
+const MyFooter:React.FC<FooterProps> = (props) => {
+  const { className} = props;
   const [social , ] = useState<SocialProps[]>([{
     id:1,
     text:'facebook',
@@ -27,7 +29,7 @@ const MyFooter = () => {
  ]) 
   return (<>
 
-  <footer className='footer'>
+  <footer className={`footer ${className? className:""} `} >
 
           <ul className="footer-ul">
               <li className="social">

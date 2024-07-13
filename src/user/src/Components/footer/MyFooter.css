@@ -1,11 +1,13 @@
 footer.footer{
     background-color: #b44225;
-    width: 100%;
-    margin-left: -10px;
+    width: 98%;
+    margin-left:;
     margin-top: 20px;
     border-radius: 20px;
-    position: relative;
-    bottom: 0px;
+    position: absolute;
+    bottom: 0;
+   transform: translateY(50px);
+
     color: black;
     
 }
@@ -21,4 +23,9 @@ footer.footer>ul.footer-ul{
     width: 100%;
     padding: 20px 4px;
     
+}
+@media screen and (max-width:850px) {
+    footer.footer{
+        transform: translateY(500px);
+    }
 }

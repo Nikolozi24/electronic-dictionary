@@ -1,7 +1,10 @@
 import React from 'react'
 import "./Search.css"
-
-const Search:React.FC = (props) => {
+interface SearchProps{
+  value:string;
+  handleChange:(e:any)=>void;
+}
+const Search:React.FC<SearchProps> = (props) => {
         const {value, handleChange} = props;
   return (
     <div className='handleSearching'>

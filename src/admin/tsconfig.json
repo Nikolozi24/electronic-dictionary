@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "../user/src/Components/Searching"],
+  "include": ["src", "../user/src/Components/Searching", "../user/src/Components/footer"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

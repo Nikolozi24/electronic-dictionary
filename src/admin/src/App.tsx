@@ -41,7 +41,9 @@ function App() {
   const [role, setRole] = useState("");
   const [user , setUser] = useState({
     isAdmin:false,
-    isSuperAdmin:false});
+    isSuperAdmin:false,
+    isViewer:false
+  });
   const jwt = GetCookie("jwt");
   useEffect(() => {
     const fun = async () => {
@@ -80,9 +82,9 @@ function App() {
           <Route path="/resetPassword" element={<ResetPassword />} />
 
         
-         {user.isSuperAdmin && <Route path="/addTopic" element={<AddTopic />} />}
+         {(user.isSuperAdmin || user?.isViewer)  && <Route path="/addTopic" element={<AddTopic />} />}
          {user.isSuperAdmin &&  <Route path={`/update/:ID`} element={<UpdateThematic />} />}
-          {user.isSuperAdmin && <Route path="/subTematic" element={<AddSubTopic />} />}
+          {(user.isSuperAdmin || user?.isViewer)&& <Route path="/subTematic" element={<AddSubTopic />} />}
 
          {  <Route path="/addUsers" element={<AddUser />} />}
          {user.isSuperAdmin &&  <Route path="/delete/:id" element={<Delete />} />}
@@ -90,7 +92,7 @@ function App() {
         { user.isSuperAdmin &&  <Route path="/added-failed" element={<AddedFailed />} />}
          { user.isSuperAdmin && <Route path="*" element={<Missing />} />}
          { user.isSuperAdmin && <Route path="/update/Entry/:id" element={<EditWordToDatabase/>} />}
-         {user.isSuperAdmin && <Route path="/EntryList" element={<WordList/>} />}
+         {(user.isSuperAdmin || user?.isViewer) && <Route path="/EntryList" element={<WordList/>} />}
 \
           {/* </Route> */}
         <Route path="/login" element={<Login />} />

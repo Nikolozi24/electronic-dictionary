@@ -1,24 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TranslationComponent from "../../components/TranslationComponent/TranslationComponent";
-import UseAxiosPrivate from "../../components/Hooks/UseAxiosPrivate";
-import { axiosPrivate } from "../../components/API/axios";
+
 import GetCookie from "../../components/Utilities/Coookies/GetCookie";
 import axios from "axios";
 import AxiosErrorHandling from "../../components/Utilities/ErrorHandling/AxiosErrorHandling";
-
+import { Topic } from "../../components/TypeDef/Types";
 const UpdateThematic: React.FC = () => {
-  const BASE_URL = "http://localhost:5173/";
+
   const jwt = GetCookie("jwt");
   const { ID } = useParams();
 
   let geo, eng;
-  const [thematic, setThematic] = useState({
-    id: ID,
-    georgianName: "",
-    englishName: "",
-    subTopics: [""],
-  });
+  const [thematic, setThematic] = useState<Topic>();
   useState(() => {
     const fun = async () => {
       try {
@@ -36,7 +30,7 @@ const UpdateThematic: React.FC = () => {
       }
     };
     fun();
-  }, [ID, thematic.georgianName]);
+  }, [ID, thematic?.georgianName]);
   ///useParam-ით გავიგოთ თუ რა აიდის მატარებელი ელემენტი უნდა დააბდეითდეს
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
@@ -72,7 +66,7 @@ const UpdateThematic: React.FC = () => {
   };
   return (
     <div>
-      <h1>სიტყვა: {thematic.georgianName}</h1>
+      <h1>სიტყვა: {thematic?.georgianName}</h1>
       <TranslationComponent
         georgianName={thematic.georgianName}
         englishName={thematic.englishName}

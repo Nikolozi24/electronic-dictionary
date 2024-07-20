@@ -14,36 +14,32 @@ a:focus{
 
 }
 div.main_page{
-   
     padding: 20px;
     width: 100vw;
     position: absolute;
     top: 0;
     left: 0;
   /*  background: linear-gradient(115deg, #36BA98 10%, #E9C46A 20%,#F4A261 ,#E76F51 ,#36BA98);*/
-  background-image:;
-    height: 110vh;
+
+    height: 150vh;
     display: flex;
+    min-height: 120vh;
     background-size: auto;
+    min-width: 800px;
     flex-direction: column;
  
 }
 div.main_page_container{
     display: flex;
     width: 100%;
-    height: 100%;
+    height:100%;
     background:none
 }
-div.Searching_div> ul.listOfWord >li{
-    
-    
-}
+
 div.Searching_div> ul.listOfWord{
     padding: 20px;
     margin: 40px auto;
-    
 }
-
 div.Searching_div{
     box-shadow: 0px 10px 10px 10px #F4A261;
     border-radius: 20px;
@@ -51,7 +47,7 @@ div.Searching_div{
     background:white;
     margin: 0px auto;
     margin-top: 60px;
-   height: 100%;
+   height: 900px;
 }
 div.navigationBar{
     height: 100%;
@@ -59,3 +55,53 @@ div.navigationBar{
 div.SearchingWordPage{
     background:linear-gradient(170deg , #36BA98 50%, #E76F51 40%);
 }
+.pagination{
+    transform: translateY();
+    margin-left: 20vw;
+}
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Adjust as needed */
+  }
+  .loader {
+    border: 6px solid rgba(0, 0, 0, 0.1); /* Light border */
+    border-top: 6px solid #3e64ff; /* Blue border */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite; /* Rotate animation */
+  }
+
+  @media  screen and (max-width:850px) {
+    div.main_page_container{
+        display:flex;
+        flex-direction:column;
+        align-items: stretch;
+    
+        width: 100%;
+    }
+    div.navigationBar{
+      margin: 0;
+        padding: 20px;
+        width: 100%;
+        align-items: center;
+    
+    }
+    div.Searching_div{
+      width: 100%;
+    }
+    div.main_page{
+        position: none;
+        height: 170vh;
+        width: 100vw;
+        min-height: 1050px;
+
+    }
+  div.Searching_div> ul.listOfWord{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+  }

@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { RiFlutterFill } from "react-icons/ri";
 import { FcMenu } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { BsDatabaseAdd } from "react-icons/bs";
-import { GrContact , GrHomeRounded} from "react-icons/gr";
-import { FcAbout } from "react-icons/fc";
+import {  GrHomeRounded} from "react-icons/gr";
+
 import { BiLogOut } from "react-icons/bi";
 import { FaUser, FaEdit} from "react-icons/fa";
 import GetCookie from "../Utilities/Coookies/GetCookie";
 import axios from "axios";
-
-
 import "./Header.css"
 import RemoveCookie from "../Utilities/Coookies/RemoveCookie";
 import AxiosErrorHandling from "../Utilities/ErrorHandling/AxiosErrorHandling";
@@ -19,7 +16,7 @@ const Header: React.FC = () => {
 
   const isLogin = true;
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [login, setLogin] = useState<{}>({
+  const [login, setLogin] = useState<{in:any, out:any}>({
     in: (
       <Link to="/login" onClick={()=>{
         RemoveCookie('jwt')
@@ -44,7 +41,8 @@ const Header: React.FC = () => {
 
 
 
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState<string>("");
+  const [isViwer, setisViwer] = useState<boolean>(false);
   const jwt = GetCookie("jwt");
   useEffect(() => {
     const fun = async () => {
@@ -57,6 +55,7 @@ const Header: React.FC = () => {
         },
       });
       const role = response.data.role;
+      setisViwer(response?.data?.isViewer)
       setRole(role);
     }
     catch(err:any){
@@ -93,24 +92,23 @@ const Header: React.FC = () => {
          {role=="super_admin"&& <li className="list-item">
             <Link title="მომხამრებლის დამატება" to="/addUsers">
               <AiOutlineUserAdd className="icon" />
-              <span className="links-name">მომხმარებლის დამატება</span>
+              <span className="links-name"> დამატება</span>
             </Link>
 
           </li>}
-         {role=="super_admin"&&  <li className="list-item">
+         {(role=="super_admin" || isViwer )&&  <li className="list-item">
             <Link  title="თემატიკის დამატება"to="/addTopic">
               < FaEdit className="icon" />
-              <span className="links-name">თემატიკის
-                   დამატება</span>
+              <span className="links-name">თემატიკები</span>
             </Link>
           </li>}
-           {role=="super_admin"&&  <li className="list-item ">
+           {(role=="super_admin" || isViwer )&&  <li className="list-item ">
               <Link title="ქვეთემატიკის დამატება"to="/subTematic">
               < FaEdit className="icon" />
-                <span className="links-name">ქვეთემატიკის დამატება</span>
+                <span className="links-name">ქვეთემატიკები</span>
               </Link>
             </li>}
-           {role=="super_admin"&&  <li className="list-item ">
+           {(role=="super_admin" || isViwer )&&  <li className="list-item ">
               <Link title="სიტყვების ცხრილი " to="/EntryList">
               < FaEdit className="icon" />
                 <span className="links-name">სიტყვების ცხრილი</span>

@@ -7,13 +7,26 @@ import { HomeOutlined } from '@ant-design/icons'
 import {FacebookShareButton} from 'react-share'
 import Search from '../../Components/Searching/Search'
 import { Entry } from '../../Components/TypeDef/Types'
+import { motion } from 'framer-motion'
+import MyFooter from '../../Components/footer/MyFooter'
 
 const WordPage:React.FC = () => {
+  /// for navigation
   const navigate = useNavigate();
-    const {id} = useParams()
+  // get word object id
+  const {id} = useParams()
+// for sett word information
   const [word, setWord ] = useState<Entry>()
-
-  
+  // for loading
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  //  control loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // Simulating a 2 second loading delay
+    return () => clearTimeout(timer);
+  }, []);
+  // send requets for word and set in state
     useEffect(()=>{
         try{
             const fun =  async () =>{
@@ -31,10 +44,13 @@ const WordPage:React.FC = () => {
 
 
     },[id])
+    // for searching string
     const [value, setValue] = useState<string>("")
-    const [current, ] = useState<number>(1);
-    const [words, setWords] = useState<Entry[]>()
- 
+    //page number
+     const [current, ] = useState<number>(1);
+     // for searching, set word array
+    const [words, setWords] = useState<Entry[]>([])
+    // working with searching , when value changes
     useEffect(()=>{
       const fun= async ()=>{
          await axios.get(`http://localhost/api/entry?pageNumber=${current}&pageSize=${10}&searchText=${value}`,{
@@ -52,8 +68,10 @@ const WordPage:React.FC = () => {
       width:'70%',
       margin:'2px auto'
     }
+    //render word
     function renderWord (word:Entry){
-      return      <div>
+      return     <>
+       <div>
         <div className='SearchingWordPage'>
           <Link style={{paddingLeft:'20px', color:"black"}} to="/"><HomeOutlined/>მთავარი</Link>
             <Search value={value} words={words} styleAdditional={SearchStyle} setValue={setValue}/>
@@ -81,23 +99,40 @@ const WordPage:React.FC = () => {
         { word?.synonym!=="n/a" && <h4> სინონიმი: { word?.synonym}</h4>}
         { word?.usageNote!=="n/a" && <h4>დამატებითი კომენტარი: { word?.usageNote}</h4>}
         <hr/>
-        <img src={word?.imageUrl} alt='sityvis foto' width={400} />
-        
-        <FacebookShareButton url={`youtube.com`}>share to youtube</FacebookShareButton>
+       {
+          word.imageUrl &&  <img src={word?.imageUrl} alt='sityvis foto' width={400} style={{margin:'5px auto', }} />
+      }
+
         <FacebookShareButton url={`http://localhost:5174/${word?.id}`}>share to facebook</FacebookShareButton>
         </div>
         </div>
-       
-     
+        <MyFooter className='wordPage-pagination' />
+        </>
     }
+    //rendering if word doesn't exist
    function renderError(){
       return <>
-          <h1>სიტყვა ვერ მოიძებნა</h1>
+              <h2>გვერდი ვერ მოიძებნა </h2>
             <button onClick={()=>{navigate(-1)}}>უკან დაბრუნება</button>
-      </>
+             </>
     }
-  return (word?.status=="Active"? renderWord(word):renderError()
-  )
+
+// if it's loading show loading . esle if word exists  render word otherwise renderError.
+  return  isLoading? <>
+       <motion.div
+  className="loader"
+  initial={{ opacity: 0, scale: 0 }}
+  animate={{ opacity: 1, scale: 1, rotate: 360 }}
+  transition={{
+    repeat:Infinity,
+    type: 'spring',
+    delay:0.2,
+    stiffness: 260,
+    damping: 20,
+  }}
+> </motion.div>
+  Loading...
+  </> : <>{(word?.status=="Active"? renderWord(word):renderError())}</>
 }
 
 export default WordPage

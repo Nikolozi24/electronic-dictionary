@@ -2,8 +2,8 @@ import { useEffect,useState } from 'react'
 import "./Login.css"
 import {useForm} from "react-hook-form"
 import { LockOutlined , UserOutlined } from '@ant-design/icons';
-import { useNavigate , useLocation , Link} from 'react-router-dom';
-import useAxiosPrivate from "../../components/Hooks/UseAxiosPrivate.js"
+import { useNavigate } from 'react-router-dom';
+
 import { useDispatch} from 'react-redux';
 import Cookies from 'universal-cookie';
 import { authActions } from '../../components/Store/redux/authSlice';
@@ -15,11 +15,11 @@ import AxiosErrorHandling from '../../components/Utilities/ErrorHandling/AxiosEr
 
 const Login = () => {
 const dispatch = useDispatch()
-const [roles,setRoles] = useState([]);
-const  axiosPrivate = useAxiosPrivate();
+
+
 
   const navigate = useNavigate();
-  const location =  useLocation();
+
   const cookies = new Cookies()
   useEffect(()=>{
     cookies.remove("admin")
@@ -49,7 +49,8 @@ const  axiosPrivate = useAxiosPrivate();
           },
         }
       );
-
+      
+      
       const tokenType = response.data.tokenType;
       const expiresIn = response.data.expiresIn;
       const refreshToken = response.data.refreshToken;
@@ -78,14 +79,21 @@ const  axiosPrivate = useAxiosPrivate();
 
           console.log(role)
           dispatch(authActions.setAuth({username:getValues("email"),password:getValues("password"),role:role,accessToken:accToken}))
+        if(resp.data.status=="Active"){
           alert('complited')
 
           navigate("/fill")
           window.location.reload();
-      } catch (err:any) {
+        }
+        else if(resp.data.status=="InActive"){
+            alert("მომხარებელი არაააქტიურია")
+        }
+        }
+        catch (err:any) {
       AxiosErrorHandling(err);
   }
   };
+  const [isPasswordShow , setIsPasswordShow ] = useState<boolean>();
   return (
     <div className={`login`}>
       <div className='wrapper'>
@@ -112,7 +120,7 @@ const  axiosPrivate = useAxiosPrivate();
           </div>
             <div className='input-box'>
 
-            <input type='password' placeholder={'პაროლი'}
+            <input type={`${!isPasswordShow? "password":"text" }`} placeholder={'პაროლი'}
                 {...register("password" , {
                   required:{
                    value:true,
@@ -122,14 +130,16 @@ const  axiosPrivate = useAxiosPrivate();
                 })}
                 className={`${errors.password? "error":""}`}
             />
-              
               <LockOutlined className='icon'/>
+              <div style={{textAlign:'left', marginTop:"5px", cursor:"pointer"}}>
+            <input onChange={()=>{setIsPasswordShow(prev=>!prev)}} name='checkbox' id='checkbox' type="checkbox" style={{width:'20px', margin:"2px 4px"}}/><label htmlFor='checkbox' style={{cursor:'pointer'}}>{!isPasswordShow? "show password":"hide password"}</label>
+
+              </div>
             </div>
             {/* <div className='remember-forget'>
                 <label><input type='checkbox'/>{'დამახსოვრება'}</label>
             </div> */}
               <button disabled={errors.password ||errors.email? true : false} onClick={()=>{}} type='submit'>{'შესვლა'}</button>
-
            </form>
       </div>
      

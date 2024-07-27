@@ -197,7 +197,7 @@ const AddUser:React.FC = () => {
       <Header/>
 
        <Table columns={columns}  dataSource={data}/>
-       <Button onClick={()=>{setIsOpen(true)}}>Add user</Button>
+       <Button onClick={()=>{setIsOpen(true)}}>მომხმარებლის დამატება</Button>
       <AddUserComponent isOpen={isOpen} onSave={handleSave} onCancel={handleCancel} />
     </div>
   
